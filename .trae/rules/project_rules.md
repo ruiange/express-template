@@ -25,6 +25,13 @@
     - 使用JavaScript ES6+语法。
     - 编写详细的代码注释，并在代码中添加必要的错误处理和日志记录。
     - 使用ESM模块语法。
+    - 新增路由时路由名称为名称加Router后缀，例如：userRouter.js，这样便于区分路由和控制器。
+    - 新增控制器时控制器名称为名称加Controller后缀，例如：userController.js。
+    - 新增模型时模型名称为名称加Model后缀，例如：userModel.js。
+    - 新增中间件时中间件名称为名称加Middleware后缀，例如：userMiddleware.js。
+    - 新增工具时工具名称为名称加Util后缀，例如：userUtil.js。
+    - 新增服务时服务名称为名称加Service后缀，例如：userService.js。
+
 
     ### 解决问题时：
     - 全面阅读相关代码文件，理解所有代码的功能和逻辑。
