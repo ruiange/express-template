@@ -49,16 +49,7 @@ npm run apidoc
 
 ## 环境变量配置
 
-在项目根目录创建 `.env` 文件，配置以下环境变量：
-
-```env
-PORT=3000
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-QINIU_ACCESS_KEY=your_qiniu_access_key
-QINIU_SECRET_KEY=your_qiniu_secret_key
-QINIU_BUCKET=your_qiniu_bucket
-```
+在项目根目录创建 `.env` 文件 ,参考`.env.example`
 
 ## 项目结构
 
@@ -83,14 +74,7 @@ QINIU_BUCKET=your_qiniu_bucket
 
 API 文档自动生成并部署在 `/apidoc` 路径下。本地开发时可以通过 `http://localhost:3000/apidoc` 访问。
 
-## 部署
 
-### Vercel 部署
-
-项目已配置 `vercel.json`，可以直接部署到 Vercel：
-
-1. 安装 Vercel CLI：`npm i -g vercel`
-2. 运行：`vercel`
 
 ## 许可证
 

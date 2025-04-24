@@ -1,5 +1,3 @@
-
-
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
@@ -9,8 +7,19 @@ import mainRouter from './routes/mainRouter.js';
 /** @type {Express} */
 const app = express();
 
+
+
+// 配置EJS模板引擎
+app.set('view engine', 'ejs');
+app.set('views', './src/views/pages');
+
 // 启用CORS中间件，允许跨域请求
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || '*', // 允许的跨域来源
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的HTTP方法
+  })
+);
 // 解析JSON格式的请求体
 app.use(express.json());
 // 注册主路由
