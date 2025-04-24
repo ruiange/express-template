@@ -6,12 +6,13 @@ import 'dotenv/config';
 import getEnvIp from './utils/ipUtil.js';
 import mainRouter from './routes/mainRouter.js';
 
-/** @type {express.Application} */
+/** @type {Express} */
 const app = express();
 
 // 启用CORS中间件，允许跨域请求
 app.use(cors());
-
+// 解析JSON格式的请求体
+app.use(express.json());
 // 注册主路由
 app.use(mainRouter)
 
