@@ -1,0 +1,5 @@
+.idea/
+node_modules/
+.env
+/src/public/apidoc/*
+!/src/public/apidoc/.gitkeep
