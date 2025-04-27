@@ -3,16 +3,16 @@ import cors from 'cors';
 import 'dotenv/config';
 import getEnvIp from './utils/ip.util.js';
 import mainRouter from './routes/main.router.js';
+import path from 'node:path';
+import { fileURLToPath } from 'url';
 
 /** @type {Express} */
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.set('views', path.join(__dirname, 'views/pages'));
 
-
-// 配置EJS模板引擎
-app.set('view engine', 'ejs');
-app.set('views', './src/views/pages');
-app.use(express.static('./src/public'));
 // 启用CORS中间件，允许跨域请求
 app.use(
   cors({
