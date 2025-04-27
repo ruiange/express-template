@@ -12,7 +12,7 @@ const app = express();
 // 配置EJS模板引擎
 app.set('view engine', 'ejs');
 app.set('views', './src/views/pages');
-
+app.use(express.static('./src/public'));
 // 启用CORS中间件，允许跨域请求
 app.use(
   cors({
