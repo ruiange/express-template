@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
-import getEnvIp from './utils/ipUtil.js';
-import mainRouter from './routes/mainRouter.js';
+import getEnvIp from './utils/ip.util.js';
+import mainRouter from './routes/main.router.js';
 
 /** @type {Express} */
 const app = express();
