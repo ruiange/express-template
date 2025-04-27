@@ -1,5 +1,5 @@
 import express from 'express';
-import { scanNews } from '../../controllers/nineYinControllers.js';
+import { scanNewsController } from '../../controllers/nineYinControllers.js';
 const nineYinRouter = express.Router();
 
 /**
@@ -7,6 +7,8 @@ const nineYinRouter = express.Router();
  * @apiName GetNineYinNews
  * @apiGroup 九阴
  * @apiVersion 1.0.0
+ *
+ * @apiParams {Number} [pageNum=0] 页码，默认为0
  *
  * @apiDescription 从九阴官网爬取最新的新闻列表信息
  *
@@ -31,6 +33,6 @@ const nineYinRouter = express.Router();
  *       }]
  *     }
  */
-nineYinRouter.get('/scan/news' ,scanNews)
+nineYinRouter.get('/scan/news' ,scanNewsController)
 
 export default nineYinRouter;
