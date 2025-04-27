@@ -31,4 +31,5 @@ const port = process.env.PORT || 3000;
 // 启动服务器并监听指定端口
 app.listen(port, () => {
   console.log(`服务运行在:http://${getEnvIp()}:${port}`);
+  console.log(`服务运行在:http://${getEnvIp()}:${port}/apidoc`);
 })

@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
-/**
- * @description 九阴真经新闻爬虫
- * @param req
- * @param res
- * @returns {Promise<void>}
- */
+
 export const scanNews = async (req, res) => {
   const jiuYinUrl = 'https://9yin.woniu.com/news/sysnotice';
 
