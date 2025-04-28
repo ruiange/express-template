@@ -1,5 +1,8 @@
 import { integer, pgTable, varchar, timestamp } from 'drizzle-orm/pg-core';
 
+/**
+ * 请求日志表
+ */
 export const logsTable = pgTable('logs', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   method: varchar('method', { length: 10 }).notNull(),
@@ -9,4 +12,16 @@ export const logsTable = pgTable('logs', {
   user_agent: varchar('user_agent', { length: 255 }),
   created_at: timestamp('created_at').defaultNow().notNull()
 });
- 
+
+/**
+ * 新闻表
+ */
+export const newsTable = pgTable('jiuyin_news', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  news_id: integer('news_id').notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  content: varchar('content'),
+  type: varchar('type', { length: 255 }),
+  url: varchar('url'),
+  time:  varchar('time'),
+});

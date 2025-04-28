@@ -6,12 +6,13 @@ import axios from 'axios'; // 导入 axios 库，用于发送 HTTP 请求
  * @param pageNum 页码，默认为 0
  * @returns {Promise<*[]>}
  */
-export const scanNewsService = async (pageNum = 0) => {
+export const scanNewsService = async (pageNum = 1, type = '系统公告') => {
   let jiuYinUrl = 'https://9yin.woniu.com/news/sysnotice'; // 定义要抓取的新闻页面 URL
 
-  if (pageNum > 0) {
+  if (pageNum > 1) {
     jiuYinUrl = `${jiuYinUrl}/list_${pageNum}.html`;
   }
+
 
   // 使用 axios 发送 GET 请求获取 HTML 内容
   const { data: html } = await axios({
@@ -43,7 +44,7 @@ export const scanNewsService = async (pageNum = 0) => {
     const link = item.querySelector('a'); // 获取新闻链接元素
     const time = item.querySelector('.newsListItemTime'); // 获取新闻发布时间元素
 
-    const url = link?.href || ''; // 获取新闻链接的 href 属性，如果没有则为空字符串
+    const url = 'https:' + link?.href || ''; // 获取新闻链接的 href 属性，如果没有则为空字符串
     let id = ''; // 初始化新闻 ID
 
     // 使用正则表达式从 URL 中提取新闻 ID（假设 URL 格式为 /数字.html）
@@ -54,12 +55,12 @@ export const scanNewsService = async (pageNum = 0) => {
 
     // 将处理后的新闻信息推入结果数组
     result.push({
-      newsId: id, // 新闻唯一标识
+      news_id: Number(id), // 新闻唯一标识
       title: link?.textContent.trim() || '', // 新闻标题，去除前后空格
       url, // 新闻链接
       time: time?.textContent.trim() || '', // 新闻发布时间，去除前后空格
+      type,
     });
   });
-  console.log(result);
   return result; // 返回处理后的新闻信息数组
 };
