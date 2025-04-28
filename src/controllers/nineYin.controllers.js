@@ -1,4 +1,4 @@
-import { scanNewsService } from '../services/nineYinService.js';
+import { scanNewsService } from '../services/nineYin.service.js';
 
 export const scanNewsController = async (req, res) => {
 
