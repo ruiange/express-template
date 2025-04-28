@@ -24,7 +24,7 @@ export const requestLogMiddleware = async (req, res, next) => {
       ip: getClientIp(req),
       user_agent: req.get('user-agent') || '',
     };
-    console.log(params)
+    console.log(params);
     try {
       const result = await db.insert(logsTable).values(params);
       console.log(result);
