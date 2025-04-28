@@ -1,6 +1,5 @@
 import { db } from '../config/db.js';
 import { logsTable } from '../db/schema.js';
-import  getClientIp  from '../utils/ip.util.js';
 
 /**
  * 请求日志中间件
@@ -18,15 +17,17 @@ export const requestLogMiddleware = async (req, res, next) => {
     // 恢复原始的end方法
     res.end = originalEnd;
 
+    const params = {
+      method: req.method,
+      url: req.originalUrl || req.url,
+      status_code: res.statusCode,
+      ip: getClientIp(req),
+      user_agent: req.get('user-agent') || '',
+    };
+    console.log(params)
     try {
-      // 记录请求日志
-      await db.insert(logsTable).values({
-        method: req.method,
-        url: req.originalUrl || req.url,
-        status_code: res.statusCode,
-        ip: getClientIp(req),
-        user_agent: req.get('user-agent') || '',
-      });
+      const result = await db.insert(logsTable).values(params);
+      console.log(result);
     } catch (error) {
       console.error('Error saving request log:', error.message);
     }
@@ -36,4 +37,12 @@ export const requestLogMiddleware = async (req, res, next) => {
   };
 
   next();
+};
+const getClientIp = (req) => {
+  const forwardedFor = req.headers['x-forwarded-for'];
+  if (forwardedFor) {
+    // 如果有代理，返回第一个IP地址
+    return forwardedFor.split(',')[0];
+  }
+  return req.socket.remoteAddress || 'unknown';
 };

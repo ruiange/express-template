@@ -9,7 +9,8 @@
     "dev": "nodemon src/app.js",
     "apidoc": "apidoc -i src/ -o src/public/apidoc/",
     "generate": "npx drizzle-kit generate",
-    "migrate": "npx drizzle-kit migrate"
+    "migrate": "npx drizzle-kit migrate",
+    "push":"npx drizzle-kit push"
   },
   "keywords": [
     "express",
