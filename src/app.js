@@ -5,7 +5,6 @@ import getEnvIp from './utils/ip.util.js';
 import mainRouter from './routes/main.router.js';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
-import requestLogMiddleware from './middlewares/requestLog.middleware.js';
 
 /** @type {Express} */
 const app = express();
@@ -22,7 +21,6 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的HTTP方法
   })
 );
-app.use(requestLogMiddleware)
 // 解析JSON格式的请求体
 app.use(express.json());
 // 注册主路由
