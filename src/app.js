@@ -5,6 +5,7 @@ import getEnvIp from './utils/ip.util.js';
 import mainRouter from './routes/main.router.js';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
+import requestLogMiddleware from './middlewares/requestLog.middleware.js';
 
 /** @type {Express} */
 const app = express();
@@ -13,7 +14,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // 配置EJS模板引擎
 app.set('view engine', 'ejs');
-console.log(path.join(__dirname, 'views/pages'))
 app.set('views', path.join(__dirname, 'views/pages'));
 // 启用CORS中间件，允许跨域请求
 app.use(
@@ -22,6 +22,7 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的HTTP方法
   })
 );
+app.use(requestLogMiddleware)
 // 解析JSON格式的请求体
 app.use(express.json());
 // 注册主路由
