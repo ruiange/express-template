@@ -22,7 +22,7 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的HTTP方法
   })
 );
-app.use(requestLogMiddleware)
+app.use(requestLogMiddleware);
 // 解析JSON格式的请求体
 app.use(express.json());
 // 注册主路由

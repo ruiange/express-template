@@ -13,7 +13,6 @@ export const scanNewsService = async (pageNum = 1, type = '系统公告') => {
     jiuYinUrl = `${jiuYinUrl}/list_${pageNum}.html`;
   }
 
-
   // 使用 axios 发送 GET 请求获取 HTML 内容
   const { data: html } = await axios({
     method: 'get', // 请求方法为 GET

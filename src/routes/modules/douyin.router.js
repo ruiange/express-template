@@ -1,5 +1,9 @@
 import express from 'express';
-import { analysisVideo, getVideoDataController, saveVideoDataController } from '../../controllers/douyin.controller.js';
+import {
+  analysisVideo,
+  getVideoDataController,
+  saveVideoDataController,
+} from '../../controllers/douyin.controller.js';
 
 const douyinRouter = express.Router();
 
@@ -26,6 +30,5 @@ douyinRouter.post('/save', saveVideoDataController);
  * @apiVersion 1.0.0
  */
 douyinRouter.get('/get', getVideoDataController);
-
 
 export default douyinRouter;

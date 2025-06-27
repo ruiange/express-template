@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
+import { integer, jsonb, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 /**
  * 请求日志表

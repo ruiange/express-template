@@ -1,5 +1,6 @@
 import express from 'express';
 import { scanNewsController } from '../../controllers/nineYin.controllers.js';
+
 const nineYinRouter = express.Router();
 
 /**

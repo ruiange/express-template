@@ -33,5 +33,4 @@ export const getVideoData = async (id) => {
     .limit(1); // 可选：只取第一条，避免拿多行
 
   return rows[0]; // 没查到就是 undefined
-}
-
+};

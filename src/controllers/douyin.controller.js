@@ -34,9 +34,8 @@ export const saveVideoDataController = async (req, res) => {
 };
 
 export const getVideoDataController = async (req, res) => {
-
   const id = req.query.id ? parseInt(req.query.id) : null;
-  console.log(id,'id')
+  console.log(id, 'id');
   if (!id) {
     return res.send({
       code: 4000,
