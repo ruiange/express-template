@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgTable, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
 
 /**
  * 请求日志表
@@ -10,7 +10,7 @@ export const logsTable = pgTable('logs', {
   status_code: integer('status_code').notNull(),
   ip: varchar('ip', { length: 45 }).notNull(),
   user_agent: varchar('user_agent', { length: 255 }),
-  created_at: timestamp('created_at').defaultNow().notNull()
+  created_at: timestamp('created_at').defaultNow().notNull(),
 });
 
 /**
@@ -23,5 +23,13 @@ export const newsTable = pgTable('jiuyin_news', {
   content: varchar('content'),
   type: varchar('type', { length: 255 }),
   url: varchar('url'),
-  time:  varchar('time'),
+  time: varchar('time'),
+});
+
+/**
+ * 抖音存储表
+ */
+export const douyinTable = pgTable('douyin', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  jsonData: jsonb('jsonData'),
 });
