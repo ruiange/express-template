@@ -101,10 +101,30 @@
     "groupTitle": "九阴"
   },
   {
+    "type": "get",
+    "url": "/api/douyin/save",
+    "title": "保存视频数据接口",
+    "name": "保存视频数据接口",
+    "group": "抖音",
+    "version": "1.0.0",
+    "filename": "src/routes/modules/douyin.router.js",
+    "groupTitle": "抖音"
+  },
+  {
     "type": "post",
     "url": "/api/douyin",
     "title": "混合解析单一视频接口",
     "name": "混合解析单一视频接口",
+    "group": "抖音",
+    "version": "1.0.0",
+    "filename": "src/routes/modules/douyin.router.js",
+    "groupTitle": "抖音"
+  },
+  {
+    "type": "get",
+    "url": "/api/douyin/get",
+    "title": "获取视频数据接口",
+    "name": "获取视频数据接口",
     "group": "抖音",
     "version": "1.0.0",
     "filename": "src/routes/modules/douyin.router.js",
