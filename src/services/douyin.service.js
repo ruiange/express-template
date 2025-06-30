@@ -34,3 +34,12 @@ export const getVideoData = async (id) => {
 
   return rows[0]; // 没查到就是 undefined
 };
+
+export const getDouyinDataListService = async (page) => {
+  return db
+    .select() // 默认选中所有字段；也可以 `.select({ jsonData: douyinTable.jsonData })`
+    .from(douyinTable)
+    .where()
+    .limit(10)
+    .offset(page * 10);
+};

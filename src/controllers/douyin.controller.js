@@ -1,4 +1,9 @@
-import { douyinService, getVideoData, saveVideoData } from '../services/douyin.service.js';
+import {
+  douyinService,
+  getDouyinDataListService,
+  getVideoData,
+  saveVideoData,
+} from '../services/douyin.service.js';
 
 export const analysisVideo = async (req, res) => {
   const { url } = req.body || {};
@@ -47,5 +52,15 @@ export const getVideoDataController = async (req, res) => {
     code: 2000,
     msg: '获取成功',
     data: resData,
+  });
+};
+
+export const getDouyinDataList = async (req, res) => {
+  const page = req.query.page || 0;
+  const list = await getDouyinDataListService(Number(page));
+  res.send({
+    code: 2000,
+    msg: '获取成功',
+    data: list,
   });
 };
