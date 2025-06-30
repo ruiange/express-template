@@ -10,7 +10,8 @@
     "apidoc": "apidoc -i src/ -o src/public/apidoc/",
     "generate": "npx drizzle-kit generate",
     "migrate": "npx drizzle-kit migrate",
-    "push":"npx drizzle-kit push"
+    "push":"npx drizzle-kit push",
+    "database-push": "npm run generate && npm run migrate && npm run push"
   },
   "keywords": [
     "express",
