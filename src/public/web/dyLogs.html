@@ -1,8 +1,438 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>抖音数据列表</title>
+    <!-- Element Plus CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.3.8/dist/index.css" />
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@2.1.0/dist/index.css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+        background-color: #f5f7fa;
+        color: #303133;
+      }
+      .app-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .page-header {
+        margin-bottom: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ebeef5;
+      }
+      .page-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #409EFF;
+        margin: 0;
+      }
+      .el-card {
+        margin-bottom: 20px;
+        border-radius: 6px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      }
+      .el-table {
+        width: 100%;
+        border-radius: 4px;
+      }
+      .json-preview {
+        max-height: 100px;
+        overflow: auto;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        padding: 8px;
+        font-family: monospace;
+        font-size: 12px;
+        color: #606266;
+        border: 1px solid #ebeef5;
+      }
+      .loading-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        display: none;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
+      }
+      .loading-text {
+        color: #409EFF;
+        font-size: 14px;
+        margin-top: 8px;
+      }
+      .el-table {
+        position: relative;
+        transition: all 0.3s ease-in-out;
+      }
+      .el-table__row {
+        transition: all 0.3s ease-in-out;
+      }
+      @media (max-width: 768px) {
+        .app-container {
+          padding: 10px;
+        }
+        .page-title {
+          font-size: 18px;
+        }
+        .el-button--small {
+          padding: 8px 12px;
+          font-size: 12px;
+        }
+        .json-preview {
+          max-height: 80px;
+          font-size: 11px;
+        }
+      }
+      .el-button--primary {
+        background-color: #409EFF;
+      }
+      .el-button--primary:hover {
+        background-color: #66b1ff;
+      }
+      .el-dialog__body {
+        padding: 20px;
+      }
+      .json-detail {
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        padding: 15px;
+        font-family: monospace;
+        max-height: 500px;
+        overflow: auto;
+        border: 1px solid #ebeef5;
+      }
+      .empty-data {
+        text-align: center;
+        color: #909399;
+        padding: 30px 0;
+      }
+      .error-message {
+        text-align: center;
+        color: #f56c6c;
+        padding: 30px 0;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <div class="app-container">
+      <div class="page-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center;">
+            <i class="el-icon-data-line" style="font-size: 24px; margin-right: 8px; color: #409EFF;"></i>
+            <h1 class="page-title">抖音数据列表</h1>
+          </div>
+          <button class="el-button el-button--primary el-button--small" onclick="refreshData()">
+            <i class="el-icon-refresh" style="margin-right: 5px;"></i>
+            <span>刷新数据</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="el-card" style="min-height: 400px;">
+        <div class="el-card__body">
+          <!-- 加载状态 -->
+          <div class="loading-container">
+            <svg class="loading-spinner" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#409EFF" stroke-width="5" stroke-linecap="round">
+                <animateTransform
+                  attributeName="transform"
+                  type="rotate"
+                  dur="1s"
+                  from="0 25 25"
+                  to="360 25 25"
+                  repeatCount="indefinite"
+                />
+              </circle>
+            </svg>
+            <div class="loading-text">正在加载数据...</div>
+          </div>
+
+          <!-- 数据表格 -->
+          <div class="el-table el-table--enable-row-hover el-table--striped">
+            <table class="el-table__body" style="width: 100%">
+              <thead>
+                <tr>
+                  <th class="el-table__cell"><div class="cell">ID</div></th>
+                  <th class="el-table__cell"><div class="cell">JSON数据</div></th>
+                  <th class="el-table__cell"><div class="cell">操作</div></th>
+                </tr>
+              </thead>
+              <tbody id="dataTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JSON详情对话框 -->
+    <div class="el-overlay" id="jsonDetailModal" style="display: none; z-index: 2000;">
+      <div class="el-dialog" style="margin-top: 15vh; width: 90%; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <div class="el-dialog__header">
+          <span class="el-dialog__title" id="jsonDetailModalLabel">JSON数据详情</span>
+          <button type="button" class="el-dialog__headerbtn" onclick="closeModal()">
+            <i class="el-dialog__close el-icon el-icon-close"></i>
+          </button>
+        </div>
+        <div class="el-dialog__body">
+          <pre id="jsonDetailContent" class="json-detail"></pre>
+        </div>
+        <div class="el-dialog__footer">
+          <button type="button" class="el-button el-button--default" onclick="closeModal()">
+            <span>关闭</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* 关闭模态框 */
+      function closeModal() {
+        document.getElementById('jsonDetailModal').style.display = 'none';
+      }
+      
+      /* 显示JSON详情 */
+      function showJsonDetail(id, encodedJsonData) {
+        const modalTitle = document.getElementById('jsonDetailModalLabel');
+        const jsonContent = document.getElementById('jsonDetailContent');
+        const modal = document.getElementById('jsonDetailModal');
+        
+        try {
+          // 解码并解析JSON数据
+          const jsonData = JSON.parse(decodeURIComponent(encodedJsonData));
+          
+          modalTitle.textContent = `ID: ${id} 的JSON数据详情`;
+          jsonContent.textContent = JSON.stringify(jsonData, null, 2);
+          
+          // 显示模态框
+          modal.style.display = 'block';
+        } catch (error) {
+          console.error('解析JSON数据失败:', error);
+          // 使用Element风格的消息提示
+          showMessage('错误', '无法显示JSON数据详情', 'error');
+        }
+      }
+
+      /* 显示消息提示 */
+      function showMessage(title, message, type = 'info') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `el-message el-message--${type}`;
+        messageDiv.style.top = '20px';
+        messageDiv.style.position = 'fixed';
+        messageDiv.style.left = '50%';
+        messageDiv.style.transform = 'translateX(-50%)';
+        messageDiv.style.transition = 'opacity 0.3s, transform 0.4s, top 0.4s';
+        messageDiv.style.padding = '15px 15px 15px 20px';
+        messageDiv.style.display = 'flex';
+        messageDiv.style.alignItems = 'center';
+        messageDiv.style.backgroundColor = '#fff';
+        messageDiv.style.border = type === 'error' ? '1px solid #f56c6c' : '1px solid #e6e6e6';
+        messageDiv.style.borderRadius = '4px';
+        messageDiv.style.boxShadow = '0 2px 12px 0 rgba(0, 0, 0, 0.1)';
+        
+        messageDiv.innerHTML = `
+          <i class="el-message__icon el-icon-${type === 'error' ? 'error' : 'info'}" 
+             style="color: ${type === 'error' ? '#f56c6c' : '#909399'}; margin-right: 10px;"></i>
+          <div class="el-message__content" style="color: #606266;">
+            <strong>${title}</strong>: ${message}
+          </div>
+        `;
+        
+        document.body.appendChild(messageDiv);
+        
+        setTimeout(() => {
+          messageDiv.style.opacity = '0';
+          setTimeout(() => {
+            document.body.removeChild(messageDiv);
+          }, 300);
+        }, 3000);
+      }
+
+      /* 加载数据并渲染表格 */
+      async function loadData() {
+        const loading = document.querySelector('.loading-container');
+        const tableBody = document.getElementById('dataTableBody');
+        
+        try {
+          loading.style.display = 'block';
+          const response = await fetch('/api/douyin/dataList');
+          const data = await response.json();
+
+          if (data.code === 2000 ) {
+            if (data.data.length > 0) {
+              const rows = data.data.map(item => {
+                // 将JSON数据转换为格式化的字符串，限制长度
+                const jsonPreview = JSON.stringify(item.jsonData, null, 2).substring(0, 100) + '...';
+                return `
+                  <tr class="el-table__row">
+                    <td class="el-table__cell"><div class="cell">${item.id || ''}</div></td>
+                    <td class="el-table__cell">
+                      <div class="cell">
+                        <pre class="json-preview">${jsonPreview}</pre>
+                      </div>
+                    </td>
+                    <td class="el-table__cell">
+                      <div class="cell">
+                        <button class="el-button el-button--primary el-button--small" 
+                                onclick="showJsonDetail(${item.id}, '${encodeURIComponent(JSON.stringify(item.jsonData))}')">
+                          <span>查看详情</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join('');
+              
+              tableBody.innerHTML = rows;
+            } else {
+              tableBody.innerHTML = `
+                <tr class="el-table__row">
+                  <td class="el-table__cell" colspan="3">
+                    <div class="empty-data">
+                      <i class="el-icon-data-empty" style="font-size: 30px; margin-bottom: 10px;"></i>
+                      <p>暂无数据</p>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }
+          } else {
+            tableBody.innerHTML = `
+              <tr class="el-table__row">
+                <td class="el-table__cell" colspan="3">
+                  <div class="empty-data">
+                    <i class="el-icon-data-empty" style="font-size: 30px; margin-bottom: 10px;"></i>
+                    <p>暂无数据</p>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }
+        } catch (error) {
+          console.error('加载数据失败:', error);
+          tableBody.innerHTML = `
+            <tr class="el-table__row">
+              <td class="el-table__cell" colspan="3">
+                <div class="error-message">
+                  <i class="el-icon-error" style="font-size: 30px; margin-bottom: 10px;"></i>
+                  <p>加载数据失败</p>
+                </div>
+              </td>
+            </tr>
+          `;
+          showMessage('错误', '加载数据失败，请稍后重试', 'error');
+        } finally {
+          loading.style.display = 'none';
+        }
+      }
+
+      /* 防抖函数 */
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      /* 刷新数据 */
+      const refreshData = debounce(async () => {
+        const button = document.querySelector('.el-button--primary');
+        if (button) {
+          // 添加加载状态
+          button.classList.add('is-loading');
+          button.disabled = true;
+          
+          // 添加旋转动画到图标
+          const icon = button.querySelector('.el-icon-refresh');
+          if (icon) {
+            icon.style.animation = 'rotate360 1s linear infinite';
+          }
+        }
+
+        try {
+          await loadData();
+          showMessage('成功', '数据已更新', 'success');
+        } catch (error) {
+          showMessage('错误', '刷新数据失败，请稍后重试', 'error');
+        } finally {
+          if (button) {
+            // 移除加载状态
+            button.classList.remove('is-loading');
+            button.disabled = false;
+            
+            // 移除旋转动画
+            const icon = button.querySelector('.el-icon-refresh');
+            if (icon) {
+              icon.style.animation = '';
+            }
+          }
+        }
+      }, 500);
+
+      /* 页面加载完成后自动加载数据 */
+      document.addEventListener('DOMContentLoaded', loadData);
+
+      /* 添加键盘事件监听，按ESC关闭模态框 */
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
+
+      /* 添加点击遮罩层关闭模态框 */
+      document.getElementById('jsonDetailModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+          closeModal();
+        }
+      });
+
+      /* 添加旋转动画样式 */
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes rotate360 {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .el-button.is-loading {
+          opacity: 0.8;
+          cursor: not-allowed;
+        }
+        .el-message--success {
+          background-color: #f0f9eb;
+          border-color: #e1f3d8;
+        }
+        .el-message--success .el-message__content {
+          color: #67c23a;
+        }
+        .el-message--error {
+          background-color: #fef0f0;
+          border-color: #fde2e2;
+        }
+        .el-message--error .el-message__content {
+          color: #f56c6c;
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+  </body>
 </html>
