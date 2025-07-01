@@ -14,8 +14,8 @@ import { miniLogin } from '../../controllers/mini.controller.js';
  * @apiError (Error 400) InvalidCode 提供的code无效
  * @apiError (Error 500) InternalServerError 服务器内部错误
  */
-const miniRouter = express.Router();
+const miniRoute = express.Router();
 
-miniRouter.post('/login', miniLogin);
+miniRoute.post('/login', miniLogin);
 
-export default miniRouter;
+export default miniRoute;

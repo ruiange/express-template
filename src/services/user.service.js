@@ -71,10 +71,10 @@ export const getUserById = async (id) => {
  * @param {Object} projection - 需要返回的字段（可选）
  * @returns {Promise<Object>} - 用户对象
  */
-export const getUserByOpenid = async (openid, projection = {}) => {
+export const getUserByOpenid = async (openid) => {
   try {
     const user = await db
-      .select(projection)
+      .select()
       .from(userTable)
       .where(eq(userTable.openid, openid))
       .execute();

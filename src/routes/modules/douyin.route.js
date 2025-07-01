@@ -5,39 +5,39 @@ import {
   saveVideoDataController,
 } from '../../controllers/douyin.controller.js';
 
-const douyinRouter = express.Router();
+const douyinRoute = express.Router();
 
 /**
- * @api {post} /api/douyin 混合解析单一视频接口
+ * @api {post} /douyin 混合解析单一视频接口
  * @apiName 混合解析单一视频接口
  * @apiGroup 抖音
  * @apiVersion 1.0.0
  */
-douyinRouter.post('/', analysisVideo);
+douyinRoute.post('/', analysisVideo);
 
 /**
- * @api {get} /api/douyin/save 保存视频数据接口
+ * @api {get} /douyin/save 保存视频数据接口
  * @apiName 保存视频数据接口
  * @apiGroup 抖音
  * @apiVersion 1.0.0
  */
-douyinRouter.post('/save', saveVideoDataController);
+douyinRoute.post('/save', saveVideoDataController);
 
 /**
- * @api {get} /api/douyin/get 获取视频数据接口
+ * @api {get} /douyin/get 获取视频数据接口
  * @apiName 获取视频数据接口
  * @apiGroup 抖音
  * @apiVersion 1.0.0
  */
-douyinRouter.get('/get', getVideoDataController);
+douyinRoute.get('/get', getVideoDataController);
 
 /**
- * @api {get} /api/douyin/dataList 获取视频数据列表接口
+ * @api {get} /douyin/dataList 获取视频数据列表接口
  * @apiName 获取视频数据请求列表
  * @apiGroup 抖音
  * @apiVersion 1.0.0
  */
-douyinRouter.get('/dataList',getDouyinDataList)
+douyinRoute.get('/dataList',getDouyinDataList)
 
 
-export default douyinRouter;
+export default douyinRoute;

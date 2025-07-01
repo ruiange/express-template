@@ -1,10 +1,10 @@
 import express from 'express';
 import { scanNewsController } from '../../controllers/nineYin.controllers.js';
 
-const nineYinRouter = express.Router();
+const nineYinRoute = express.Router();
 
 /**
- * @api {get} /api/9yin/scan/news 获取九阴新闻列表
+ * @api {get} /9yin/scan/news 获取九阴新闻列表
  * @apiName GetNineYinNews
  * @apiGroup 九阴
  * @apiVersion 1.0.0
@@ -34,6 +34,6 @@ const nineYinRouter = express.Router();
  *       }]
  *     }
  */
-nineYinRouter.get('/scan/news', scanNewsController);
+nineYinRoute.get('/scan/news', scanNewsController);
 
-export default nineYinRouter;
+export default nineYinRoute;

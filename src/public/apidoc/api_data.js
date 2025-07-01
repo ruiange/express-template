@@ -29,7 +29,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/9yin/scan/news",
+    "url": "/9yin/scan/news",
     "title": "获取九阴新闻列表",
     "name": "GetNineYinNews",
     "group": "九阴",
@@ -97,37 +97,122 @@ define({ "api": [
         }
       ]
     },
-    "filename": "src/routes/modules/nineYin.router.js",
+    "filename": "src/routes/modules/nineYin.route.js",
     "groupTitle": "九阴"
   },
   {
+    "type": "post",
+    "url": "/mini/login",
+    "title": "小程序登录",
+    "name": "MiniLogin",
+    "group": "小程序",
+    "description": "<p>小程序登录接口</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>小程序登录时获取的临时登录凭证</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>用户登录令牌</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户ID</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "optional": false,
+            "field": "InvalidCode",
+            "description": "<p>提供的code无效</p>"
+          }
+        ],
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>服务器内部错误</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/mini.route.js",
+    "groupTitle": "小程序"
+  },
+  {
     "type": "get",
-    "url": "/api/douyin/save",
+    "url": "/douyin/save",
     "title": "保存视频数据接口",
     "name": "保存视频数据接口",
     "group": "抖音",
     "version": "1.0.0",
-    "filename": "src/routes/modules/douyin.router.js",
+    "filename": "src/routes/modules/douyin.route.js",
     "groupTitle": "抖音"
   },
   {
     "type": "post",
-    "url": "/api/douyin",
+    "url": "/douyin",
     "title": "混合解析单一视频接口",
     "name": "混合解析单一视频接口",
     "group": "抖音",
     "version": "1.0.0",
-    "filename": "src/routes/modules/douyin.router.js",
+    "filename": "src/routes/modules/douyin.route.js",
     "groupTitle": "抖音"
   },
   {
     "type": "get",
-    "url": "/api/douyin/get",
+    "url": "/douyin/get",
     "title": "获取视频数据接口",
     "name": "获取视频数据接口",
     "group": "抖音",
     "version": "1.0.0",
-    "filename": "src/routes/modules/douyin.router.js",
+    "filename": "src/routes/modules/douyin.route.js",
     "groupTitle": "抖音"
+  },
+  {
+    "type": "get",
+    "url": "/douyin/dataList",
+    "title": "获取视频数据列表接口",
+    "name": "获取视频数据请求列表",
+    "group": "抖音",
+    "version": "1.0.0",
+    "filename": "src/routes/modules/douyin.route.js",
+    "groupTitle": "抖音"
+  },
+  {
+    "type": "post",
+    "url": "/wealth/muyu",
+    "title": "敲木鱼增加财富",
+    "name": "WealthMuyu",
+    "group": "财富",
+    "description": "<p>敲木鱼增加财富</p>",
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wealth.route.js",
+    "groupTitle": "财富"
   }
 ] });
