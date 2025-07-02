@@ -1,8 +1,8 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadController } from '../../controllers/upload.controller.js';
+import { deleteVercelBlob, uploadController } from '../../controllers/upload.controller.js';
 
-const uploadRouter = express.Router();
+const uploadRoute = express.Router();
 const upload = multer();
 /**
  * @api {post} /upload 上传文件
@@ -18,6 +18,9 @@ const upload = multer();
  * @apiError (Error 400) BadRequest Invalid file format
  * @apiError (Error 500) InternalServerError Server error
  */
-uploadRouter.post('/', upload.single('file'), uploadController);
+uploadRoute.post('/', upload.single('file'), uploadController);
 
-export default uploadRouter;
+
+uploadRoute.delete('/', deleteVercelBlob);
+
+export default uploadRoute;

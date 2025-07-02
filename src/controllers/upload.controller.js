@@ -1,8 +1,8 @@
-import { put } from '@vercel/blob';
+import { del, put } from '@vercel/blob';
 import qiniu from 'qiniu';
 import { v4 as uuidv4 } from 'uuid';
 
-const vercelBlobUpload = async (file,path) => {
+const vercelBlobUpload = async (file, path) => {
   const filepath = `${path}/${file.originalname}`;
   const { url, downloadUrl, pathname, contentType, contentDisposition } = await put(
     filepath,
@@ -61,11 +61,24 @@ export const uploadController = async (req, res) => {
   try {
     const file = req.file;
     const path = req.body.path || 'default';
-    const url = await vercelBlobUpload(file,path);
+    const url = await vercelBlobUpload(file, path);
     //const url = await qiNiuUpload(file, path);
     res.json({ url: url });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: '上传失败' });
+  }
+};
+
+export const deleteVercelBlob = async (filePath) => {
+  const pathname = new URL(filePath).pathname.slice(1);
+  try {
+    await del(pathname, {
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
+    return true;
+  } catch (error) {
+    console.error('删除失败:', error);
+    return false;
   }
 };
