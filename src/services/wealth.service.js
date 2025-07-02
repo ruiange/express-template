@@ -71,7 +71,7 @@ export const getMoyuRank = async () => {
   `);
 
 
-  console.log(result.rows)
+
 
   return result.rows.map((item, index) => ({
     rank: index + 1,
