@@ -206,6 +206,100 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/user/register",
+    "title": "用户注册",
+    "name": "RegisterUser",
+    "group": "用户",
+    "description": "<p>新用户注册接口</p>",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "username",
+        "description": "<p>用户名</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "password",
+        "description": "<p>密码</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "email",
+        "description": "<p>电子邮箱</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>注册成功提示</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created\n{\n  \"message\": \"用户注册成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 400 Bad Request\n{\n  \"message\": \"用户名或邮箱已被使用\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
+    "type": "put",
+    "url": "/user/",
+    "title": "修改个人资料",
+    "name": "updateProfile",
+    "group": "用户",
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
+    "type": "get",
+    "url": "/user/",
+    "title": "查看个人资料",
+    "name": "viewProfile",
+    "group": "用户",
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
+    "type": "post",
     "url": "/wealth/muyu",
     "title": "敲木鱼增加财富",
     "name": "WealthMuyu",

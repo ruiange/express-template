@@ -5,7 +5,7 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 const userRoute = express.Router();
 
 /**
- * @api {post} /users/register 用户注册
+ * @api {post} /user/register 用户注册
  * @apiName RegisterUser
  * @apiGroup 用户
  * @apiDescription 新用户注册接口
@@ -32,6 +32,12 @@ const userRoute = express.Router();
  */
 userRoute.post('/register', register);
 
+
+/**
+ * @api {get} /user/ 查看个人资料
+ * @apiName viewProfile
+ * @apiGroup 用户
+ */
 userRoute.get('/', authMiddleware, viewProfile);
 
 /**
