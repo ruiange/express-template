@@ -1,8 +1,13 @@
-
 import { dateDiff } from '../utils/index.js';
 import chalk from 'chalk';
 import dayjs from 'dayjs';
-import { getUserById, registerUser, updateUser } from '../services/user.service.js';
+import {
+  getUserById,
+  getUserByOpenid,
+  getUserInfo,
+  registerUser,
+  updateUser,
+} from '../services/user.service.js';
 
 // 用户注册
 export const register = async (req, res) => {
@@ -27,9 +32,10 @@ export const register = async (req, res) => {
  */
 export const viewProfile = async (req, res) => {
   try {
-    let info = await getUserById(req.user.id);
+    const info = await getUserInfo(req.user);
 
-    let days = dateDiff(info.createTime, dayjs());
+    console.log(info);
+    let days = dateDiff(info.create_time, dayjs());
 
     const userInfo = {
       nickname: info.nickname,
@@ -55,9 +61,10 @@ export const viewProfile = async (req, res) => {
  * 修改个人资料
  */
 export const updateProfile = async (req, res) => {
+  console.log('===修改资料');
   try {
     const { nickname, avatar } = req.body;
-    let info = await getUserById(req.user.id);
+    const info = await getUserInfo(req.user);
 
     const params = {
       nickname,
@@ -66,7 +73,6 @@ export const updateProfile = async (req, res) => {
 
     const userInfo = await updateUser(info.id, params);
 
-    console.log(userInfo);
     res.send({
       code: 2000,
       data: {

@@ -133,3 +133,17 @@ export const deleteUser = async (id) => {
     throw error;
   }
 };
+
+
+export const getUserInfo = async (user)=>{
+  const id = user.id || null;
+  const openid = user.openid || null;
+  let info = null;
+
+  if (id) {
+    info = await getUserById(id);
+  } else {
+    info = await getUserByOpenid(openid);
+  }
+  return info
+}

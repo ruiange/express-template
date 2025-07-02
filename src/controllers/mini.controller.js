@@ -59,7 +59,7 @@ export const miniLogin = async (req, res) => {
       info = await createUser({ openid, nickname: '剑客无名', avatar: '' });
     }
 
-    const timestamp = info.createTime;
+    const timestamp = info.create_time;
     const now = dayjs();
     let days = now.diff(timestamp*1000, 'day') + 1;
 
