@@ -1,4 +1,4 @@
-import { addMuyuWealth } from '../services/wealth.service.js';
+import { addMuyuWealth, getWealthRank } from '../services/wealth.service.js';
 
 /**
  * 通过敲木鱼增加财富
@@ -7,20 +7,20 @@ import { addMuyuWealth } from '../services/wealth.service.js';
  */
 export const muyuAddWealth = async (req, res) => {
   const user = req.user;
-  console.log(req.body, req.user);
 
   const params = {
-    openid: req.body.openid,
+    openid: req.user.openid,
     muyu: req.body.totalCount,
   };
 
-  await addMuyuWealth(params.openid, params.muyu)
-
+  const data = await addMuyuWealth(params.openid, params.muyu);
+  const rank = await getWealthRank(params.openid);
+  const result = {
+    rank,
+  };
   return res.send({
     code: 2000,
     msg: 'success',
-    data: {
-      user: user,
-    },
+    data: result,
   });
 };
