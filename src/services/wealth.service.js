@@ -1,6 +1,6 @@
 import { db } from '../config/db.js';
 import { wealthTable } from '../db/schema/wealth.schema.js';
-import { eq, sql } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 
 /**
  * 更新或插入用户的木鱼财富记录
@@ -51,4 +51,30 @@ export const getWealthRank = async (openid) => {
     .where(sql`${wealthTable.count} > ${userCount}`);
 
   return Number(row.total) + 1;
+};
+
+/**
+ * 获取摸鱼排行榜（前20名），附带用户昵称和头像
+ */
+export const getMoyuRank = async () => {
+  const result = await db.execute(sql`
+      SELECT
+          w.openid,
+          w.count,
+          w.muyu,
+          u.nickname,
+          u.avatar
+      FROM wealth AS w
+               LEFT JOIN users AS u ON w.openid = u.openid
+      ORDER BY w.muyu DESC
+          LIMIT 20
+  `);
+
+
+  console.log(result.rows)
+
+  return result.rows.map((item, index) => ({
+    rank: index + 1,
+    ...item,
+  }));
 };

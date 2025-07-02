@@ -1,5 +1,5 @@
 import express from 'express';
-import { muyuAddWealth } from '../../controllers/wealth.controller.js';
+import { muyuAddWealth, muyuRankList } from '../../controllers/wealth.controller.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 /**
  * @api {post} /wealth/muyu 敲木鱼增加财富
@@ -10,5 +10,6 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 const wealthRoute = express.Router();
 
 wealthRoute.post('/muyu',authMiddleware, muyuAddWealth);
+wealthRoute.get('/muyu',authMiddleware, muyuRankList);
 
 export default wealthRoute;
