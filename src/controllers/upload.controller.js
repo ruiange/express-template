@@ -2,8 +2,8 @@ import { put } from '@vercel/blob';
 import qiniu from 'qiniu';
 import { v4 as uuidv4 } from 'uuid';
 
-const vercelBlobUpload = async (file) => {
-  const filepath = `zhou/${file.originalname}`;
+const vercelBlobUpload = async (file,path) => {
+  const filepath = `${path}/${file.originalname}`;
   const { url, downloadUrl, pathname, contentType, contentDisposition } = await put(
     filepath,
     file.buffer,
@@ -61,7 +61,7 @@ export const uploadController = async (req, res) => {
   try {
     const file = req.file;
     const path = req.body.path || 'default';
-    const url = await vercelBlobUpload(file);
+    const url = await vercelBlobUpload(file,path);
     //const url = await qiNiuUpload(file, path);
     res.json({ url: url });
   } catch (err) {
