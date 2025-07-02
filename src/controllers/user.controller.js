@@ -2,12 +2,11 @@ import { dateDiff } from '../utils/index.js';
 import chalk from 'chalk';
 import dayjs from 'dayjs';
 import {
-  getUserById,
-  getUserByOpenid,
   getUserInfo,
   registerUser,
   updateUser,
 } from '../services/user.service.js';
+import { deleteVercelBlob } from './upload.controller.js';
 
 // 用户注册
 export const register = async (req, res) => {
@@ -61,15 +60,18 @@ export const viewProfile = async (req, res) => {
  * 修改个人资料
  */
 export const updateProfile = async (req, res) => {
-  console.log('===修改资料');
+
   try {
     const { nickname, avatar } = req.body;
     const info = await getUserInfo(req.user);
-
+    console.log(info.avatar);
     const params = {
       nickname,
       avatar,
     };
+    if (info.avatar && info.avatar !== avatar) {
+      await deleteVercelBlob(info.avatar);
+    }
 
     const userInfo = await updateUser(info.id, params);
 

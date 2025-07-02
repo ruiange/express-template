@@ -72,13 +72,13 @@ export const uploadController = async (req, res) => {
 
 export const deleteVercelBlob = async (filePath) => {
   const pathname = new URL(filePath).pathname.slice(1);
+
   try {
     await del(pathname, {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
     return true;
   } catch (error) {
-    console.error('删除失败:', error);
     return false;
   }
 };
