@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const TOKEN_EXPIRE_TIME = '7d';
+const TOKEN_EXPIRE_TIME = process.env.JWT_EXPIRES_IN || '1h';
 
 /**
  * 生成 JWT 令牌

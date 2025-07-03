@@ -33,7 +33,7 @@ export const viewProfile = async (req, res) => {
   try {
     const info = await getUserInfo(req.user);
 
-    console.log(info);
+
     let days = dateDiff(info.create_time, dayjs());
 
     const userInfo = {
@@ -64,7 +64,7 @@ export const updateProfile = async (req, res) => {
   try {
     const { nickname, avatar } = req.body;
     const info = await getUserInfo(req.user);
-    console.log(info.avatar);
+
     const params = {
       nickname,
       avatar,
