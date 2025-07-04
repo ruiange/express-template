@@ -46,6 +46,7 @@ export const viewProfile = async (req, res) => {
       code: 2000,
       data: {
         userInfo: userInfo,
+        openid:req.user.openid || undefined
       },
     });
   } catch (error) {
