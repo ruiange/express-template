@@ -1,5 +1,15 @@
 [
   {
+    "type": "post",
+    "url": "/ai/name",
+    "title": "起名宝",
+    "name": "起名宝",
+    "group": "AI对话",
+    "version": "1.0.0",
+    "filename": "src/routes/modules/ai.route.js",
+    "groupTitle": "AI对话"
+  },
+  {
     "success": {
       "fields": {
         "Success 200": [
@@ -23,9 +33,73 @@
     "url": "",
     "version": "0.0.0",
     "filename": "src/public/apidoc/main.js",
-    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
-    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
+    "group": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
+    "groupTitle": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
     "name": ""
+  },
+  {
+    "type": "post",
+    "url": "/upload",
+    "title": "上传文件",
+    "name": "UploadFile",
+    "group": "上传",
+    "description": "<p>Upload a file to the server</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "file",
+            "description": "<p>The file to upload</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Success message</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "filename",
+            "description": "<p>Uploaded file name</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Invalid file format</p>"
+          }
+        ],
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/upload.route.js",
+    "groupTitle": "上传"
   },
   {
     "type": "get",
