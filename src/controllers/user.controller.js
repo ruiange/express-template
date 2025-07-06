@@ -45,6 +45,7 @@ export const viewProfile = async (req, res) => {
     res.send({
       code: 2000,
       data: {
+        role: info.role,
         userInfo: userInfo,
         openid:req.user.openid || undefined
       },

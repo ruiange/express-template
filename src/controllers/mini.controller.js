@@ -75,6 +75,7 @@ export const miniLogin = async (req, res) => {
       code: 2000,
       data: {
         token,
+        role:  info.role,
         openid,
         userInfo,
       },
