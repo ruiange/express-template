@@ -3,6 +3,7 @@ export const getWallpaper =  async (req, res) => {
 
 
   const imageUrls = [
+    "https://img.picui.cn/free/2025/07/06/686a0275716e4.webp",
     "https://img.picui.cn/free/2025/07/06/686a01e51718c.webp",
     "https://img.picui.cn/free/2025/07/06/686a01e527153.webp",
     "https://img.picui.cn/free/2025/07/06/686a01e5cf3a2.webp",
