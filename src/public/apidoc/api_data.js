@@ -175,6 +175,17 @@ define({ "api": [
     "groupTitle": "九阴"
   },
   {
+    "type": "get",
+    "url": "/wallpaper",
+    "title": "获取壁纸",
+    "name": "getWallpaper",
+    "group": "壁纸",
+    "description": "<p>获取壁纸</p>",
+    "version": "1.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
     "type": "post",
     "url": "/mini/login",
     "title": "小程序登录",

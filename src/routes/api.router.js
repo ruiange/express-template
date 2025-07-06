@@ -6,6 +6,7 @@ import wealthRoute from './modules/wealth.route.js';
 import userRoute from './modules/user.route.js';
 import uploadRoute from './modules/upload.route.js';
 import aiRoute from './modules/ai.route.js';
+import wallpaperRoute from './modules/wallpaper.route.js';
 
 const apiRouter = express.Router();
 
@@ -16,4 +17,5 @@ apiRouter.use('/wealth', wealthRoute);
 apiRouter.use('/user', userRoute);
 apiRouter.use('/upload', uploadRoute);
 apiRouter.use('/ai', aiRoute);
+apiRouter.use('/wallpaper',wallpaperRoute)
 export default apiRouter;
