@@ -175,6 +175,16 @@
     "groupTitle": "九阴"
   },
   {
+    "type": "put",
+    "url": "/admin/audit/config",
+    "title": "修改审核配置",
+    "name": "修改审核配置",
+    "group": "后台管理",
+    "version": "1.0.0",
+    "filename": "src/routes/admin/audit.route.js",
+    "groupTitle": "后台管理"
+  },
+  {
     "type": "get",
     "url": "/wallpaper",
     "title": "获取壁纸",
