@@ -186,6 +186,42 @@ define({ "api": [
     "groupTitle": "壁纸"
   },
   {
+    "type": "get",
+    "url": "/mini/v",
+    "title": "获取小程序版本信息",
+    "name": "GetMiniVersion",
+    "group": "小程序",
+    "description": "<p>获取小程序版本信息</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "version",
+            "description": "<p>小程序版本号</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>获取小程序版本信息失败</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/mini.route.js",
+    "groupTitle": "小程序"
+  },
+  {
     "type": "post",
     "url": "/mini/login",
     "title": "小程序登录",

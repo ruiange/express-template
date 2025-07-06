@@ -1,5 +1,5 @@
 import express from 'express';
-import { miniLogin } from '../../controllers/mini.controller.js';
+import { getVersion, miniLogin } from '../../controllers/mini.controller.js';
 /**
  * @api {post} /mini/login 小程序登录
  * @apiName MiniLogin
@@ -17,5 +17,19 @@ import { miniLogin } from '../../controllers/mini.controller.js';
 const miniRoute = express.Router();
 
 miniRoute.post('/login', miniLogin);
+
+
+
+/**
+ * @api {get} /mini/v 获取小程序版本信息
+ * @apiName GetMiniVersion
+ * @apiGroup 小程序
+ * @apiDescription 获取小程序版本信息
+ *
+ * @apiSuccess {String} version 小程序版本号
+ *
+ * @apiError (Error 500) InternalServerError 获取小程序版本信息失败
+ */
+miniRoute.get('/v',getVersion)
 
 export default miniRoute;

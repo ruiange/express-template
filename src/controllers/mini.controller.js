@@ -3,6 +3,7 @@ import { createUser, getUserByOpenid } from '../services/user.service.js';
 import dayjs from 'dayjs';
 import { generateToken } from '../utils/jwt.util.js';
 import chalk from 'chalk';
+import getVersionList from '../utils/wechat/getVersionList.util.js';
 /**
  * 小程序登录
  * @param code
@@ -86,3 +87,13 @@ export const miniLogin = async (req, res) => {
     });
   }
 };
+
+
+export const getVersion = async (req,res)=>{
+  const data =  await getVersionList();
+  return res.send({
+    code: 2000,
+    data: data,
+    msg: 'success'
+  })
+}
