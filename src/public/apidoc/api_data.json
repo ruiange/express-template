@@ -186,6 +186,16 @@
   },
   {
     "type": "get",
+    "url": "/admin/audit/config",
+    "title": "获取审核配置",
+    "name": "获取审核配置",
+    "group": "后台管理",
+    "version": "1.0.0",
+    "filename": "src/routes/admin/audit.route.js",
+    "groupTitle": "后台管理"
+  },
+  {
+    "type": "get",
     "url": "/wallpaper",
     "title": "获取壁纸",
     "name": "getWallpaper",
