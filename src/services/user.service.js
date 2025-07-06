@@ -1,7 +1,7 @@
 // user.service.js
 
 import { userTable } from '../db/schema/user.schema.js';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, like, or, sql } from 'drizzle-orm';
 import { db } from '../config/db.js';
 
 /**
@@ -85,17 +85,60 @@ export const getUserByOpenid = async (openid) => {
 };
 
 /**
- * 获取所有用户
- * @returns {Promise<Array>} - 用户列表
+ * 获取所有用户（支持分页和搜索）
+ * @param {Object} options - 查询选项
+ * @param {number} options.page - 页码，默认为1
+ * @param {number} options.limit - 每页数量，默认为10
+ * @param {string} options.search - 搜索关键词
+ * @returns {Promise<Object>} - 用户列表和分页信息
  */
-export const getAllUsers = async () => {
+export const getAllUsers = async (options = {}) => {
   try {
-    const users = await db
-      .select()
-      .from(userTable)
+    const { page = 1, limit = 10, search = '' } = options;
+    const offset = (page - 1) * limit;
+    
+    let query = db.select().from(userTable);
+    
+    // 如果有搜索关键词，添加搜索条件
+    if (search) {
+      query = query.where(
+        or(
+          like(userTable.username, `%${search}%`),
+          like(userTable.nickname, `%${search}%`),
+          like(userTable.email, `%${search}%`)
+        )
+      );
+    }
+    
+    // 获取总数
+    const countQuery = search 
+      ? db.select({ count: sql`count(*)` }).from(userTable).where(
+          or(
+            like(userTable.username, `%${search}%`),
+            like(userTable.nickname, `%${search}%`),
+            like(userTable.email, `%${search}%`)
+          )
+        )
+      : db.select({ count: sql`count(*)` }).from(userTable);
+    
+    const [{ count }] = await countQuery.execute();
+    
+    // 获取分页数据
+    const users = await query
       .orderBy(desc(userTable.id))
+      .limit(limit)
+      .offset(offset)
       .execute();
-    return users;
+    
+    return {
+      users,
+      pagination: {
+        currentPage: page,
+        pageSize: limit,
+        total: parseInt(count),
+        totalPages: Math.ceil(parseInt(count) / limit)
+      }
+    };
   } catch (error) {
     throw error;
   }

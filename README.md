@@ -74,7 +74,74 @@ npm run apidoc
 
 API 文档自动生成并部署在 `/apidoc` 路径下。本地开发时可以通过 `http://localhost:3000/apidoc` 访问。
 
+## API 接口文档
 
+### 管理员接口
+
+#### 获取用户列表
+
+**接口地址：** `GET /api/admin/user/users`
+
+**请求头：**
+```
+Authorization: Bearer <token>
+```
+
+**查询参数：**
+- `page` (可选): 页码，默认为1
+- `limit` (可选): 每页数量，默认为10
+- `search` (可选): 搜索关键词，支持用户名、昵称、邮箱搜索
+
+**权限要求：** 需要管理员权限
+
+**请求示例：**
+```
+GET /api/admin/user/users?page=1&limit=10&search=test
+```
+
+**响应示例：**
+```json
+{
+  "code": 2000,
+  "message": "获取用户列表成功",
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "username": "testuser",
+        "email": "test@example.com",
+        "nickname": "测试用户",
+        "avatar": "https://example.com/avatar.jpg",
+        "role": "user",
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "updatedAt": "2024-01-01T00:00:00.000Z",
+        "createTime": 1704067200
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "pageSize": 10,
+      "total": 1,
+      "totalPages": 1
+    }
+  }
+}
+```
+
+**错误响应：**
+```json
+{
+  "code": 4001,
+  "message": "未经身份验证的用户"
+}
+```
+
+```json
+{
+  "code": 4003,
+  "message": "权限不足，需要管理员权限"
+}
+```
 
 ## 许可证
 
