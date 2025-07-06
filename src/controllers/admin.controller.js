@@ -1,5 +1,5 @@
 import { getAuditConfigByKey, updateAuditConfigByKey } from '../services/admin.service.js';
-import * as tty from 'node:tty';
+
 
 export const auditConfigController = async (req, res) => {
   let status = false;

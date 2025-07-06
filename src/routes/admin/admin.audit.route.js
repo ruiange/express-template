@@ -3,7 +3,7 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { adminMiddleware } from '../../middlewares/admin.middleware.js';
 import { auditConfigController, getAuditConfigController } from '../../controllers/admin.controller.js';
 
-const auditRoute = express.Router();
+const adminAuditRoute = express.Router();
 
 /**
  * @api {put} /admin/audit/config 修改审核配置
@@ -11,7 +11,7 @@ const auditRoute = express.Router();
  * @apiGroup 后台管理
  * @apiVersion 1.0.0
  */
-auditRoute.put('/config', authMiddleware, adminMiddleware, auditConfigController);
+adminAuditRoute.put('/config', authMiddleware, adminMiddleware, auditConfigController);
 
 /**
  * @api {get} /admin/audit/config 获取审核配置
@@ -19,5 +19,5 @@ auditRoute.put('/config', authMiddleware, adminMiddleware, auditConfigController
  * @apiGroup 后台管理
  * @apiVersion 1.0.0
  */
-auditRoute.get('/config', getAuditConfigController);
-export default auditRoute;
+adminAuditRoute.get('/config', getAuditConfigController);
+export default adminAuditRoute;

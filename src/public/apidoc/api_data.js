@@ -181,7 +181,7 @@ define({ "api": [
     "name": "修改审核配置",
     "group": "后台管理",
     "version": "1.0.0",
-    "filename": "src/routes/admin/audit.route.js",
+    "filename": "src/routes/admin/admin.audit.route.js",
     "groupTitle": "后台管理"
   },
   {
@@ -191,7 +191,7 @@ define({ "api": [
     "name": "获取审核配置",
     "group": "后台管理",
     "version": "1.0.0",
-    "filename": "src/routes/admin/audit.route.js",
+    "filename": "src/routes/admin/admin.audit.route.js",
     "groupTitle": "后台管理"
   },
   {
@@ -416,7 +416,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "src/routes/modules/user.route.js",
+    "filename": "src/routes/modules/admin.user.route.js",
     "groupTitle": "用户"
   },
   {
@@ -426,7 +426,7 @@ define({ "api": [
     "name": "updateProfile",
     "group": "用户",
     "version": "0.0.0",
-    "filename": "src/routes/modules/user.route.js",
+    "filename": "src/routes/modules/admin.user.route.js",
     "groupTitle": "用户"
   },
   {
@@ -436,7 +436,7 @@ define({ "api": [
     "name": "viewProfile",
     "group": "用户",
     "version": "0.0.0",
-    "filename": "src/routes/modules/user.route.js",
+    "filename": "src/routes/modules/admin.user.route.js",
     "groupTitle": "用户"
   },
   {
