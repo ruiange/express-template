@@ -1,8 +1,9 @@
 // user.service.js
 
 import { userTable } from '../db/schema/user.schema.js';
-import { eq, desc, like, or, sql } from 'drizzle-orm';
+import { eq, asc, like, or, sql } from 'drizzle-orm';
 import { db } from '../config/db.js';
+import chalk from 'chalk';
 
 /**
  * 用户注册服务
@@ -97,6 +98,8 @@ export const getAllUsers = async (options = {}) => {
     const { page = 1, limit = 10, search = '' } = options;
     const offset = (page - 1) * limit;
     
+    console.log(chalk.yellow('getAllUsers 参数:', { page, limit, search, offset }));
+    
     let query = db.select().from(userTable);
     
     // 如果有搜索关键词，添加搜索条件
@@ -121,14 +124,26 @@ export const getAllUsers = async (options = {}) => {
         )
       : db.select({ count: sql`count(*)` }).from(userTable);
     
+    console.log(chalk.yellow('执行计数查询...'));
     const [{ count }] = await countQuery.execute();
+    console.log(chalk.yellow('总记录数:', count));
     
     // 获取分页数据
+    console.log(chalk.yellow('执行分页查询...'));
     const users = await query
-      .orderBy(desc(userTable.id))
+      .orderBy(asc(userTable.id))
       .limit(limit)
       .offset(offset)
       .execute();
+    
+    console.log(chalk.yellow('查询到的用户数量:', users.length));
+    if (users.length > 0) {
+      console.log(chalk.yellow('第一个用户示例:', {
+        id: users[0].id,
+        username: users[0].username,
+        email: users[0].email
+      }));
+    }
     
     return {
       users,
@@ -140,6 +155,8 @@ export const getAllUsers = async (options = {}) => {
       }
     };
   } catch (error) {
+    console.log(chalk.red('getAllUsers 错误:', error.message));
+    console.log(chalk.red('错误堆栈:', error.stack));
     throw error;
   }
 };

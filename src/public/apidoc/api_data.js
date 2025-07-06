@@ -175,6 +175,300 @@ define({ "api": [
     "groupTitle": "九阴"
   },
   {
+    "type": "get",
+    "url": "/admin/user/users",
+    "title": "获取用户列表",
+    "name": "GetUserList",
+    "group": "后台管理",
+    "version": "1.0.0",
+    "description": "<p>管理员获取用户列表，支持分页和搜索功能</p>",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "1",
+            "description": "<p>页码，从1开始</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "10",
+            "description": "<p>每页数量，最大100</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "search",
+            "description": "<p>搜索关键词，支持用户名、昵称、邮箱模糊搜索</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码，2000表示成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "data.users",
+            "description": "<p>用户列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.users.id",
+            "description": "<p>用户ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.username",
+            "description": "<p>用户名</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.email",
+            "description": "<p>邮箱</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.nickname",
+            "description": "<p>昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.avatar",
+            "description": "<p>头像URL</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.role",
+            "description": "<p>用户角色（user/admin）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.createdAt",
+            "description": "<p>创建时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.users.updatedAt",
+            "description": "<p>更新时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.users.createTime",
+            "description": "<p>创建时间戳</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data.pagination",
+            "description": "<p>分页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pagination.currentPage",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pagination.pageSize",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pagination.total",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pagination.totalPages",
+            "description": "<p>总页数</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 2000,\n  \"message\": \"获取用户列表成功\",\n  \"data\": {\n    \"users\": [\n      {\n        \"id\": 1,\n        \"username\": \"testuser\",\n        \"email\": \"test@example.com\",\n        \"nickname\": \"测试用户\",\n        \"avatar\": \"https://example.com/avatar.jpg\",\n        \"role\": \"user\",\n        \"createdAt\": \"2024-01-01T00:00:00.000Z\",\n        \"updatedAt\": \"2024-01-01T00:00:00.000Z\",\n        \"createTime\": 1704067200\n      }\n    ],\n    \"pagination\": {\n      \"currentPage\": 1,\n      \"pageSize\": 10,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 401": [
+          {
+            "group": "Error 401",
+            "type": "Object",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>未授权访问</p>"
+          },
+          {
+            "group": "Error 401",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误码，4001</p>"
+          },
+          {
+            "group": "Error 401",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          }
+        ],
+        "Error 403": [
+          {
+            "group": "Error 403",
+            "type": "Object",
+            "optional": false,
+            "field": "Forbidden",
+            "description": "<p>权限不足</p>"
+          },
+          {
+            "group": "Error 403",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误码，4003</p>"
+          },
+          {
+            "group": "Error 403",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          }
+        ],
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>服务器内部错误</p>"
+          },
+          {
+            "group": "Error 500",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误码，5000</p>"
+          },
+          {
+            "group": "Error 500",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 500",
+            "type": "String",
+            "optional": false,
+            "field": "error",
+            "description": "<p>详细错误信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response-401:",
+          "content": "HTTP/1.1 401 Unauthorized\n{\n  \"code\": 4001,\n  \"message\": \"未经身份验证的用户\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response-403:",
+          "content": "HTTP/1.1 403 Forbidden\n{\n  \"code\": 4003,\n  \"message\": \"权限不足，需要管理员权限\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response-500:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"code\": 5000,\n  \"message\": \"服务器内部错误\",\n  \"error\": \"Database connection failed\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/routes/admin/admin.user.route.js",
+    "groupTitle": "后台管理"
+  },
+  {
     "type": "put",
     "url": "/admin/audit/config",
     "title": "修改审核配置",
@@ -416,7 +710,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "src/routes/modules/admin.user.route.js",
+    "filename": "src/routes/modules/user.route.js",
     "groupTitle": "用户"
   },
   {
@@ -426,7 +720,7 @@ define({ "api": [
     "name": "updateProfile",
     "group": "用户",
     "version": "0.0.0",
-    "filename": "src/routes/modules/admin.user.route.js",
+    "filename": "src/routes/modules/user.route.js",
     "groupTitle": "用户"
   },
   {
@@ -436,7 +730,7 @@ define({ "api": [
     "name": "viewProfile",
     "group": "用户",
     "version": "0.0.0",
-    "filename": "src/routes/modules/admin.user.route.js",
+    "filename": "src/routes/modules/user.route.js",
     "groupTitle": "用户"
   },
   {
