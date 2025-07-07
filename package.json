@@ -11,7 +11,8 @@
     "generate": "npx drizzle-kit generate",
     "migrate": "npx drizzle-kit migrate",
     "push": "npx drizzle-kit push",
-    "database-push": "npm run generate && npm run migrate && npm run push"
+    "database-push": "npm run generate && npm run migrate && npm run push",
+    "upload-project": "node build/upload.js"
   },
   "keywords": [
     "express",
@@ -24,6 +25,7 @@
     "@neondatabase/serverless": "^1.0.0",
     "@vercel/blob": "^1.1.1",
     "axios": "^1.9.0",
+    "basic-ftp": "^5.0.5",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.4.1",
     "compression": "^1.7.4",
