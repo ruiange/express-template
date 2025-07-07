@@ -33,7 +33,6 @@ const EXCLUDE_LIST = [
   '.trae',
   'build',
   'doc',
-  'node_modules',
   '.git',
   '.vscode',
   'dist',

@@ -12,7 +12,7 @@
     "migrate": "npx drizzle-kit migrate",
     "push": "npx drizzle-kit push",
     "database-push": "npm run generate && npm run migrate && npm run push",
-    "upload-project": "node build/upload.js"
+    "upload": "node build/upload.js"
   },
   "keywords": [
     "express",
