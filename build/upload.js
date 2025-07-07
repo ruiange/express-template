@@ -36,6 +36,7 @@ const EXCLUDE_LIST = [
   '.git',
   '.vscode',
   'dist',
+  'node_modules',
   '.DS_Store',
   'npm-debug.log',
   'yarn.lock',
