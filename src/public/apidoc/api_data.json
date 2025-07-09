@@ -33,8 +33,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "src/public/apidoc/main.js",
-    "group": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
-    "groupTitle": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
+    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
+    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
     "name": ""
   },
   {
@@ -465,6 +465,22 @@
         }
       ]
     },
+    "filename": "src/routes/admin/admin.user.route.js",
+    "groupTitle": "后台管理"
+  },
+  {
+    "type": "get",
+    "url": "/admin/user/test-db",
+    "title": "测试数据库连接",
+    "name": "TestDatabaseConnection",
+    "group": "后台管理",
+    "version": "1.0.0",
+    "description": "<p>测试数据库连接和用户表查询</p>",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "filename": "src/routes/admin/admin.user.route.js",
     "groupTitle": "后台管理"
   },
