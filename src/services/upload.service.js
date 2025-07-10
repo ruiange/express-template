@@ -3,7 +3,7 @@ import qiniu from 'qiniu';
 import { v4 as uuidv4 } from 'uuid';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import dotenv from 'dotenv';
-import r2, { endpoint } from '../utils/r2S3Client.util.js';
+import s3CompatibleClient from '../utils/S3Client.util.js';
 
 dotenv.config();
 
@@ -84,7 +84,7 @@ export const r2Upload = async (file, path) => {
   const key = `${path}/${file.originalname}`;
   const bucketName = 'cloud-disk';
   try {
-    await r2.send(
+    await s3CompatibleClient.send(
       new PutObjectCommand({
         Bucket: bucketName,
         Key: key,
