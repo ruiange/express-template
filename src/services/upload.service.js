@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import dotenv from 'dotenv';
 import s3CompatibleClient from '../utils/S3Client.util.js';
-
 dotenv.config();
 
 /**
@@ -102,8 +101,15 @@ export const r2Upload = async (file, path) => {
   }
 };
 
+/**
+ * 文件存储介质判断
+ * @param filePath
+ */
+const storageMediumJudgment = (filePath) => {};
 
-
-export const deleteBlobService = async (file) => {
-
-}
+/**
+ * 删除文件
+ * @param filePath
+ * @returns {Promise<void>}
+ */
+export const deleteBlobService = async (filePath) => {};
