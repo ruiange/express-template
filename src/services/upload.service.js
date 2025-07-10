@@ -3,6 +3,7 @@ import qiniu from 'qiniu';
 import { v4 as uuidv4 } from 'uuid';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import dotenv from 'dotenv';
+import r2, { endpoint } from '../utils/r2S3Client.util.js';
 
 dotenv.config();
 
@@ -73,7 +74,6 @@ export const qiNiuUpload = async (file, path) => {
   });
 };
 
-
 /**
  * R2 上传
  * @param file
@@ -81,16 +81,8 @@ export const qiNiuUpload = async (file, path) => {
  * @returns {Promise<string>}
  */
 export const r2Upload = async (file, path) => {
-  const r2 = await new S3Client({
-    region: 'auto',
-    endpoint: 'https://f63af00ee8a3d6faa782b6ce83b11120.r2.cloudflarestorage.com', // 你的 R2 endpoint
-    credentials: {
-      accessKeyId: '2983257bc762700d9a2a67435aa6b20b',
-      secretAccessKey: '422b93761fbc60bfbd23927ee5c167f2c0230ce57442981403200079f43a68a6',
-    },
-  });
   const key = `${path}/${file.originalname}`;
-  const bucketName = 'hono-file';
+  const bucketName = 'cloud-disk';
   try {
     await r2.send(
       new PutObjectCommand({
@@ -101,7 +93,7 @@ export const r2Upload = async (file, path) => {
       })
     );
 
-    return `https://f63af00ee8a3d6faa782b6ce83b11120.r2.cloudflarestorage.com/${bucketName}/${key}`;
+    return `${process.env.R2_PUBLIC_URL}/${bucketName}/${key}`;
   } catch (error) {
     console.error('[R2 上传错误]', error);
     throw error;

@@ -13,16 +13,20 @@ export const uploadController = async (req, res) => {
     const path = req.body.path || 'default';
     const upType = req.body.upType || 'vercel';
 
+    if (!file){
+      return res.status(400).json({ error: '请选择要上传的文件' });
+    }
+
     let url = null;
     if (upType === 'vercel') {
-      await vercelBlobUpload(file, path);
+      url = await vercelBlobUpload(file, path);
     }
     if (upType === 'qiniu') {
       url = await qiNiuUpload(file, path);
     }
 
-    if(upType==='r2'){
-      r2Upload()
+    if (upType === 'r2') {
+      url = await r2Upload(file, path);
     }
 
     res.json({ url: url });
