@@ -1,11 +1,12 @@
 import { del, put } from '@vercel/blob';
 import { qiNiuUpload, r2Upload, vercelBlobUpload } from '../services/upload.service.js';
 
+
 /**
  * 文件上传控制器
- * @param req
- * @param res
- * @returns {Promise<void>}
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 export const uploadController = async (req, res) => {
   try {
