@@ -14,7 +14,8 @@ dotenv.config();
  * @returns {Promise<string>}
  */
 export const vercelBlobUpload = async (file, path) => {
-  const filepath = `${path}/${file.originalname}`;
+  const uniqueId = uuidv4();
+  const filepath = `${path}/${uniqueId}.${file.originalname.split('.')[1]}`;
   const { url, downloadUrl, pathname, contentType, contentDisposition } = await put(
     filepath,
     file.buffer,
@@ -81,8 +82,9 @@ export const qiNiuUpload = async (file, path) => {
  * @returns {Promise<string>}
  */
 export const r2Upload = async (file, path) => {
-  const key = `${path}/${file.originalname}`;
-  const bucketName = 'cloud-disk';
+  const uniqueId = uuidv4();
+  const key = `${path}/${uniqueId}.${file.originalname.split('.')[1]}`;
+  const bucketName = process.env.R2_BUCKET_NAME;
   try {
     await s3CompatibleClient.send(
       new PutObjectCommand({
