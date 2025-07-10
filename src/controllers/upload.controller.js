@@ -13,7 +13,7 @@ export const uploadController = async (req, res) => {
     const path = req.body.path || 'default';
     const upType = req.body.upType || 'vercel';
 
-    if (!file){
+    if (!file) {
       return res.status(400).json({ error: '请选择要上传的文件' });
     }
 
@@ -29,7 +29,13 @@ export const uploadController = async (req, res) => {
       url = await r2Upload(file, path);
     }
 
-    res.json({ url: url });
+    res.send({
+      data: {
+        url,
+      },
+      code: 2000,
+      msg: '上传成功',
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: '上传失败' });
