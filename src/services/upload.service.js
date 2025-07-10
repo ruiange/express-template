@@ -101,3 +101,9 @@ export const r2Upload = async (file, path) => {
     throw error;
   }
 };
+
+
+
+export const deleteBlobService = async (file) => {
+
+}

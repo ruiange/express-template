@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import { deleteVercelBlob, uploadController } from '../../controllers/upload.controller.js';
+import { authMiddleware } from '../../middlewares/auth.middleware.js';
 
 const uploadRoute = express.Router();
 const upload = multer();
@@ -18,9 +19,9 @@ const upload = multer();
  * @apiError (Error 400) BadRequest Invalid file format
  * @apiError (Error 500) InternalServerError Server error
  */
-uploadRoute.post('/', upload.single('file'), uploadController);
+uploadRoute.post('/', upload.single('file'), authMiddleware, uploadController);
 
 
-uploadRoute.delete('/', deleteVercelBlob);
+uploadRoute.delete('/', authMiddleware, deleteVercelBlob);
 
 export default uploadRoute;
