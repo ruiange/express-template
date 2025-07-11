@@ -15,7 +15,7 @@ let _cacheExpireAt = 0; // 毫秒时间戳
 const getStableAccessToken = async (opts = {}) => {
   const {
     appid = process.env.MINI_PROGRAM_APPID,
-    secret = process.env.MINI_PROGRAM_APPSECRET ,
+    secret = process.env.MINI_PROGRAM_APPSECRET,
     forceRefresh = false,
   } = opts;
 

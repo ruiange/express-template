@@ -18,7 +18,7 @@ const code2Session = async (code) => {
       js_code: code,
       grant_type: 'authorization_code',
     };
-    const {data} = await axios({
+    const { data } = await axios({
       method: 'get',
       url: 'https://api.weixin.qq.com/sns/jscode2session',
       params,
@@ -53,7 +53,7 @@ export const miniLogin = async (req, res) => {
       });
     }
     const { openid, session_key } = await code2Session(code);
-    console.log(openid)
+    console.log(openid);
     let info = null;
     info = await getUserByOpenid(openid);
     if (!info) {
@@ -62,7 +62,7 @@ export const miniLogin = async (req, res) => {
 
     const timestamp = info.create_time;
     const now = dayjs();
-    let days = now.diff(timestamp*1000, 'day') + 1;
+    let days = now.diff(timestamp * 1000, 'day') + 1;
 
     // 生成包含用户openid的JWT token
     const token = generateToken({ id: info._id, openid, role: info.role });
@@ -75,7 +75,7 @@ export const miniLogin = async (req, res) => {
       code: 2000,
       data: {
         token,
-        role:  info.role,
+        role: info.role,
         openid,
         userInfo,
       },
@@ -89,12 +89,11 @@ export const miniLogin = async (req, res) => {
   }
 };
 
-
-export const getVersion = async (req,res)=>{
-  const data =  await getVersionList();
+export const getVersion = async (req, res) => {
+  const data = await getVersionList();
   return res.send({
     code: 2000,
     data: data,
-    msg: 'success'
-  })
-}
+    msg: 'success',
+  });
+};

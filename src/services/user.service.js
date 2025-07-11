@@ -55,11 +55,7 @@ export const createUser = async (userData) => {
  */
 export const getUserById = async (id) => {
   try {
-    const user = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.id, id))
-      .execute();
+    const user = await db.select().from(userTable).where(eq(userTable.id, id)).execute();
     return user[0];
   } catch (error) {
     throw error;
@@ -74,11 +70,7 @@ export const getUserById = async (id) => {
  */
 export const getUserByOpenid = async (openid) => {
   try {
-    const user = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.openid, openid))
-      .execute();
+    const user = await db.select().from(userTable).where(eq(userTable.openid, openid)).execute();
     return user[0];
   } catch (error) {
     throw error;
@@ -97,11 +89,11 @@ export const getAllUsers = async (options = {}) => {
   try {
     const { page = 1, limit = 10, search = '' } = options;
     const offset = (page - 1) * limit;
-    
+
     console.log(chalk.yellow('getAllUsers 参数:', { page, limit, search, offset }));
-    
+
     let query = db.select().from(userTable);
-    
+
     // 如果有搜索关键词，添加搜索条件
     if (search) {
       query = query.where(
@@ -112,47 +104,48 @@ export const getAllUsers = async (options = {}) => {
         )
       );
     }
-    
+
     // 获取总数
-    const countQuery = search 
-      ? db.select({ count: sql`count(*)` }).from(userTable).where(
-          or(
-            like(userTable.username, `%${search}%`),
-            like(userTable.nickname, `%${search}%`),
-            like(userTable.email, `%${search}%`)
+    const countQuery = search
+      ? db
+          .select({ count: sql`count(*)` })
+          .from(userTable)
+          .where(
+            or(
+              like(userTable.username, `%${search}%`),
+              like(userTable.nickname, `%${search}%`),
+              like(userTable.email, `%${search}%`)
+            )
           )
-        )
       : db.select({ count: sql`count(*)` }).from(userTable);
-    
+
     console.log(chalk.yellow('执行计数查询...'));
     const [{ count }] = await countQuery.execute();
     console.log(chalk.yellow('总记录数:', count));
-    
+
     // 获取分页数据
     console.log(chalk.yellow('执行分页查询...'));
-    const users = await query
-      .orderBy(asc(userTable.id))
-      .limit(limit)
-      .offset(offset)
-      .execute();
-    
+    const users = await query.orderBy(asc(userTable.id)).limit(limit).offset(offset).execute();
+
     console.log(chalk.yellow('查询到的用户数量:', users.length));
     if (users.length > 0) {
-      console.log(chalk.yellow('第一个用户示例:', {
-        id: users[0].id,
-        username: users[0].username,
-        email: users[0].email
-      }));
+      console.log(
+        chalk.yellow('第一个用户示例:', {
+          id: users[0].id,
+          username: users[0].username,
+          email: users[0].email,
+        })
+      );
     }
-    
+
     return {
       users,
       pagination: {
         currentPage: page,
         pageSize: limit,
         total: parseInt(count),
-        totalPages: Math.ceil(parseInt(count) / limit)
-      }
+        totalPages: Math.ceil(parseInt(count) / limit),
+      },
     };
   } catch (error) {
     console.log(chalk.red('getAllUsers 错误:', error.message));
@@ -194,8 +187,7 @@ export const deleteUser = async (id) => {
   }
 };
 
-
-export const getUserInfo = async (user)=>{
+export const getUserInfo = async (user) => {
   const id = user.id || null;
   const openid = user.openid || null;
   let info = null;
@@ -205,5 +197,5 @@ export const getUserInfo = async (user)=>{
   } else {
     info = await getUserByOpenid(openid);
   }
-  return info
-}
+  return info;
+};

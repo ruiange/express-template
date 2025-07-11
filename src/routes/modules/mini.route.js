@@ -1,5 +1,8 @@
 import express from 'express';
 import { getVersion, miniLogin } from '../../controllers/mini.controller.js';
+
+const miniRoute = express.Router();
+
 /**
  * @api {post} /mini/login 小程序登录
  * @apiName MiniLogin
@@ -14,11 +17,7 @@ import { getVersion, miniLogin } from '../../controllers/mini.controller.js';
  * @apiError (Error 400) InvalidCode 提供的code无效
  * @apiError (Error 500) InternalServerError 服务器内部错误
  */
-const miniRoute = express.Router();
-
 miniRoute.post('/login', miniLogin);
-
-
 
 /**
  * @api {get} /mini/v 获取小程序版本信息
@@ -30,6 +29,6 @@ miniRoute.post('/login', miniLogin);
  *
  * @apiError (Error 500) InternalServerError 获取小程序版本信息失败
  */
-miniRoute.get('/v',getVersion)
+miniRoute.get('/v', getVersion);
 
 export default miniRoute;

@@ -7,11 +7,11 @@ import getStableAccessToken from './getStableAccessToken.util.js';
 export const getVersionList = async () => {
   const access_token = await getStableAccessToken();
 
-  const {data} = await axios({
+  const { data } = await axios({
     method: 'get',
     url: `https://api.weixin.qq.com/wxaapi/log/get_client_version?access_token=${access_token}`,
-  })
+  });
   return data;
-}
+};
 
 export default getVersionList;

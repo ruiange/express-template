@@ -32,7 +32,6 @@ const userRoute = express.Router();
  */
 userRoute.post('/register', register);
 
-
 /**
  * @api {get} /user/ 查看个人资料
  * @apiName viewProfile

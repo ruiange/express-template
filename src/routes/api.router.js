@@ -18,6 +18,6 @@ apiRouter.use('/wealth', wealthRoute);
 apiRouter.use('/user', userRoute);
 apiRouter.use('/upload', uploadRoute);
 apiRouter.use('/ai', aiRoute);
-apiRouter.use('/wallpaper',wallpaperRoute)
+apiRouter.use('/wallpaper', wallpaperRoute);
 apiRouter.use('/admin', adminRoute);
 export default apiRouter;

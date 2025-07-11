@@ -21,7 +21,6 @@ const upload = multer();
  */
 uploadRoute.post('/', upload.single('file'), authMiddleware, uploadController);
 
-
 uploadRoute.delete('/', authMiddleware, deleteVercelBlob);
 
 export default uploadRoute;

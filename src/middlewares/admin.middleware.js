@@ -12,18 +12,18 @@ export const adminMiddleware = async (req, res, next) => {
 
     // 检查用户角色
     if (req.user.role !== 'admin') {
-      return res.status(403).json({ 
-        code: 4003, 
-        message: '权限不足，需要管理员权限' 
+      return res.status(403).json({
+        code: 4003,
+        message: '权限不足，需要管理员权限',
       });
     }
 
     // 如果是管理员，则继续处理请求
     next();
   } catch (error) {
-    return res.status(500).json({ 
-      code: 5000, 
-      message: `服务器内部错误: ${error.message}` 
+    return res.status(500).json({
+      code: 5000,
+      message: `服务器内部错误: ${error.message}`,
     });
   }
-}; 
+};

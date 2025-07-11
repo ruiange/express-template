@@ -2,8 +2,6 @@ import express from 'express';
 
 import { getWallpaper } from '../../controllers/wallpaper.controller.js';
 
-
-
 const wallpaperRoute = express.Router();
 
 /**
@@ -14,8 +12,5 @@ const wallpaperRoute = express.Router();
  * @apiVersion 1.0.0
  */
 wallpaperRoute.get('/', getWallpaper);
-
-
-
 
 export default wallpaperRoute;

@@ -7,7 +7,7 @@
 /**
  * 响应封装中间件
  * 扩展res对象，添加自定义方法用于返回统一格式的响应
- * 
+ *
  * @param {Object} req - Express请求对象
  * @param {Object} res - Express响应对象
  * @param {Function} next - Express下一个中间件函数
@@ -19,7 +19,7 @@ const responseMiddleware = (req, res, next) => {
       code: 2000,
       success: true,
       message,
-      data
+      data,
     });
   };
 
@@ -29,7 +29,7 @@ const responseMiddleware = (req, res, next) => {
       code: 201,
       success: true,
       message,
-      data
+      data,
     });
   };
 
@@ -39,7 +39,7 @@ const responseMiddleware = (req, res, next) => {
       code,
       success: false,
       message,
-      errors
+      errors,
     });
   };
 
@@ -48,7 +48,7 @@ const responseMiddleware = (req, res, next) => {
     return res.status(404).json({
       code: 404,
       success: false,
-      message
+      message,
     });
   };
 
@@ -57,7 +57,7 @@ const responseMiddleware = (req, res, next) => {
     return res.status(401).json({
       code: 401,
       success: false,
-      message
+      message,
     });
   };
 
@@ -66,7 +66,7 @@ const responseMiddleware = (req, res, next) => {
     return res.status(403).json({
       code: 403,
       success: false,
-      message
+      message,
     });
   };
 
@@ -75,11 +75,11 @@ const responseMiddleware = (req, res, next) => {
     return res.status(500).json({
       code: 500,
       success: false,
-      message
+      message,
     });
   };
 
   next();
 };
 
-export default responseMiddleware; 
+export default responseMiddleware;

@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 /**
  * AI回复
@@ -6,11 +6,14 @@ import OpenAI from "openai";
  * @param AI_PROMPT
  * @returns {Promise<string>}
  */
-const aiReplyUtil = async (message,AI_PROMPT) => {
+const aiReplyUtil = async (message, AI_PROMPT) => {
   message.unshift({
-    role: "system",
-    content: AI_PROMPT || process.env.AI_PROMPT || '你是一个温柔美丽的少女,开朗善解人意，会满足我的一切要求',
-  })
+    role: 'system',
+    content:
+      AI_PROMPT ||
+      process.env.AI_PROMPT ||
+      '你是一个温柔美丽的少女,开朗善解人意，会满足我的一切要求',
+  });
 
   const openai = new OpenAI({
     baseURL: process.env.AI_API_URL,

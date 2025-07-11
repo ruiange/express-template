@@ -3,7 +3,7 @@ import JSON5 from 'json5';
 import { jsonrepair } from 'jsonrepair';
 
 export const NamingController = async (req, res) => {
-  const { surname, gender, style, meanings, avoid,species } = req.body;
+  const { surname, gender, style, meanings, avoid, species } = req.body;
 
   const generatePrompt = `
 - 姓氏：${surname || ''}
@@ -20,33 +20,26 @@ export const NamingController = async (req, res) => {
     "answers":"解释",
     "meaning":"寓意分析"
   }
-  `
-
+  `;
 
   const message = [
     {
       content: generatePrompt,
       role: 'user',
-    }
+    },
   ];
-  const reply = await aiReplyUtil(message,AI_PROMPT);
+  const reply = await aiReplyUtil(message, AI_PROMPT);
 
-
-  const aiName = parseMessyJson(reply)
-
-
-
+  const aiName = parseMessyJson(reply);
 
   res.send({
     code: 2000,
     msg: 'success',
     data: {
-     ...aiName
+      ...aiName,
     },
   });
-}
-
-
+};
 
 export function parseMessyJson(input) {
   let str = String(input);

@@ -1,6 +1,5 @@
 import rateLimit from 'express-rate-limit';
 
-
 /*
 windowMs | 限流时间窗口（毫秒）
 max | 每个 IP 在时间窗口内最多请求次数
@@ -18,4 +17,4 @@ const rateLimitMiddleware = rateLimit({
   legacyHeaders: false, // 关闭旧的X-RateLimit-*头
 });
 
-export default rateLimitMiddleware; 
+export default rateLimitMiddleware;

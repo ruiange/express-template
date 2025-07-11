@@ -70,9 +70,6 @@ export const getMoyuRank = async () => {
           LIMIT 20
   `);
 
-
-
-
   return result.rows.map((item, index) => ({
     rank: index + 1,
     ...item,

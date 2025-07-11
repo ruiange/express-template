@@ -1,7 +1,6 @@
 import express from 'express';
 import { NamingController } from '../../controllers/ai.controller.js';
 
-
 const aiRoute = express.Router();
 
 /**
@@ -11,8 +10,5 @@ const aiRoute = express.Router();
  * @apiVersion 1.0.0
  */
 aiRoute.post('/name', NamingController);
-
-
-
 
 export default aiRoute;

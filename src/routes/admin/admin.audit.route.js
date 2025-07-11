@@ -1,7 +1,10 @@
 import express from 'express';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { adminMiddleware } from '../../middlewares/admin.middleware.js';
-import { auditConfigController, getAuditConfigController } from '../../controllers/admin.controller.js';
+import {
+  auditConfigController,
+  getAuditConfigController,
+} from '../../controllers/admin.controller.js';
 
 const adminAuditRoute = express.Router();
 

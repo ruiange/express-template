@@ -1,6 +1,7 @@
 import express from 'express';
 import {
-  analysisVideo, getDouyinDataList,
+  analysisVideo,
+  getDouyinDataList,
   getVideoDataController,
   saveVideoDataController,
 } from '../../controllers/douyin.controller.js';
@@ -37,7 +38,6 @@ douyinRoute.get('/get', getVideoDataController);
  * @apiGroup 抖音
  * @apiVersion 1.0.0
  */
-douyinRoute.get('/dataList',getDouyinDataList)
-
+douyinRoute.get('/dataList', getDouyinDataList);
 
 export default douyinRoute;
