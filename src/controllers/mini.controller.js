@@ -53,7 +53,14 @@ export const miniLogin = async (req, res) => {
       });
     }
     const { openid, session_key } = await code2Session(code);
-    console.log(openid);
+
+    if (!openid) {
+      return res.send({
+        code: 4000,
+        msg: '获取openid失败',
+      });
+    }
+
     let info = null;
     info = await getUserByOpenid(openid);
     if (!info) {

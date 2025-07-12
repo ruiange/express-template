@@ -6,9 +6,12 @@ import mainRouter from './routes/main.router.js';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { requestLogMiddleware } from './middlewares/requestLog.middleware.js';
+import loggerMiddleware from './middlewares/logger.middleware.js';
 
 /** @type {Express} */
 const app = express();
+
+app.use(loggerMiddleware);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
