@@ -32,8 +32,7 @@ export const viewProfile = async (req, res) => {
     let days = dateDiff(info.create_time, dayjs());
 
     const userInfo = {
-      nickname: info.nickname,
-      avatar: info.avatar,
+      ...info,
       days,
     };
 
@@ -58,12 +57,21 @@ export const viewProfile = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
   try {
-    const { nickname, avatar } = req.body;
+    const { nickname, avatar ,bio,signature} = req.body;
     const info = await getUserInfo(req.user);
+
+    if(!info){
+      return res.status(500).send({
+        code: 500,
+        message: `用户不存在`,
+      });
+    }
 
     const params = {
       nickname,
       avatar,
+      bio,
+      signature,
     };
     if (info.avatar && info.avatar !== avatar) {
       await deleteVercelBlob(info.avatar);

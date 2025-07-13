@@ -12,6 +12,8 @@ import { pgTable, varchar, integer, timestamp } from 'drizzle-orm/pg-core';
  * updatedAt: 更新时间，默认为当前时间。
  * createTime: 创建时间戳（秒），默认为当前时间戳。
  * openid: 微信开放平台唯一标识，唯一且可为空。
+ * bio: 个人简介，可为空，最大长度为 500 字符。
+ * signature: 个性签名，可为空，最大长度为 250 字符。
  * 你可以根据需求进一步调整字段长度、约束和默认值。
  */
 export const userTable = pgTable('users', {
@@ -28,4 +30,6 @@ export const userTable = pgTable('users', {
     .default(Math.floor(Date.now() / 1000))
     .notNull(),
   openid: varchar('openid', { length: 255 }).unique(),
+  bio: varchar('bio', { length: 500 }), // 新增个人简介字段
+  signature: varchar('signature', { length: 250 }), // 新增个性签名字段
 });

@@ -56,7 +56,11 @@ export const createUser = async (userData) => {
 export const getUserById = async (id) => {
   try {
     const user = await db.select().from(userTable).where(eq(userTable.id, id)).execute();
-    return user[0];
+    if (!user[0]) {
+      return null;
+    }
+    const { createdAt, updatedAt, password, ...rest } = user[0];
+    return rest;
   } catch (error) {
     throw error;
   }
@@ -71,7 +75,11 @@ export const getUserById = async (id) => {
 export const getUserByOpenid = async (openid) => {
   try {
     const user = await db.select().from(userTable).where(eq(userTable.openid, openid)).execute();
-    return user[0];
+    if (!user[0]) {
+      return null;
+    }
+    const { createdAt, updatedAt, password, ...rest } = user[0];
+    return rest;
   } catch (error) {
     throw error;
   }

@@ -4,11 +4,16 @@ import dayjs from 'dayjs';
 import { generateToken } from '../utils/jwt.util.js';
 import chalk from 'chalk';
 import getVersionList from '../utils/wechat/getVersionList.util.js';
+import { dateDiff } from '../utils/index.js';
+
+const defaultBio = '这个人很懒，什么都没有写'; //默认简介
+const defaultNickname = '剑客无名'; // 默认昵称
+const defaultSignature = '这个人很懒，什么也没有写'; // 默认个性签名
+
 /**
- * 小程序登录
+ * code2Session
  * @param code
- * @returns {Promise<any>}
- * @url https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-login/code2Session.html
+ * @returns {Promise<any|null>}
  */
 const code2Session = async (code) => {
   try {
@@ -28,6 +33,9 @@ const code2Session = async (code) => {
       },
     });
 
+    console.log(chalk.green('code2Session 获取'))
+    console.log(data)
+
     return data;
   } catch (e) {
     console.log(chalk.red(e.message));
@@ -35,6 +43,12 @@ const code2Session = async (code) => {
   }
 };
 
+/**
+ * 小程序登录
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 export const miniLogin = async (req, res) => {
   try {
     if (req.headers['content-type'] !== 'application/json') {
@@ -64,18 +78,22 @@ export const miniLogin = async (req, res) => {
     let info = null;
     info = await getUserByOpenid(openid);
     if (!info) {
-      info = await createUser({ openid, nickname: '剑客无名', avatar: '' });
+      info = await createUser({
+        openid,
+        nickname: '剑客无名',
+        bio: defaultBio,
+        signature: defaultSignature,
+      });
     }
 
     const timestamp = info.create_time;
     const now = dayjs();
-    let days = now.diff(timestamp * 1000, 'day') + 1;
+    let days = dateDiff(info.create_time, dayjs());
 
     // 生成包含用户openid的JWT token
     const token = generateToken({ id: info._id, openid, role: info.role });
     const userInfo = {
-      nickname: info.nickname,
-      avatar: info.avatar,
+      ...info,
       days,
     };
     res.send({
@@ -96,6 +114,12 @@ export const miniLogin = async (req, res) => {
   }
 };
 
+/**
+ * 获取小程序版本信息
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 export const getVersion = async (req, res) => {
   const data = await getVersionList();
   return res.send({
