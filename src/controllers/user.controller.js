@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { getUserInfo, registerUser, updateUser } from '../services/user.service.js';
 import { deleteVercelBlob } from './upload.controller.js';
 import getUnlimitedQRCode from '../utils/wechat/getUnlimitedQRCode.util.js';
+import AuthService from '../services/auth.service.js';
 
 // 用户注册
 export const register = async (req, res) => {
@@ -96,12 +97,10 @@ export const updateProfile = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const generateLoginQrcode = async (req, res) => {
-  const { message, qrcode, scene, status } = await getUnlimitedQRCode('pages/login/scan');
-  if (status) {
-    res.success({ qrcode, scene }, '生成二维码成功');
-  } else {
-    res.error(message || '生成二维码失败');
-  }
+  //const { message, qrcode, scene, status } = await getUnlimitedQRCode('pages/login/scan');
+
+  const session = await AuthService.createLoginSession('pages/login/scan');
+  res.success(session, '获取二维码成功');
 };
 
 /**

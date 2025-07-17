@@ -2,9 +2,8 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import getStableAccessToken from './getStableAccessToken.util.js';
 
-const getUnlimitedQRCode = async (page) => {
+const getUnlimitedQRCode = async (page, scene) => {
   const NODE_ENV = process.env.NODE_ENV;
-  console.log('NODE_ENV', NODE_ENV);
 
   let env_version = 'release';
   if (NODE_ENV === 'development') {
@@ -28,18 +27,9 @@ const getUnlimitedQRCode = async (page) => {
       responseType: 'arraybuffer',
     });
     //返回scene和二维码
-    return {
-      scene,
-      qrcode: response.data.toString('base64'),
-      status: true,
-    };
+    return response.data.toString('base64')
   } catch (error) {
-    return {
-      status: false,
-      message: error.message,
-      scene: null,
-      qrcode: null,
-    };
+    return null
   }
 };
 export default getUnlimitedQRCode;
