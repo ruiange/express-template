@@ -2,6 +2,7 @@ import express from 'express';
 import { getUserList, testDatabaseConnection } from '../../controllers/admin.controller.js';
 import { adminMiddleware } from '../../middlewares/admin.middleware.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
+import { confirmQrcodeLogin } from '../../controllers/user.controller.js';
 
 const adminUserRoute = express.Router();
 
@@ -112,5 +113,16 @@ adminUserRoute.get('/test-db', authMiddleware, adminMiddleware, testDatabaseConn
  *     }
  */
 adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
+
+
+/**
+ * @api {post} /admin/user/login-qrcode/confirm 确认扫码登录
+ * @apiName ConfirmQrcodeLogin
+ * @apiGroup 后台管理
+ *
+ * @apiBody {String} scene 二维码场景值
+ * @apiBody {Object} adminInfo 管理员信息
+ */
+adminUserRoute.post('/login-qrcode/confirm', authMiddleware, adminMiddleware,confirmQrcodeLogin);
 
 export default adminUserRoute;

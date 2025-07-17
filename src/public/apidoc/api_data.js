@@ -175,6 +175,32 @@ define({ "api": [
     "groupTitle": "九阴"
   },
   {
+    "type": "post",
+    "url": "/admin/user/login-qrcode/confirm",
+    "title": "确认扫码登录",
+    "name": "ConfirmQrcodeLogin",
+    "group": "后台管理",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "scene",
+        "description": "<p>二维码场景值</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Object",
+        "optional": false,
+        "field": "adminInfo",
+        "description": "<p>管理员信息</p>"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "src/routes/admin/admin.user.route.js",
+    "groupTitle": "后台管理"
+  },
+  {
     "type": "get",
     "url": "/admin/user/users",
     "title": "获取用户列表",
@@ -657,45 +683,23 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/user/login-qrcode/status",
+    "url": "/api/user/login-qrcode/status",
     "title": "查询二维码状态",
     "name": "CheckQrcodeStatus",
     "group": "用户",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "scene",
-        "description": "<p>二维码场景值</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "scene",
+            "description": "<p>二维码场景值</p>"
+          }
+        ]
       }
-    ],
-    "version": "0.0.0",
-    "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
-  },
-  {
-    "type": "post",
-    "url": "/user/login-qrcode/confirm",
-    "title": "确认扫码登录",
-    "name": "ConfirmQrcodeLogin",
-    "group": "用户",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "scene",
-        "description": "<p>二维码场景值</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Object",
-        "optional": false,
-        "field": "adminInfo",
-        "description": "<p>管理员信息</p>"
-      }
-    ],
+    },
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
     "groupTitle": "用户"

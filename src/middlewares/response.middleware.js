@@ -23,7 +23,6 @@ const responseMiddleware = (req, res, next) => {
   res.error = (message = '操作失败', code = 400, errors = null) => {
     return res.status(code).json({
       code,
-      
       message,
       errors,
     });
@@ -33,7 +32,6 @@ const responseMiddleware = (req, res, next) => {
   res.notFound = (message = '资源不存在') => {
     return res.status(404).json({
       code: 404,
-      
       message,
     });
   };
@@ -42,7 +40,6 @@ const responseMiddleware = (req, res, next) => {
   res.unauthorized = (message = '未授权访问') => {
     return res.status(401).json({
       code: 401,
-      
       message,
     });
   };
