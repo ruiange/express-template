@@ -2,7 +2,15 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import getStableAccessToken from './getStableAccessToken.util.js';
 
-const getUnlimitedQRCode = async () => {
+const getUnlimitedQRCode = async (page) => {
+  const NODE_ENV = process.env.NODE_ENV;
+  console.log('NODE_ENV', NODE_ENV);
+
+  let env_version = 'release';
+  if (NODE_ENV === 'development') {
+    env_version = 'develop';
+  }
+
   try {
     // 生成唯一的scene值作为登录会话标识 6位数的UUID
     const scene = uuidv4().substring(0, 6);
@@ -13,9 +21,9 @@ const getUnlimitedQRCode = async () => {
       url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`,
       data: {
         scene,
-        page: 'pages/login/qrcode',
+        page: page || 'pages/login/scan',
         check_path: false,
-        env_version: 'develop',
+        env_version,
       },
       responseType: 'arraybuffer',
     });

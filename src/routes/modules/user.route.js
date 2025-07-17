@@ -1,6 +1,7 @@
 import express from 'express';
 import {
-  checkQrcodeStatus, confirmQrcodeLogin,
+  checkQrcodeStatus,
+  confirmQrcodeLogin,
   generateLoginQrcode,
   register,
   updateProfile,
@@ -53,7 +54,6 @@ userRoute.get('/', authMiddleware, viewProfile);
  */
 userRoute.put('/', authMiddleware, updateProfile);
 
-
 /**
  * @api {post} /api/user/login-qrcode 生成登录二维码
  * @apiName GenerateLoginQrcode
@@ -69,7 +69,5 @@ userRoute.post('/login-qrcode', generateLoginQrcode);
  * @apiparam {String} scene 二维码场景值
  */
 userRoute.get('/login-qrcode/status', checkQrcodeStatus);
-
-
 
 export default userRoute;

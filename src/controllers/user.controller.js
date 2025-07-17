@@ -96,7 +96,7 @@ export const updateProfile = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const generateLoginQrcode = async (req, res) => {
-  const { message, qrcode, scene, status } = await getUnlimitedQRCode();
+  const { message, qrcode, scene, status } = await getUnlimitedQRCode('pages/login/scan');
   if (status) {
     res.success({ qrcode, scene }, '生成二维码成功');
   } else {
@@ -134,9 +134,7 @@ export const checkQrcodeStatus = async (req, res) => {
  */
 export const confirmQrcodeLogin = async (req, res) => {
   const { scene } = req.body;
-  const userId = req.user.id;
-  const openid = req.user.openid;
-  if (!scene || !userId) {
+  if (!scene) {
     return res.status(400).send({
       code: 4000,
       message: '参数不完整',
@@ -151,10 +149,8 @@ export const confirmQrcodeLogin = async (req, res) => {
       code: 2000,
       message: '确认登录成功',
       data: {
-        userId,
         scene,
         userInfo,
-        openid,
       },
     });
   } else {
