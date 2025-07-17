@@ -17,7 +17,6 @@ class AuthService {
       status: 'waiting',
       createdAt: now,
       expiresAt,
-      lastPollTime: now,
     };
 
     const data = await loginSessionRepository.save(params);

@@ -8,7 +8,6 @@ const loginSessionSchema = new Schema(
     scene: { type: 'string' }, // 会话ID
     status: { type: 'string' }, // 状态: waiting/confirmed/expired
     openid: { type: 'string' }, // 微信用户openid
-    socketId: { type: 'string' }, // 关联的WebSocket ID
     createdAt: { type: 'date' }, // 创建时间
     expiresAt: { type: 'date' }, // 过期时间
     confirmedAt: { type: 'date' }, // 确认时间
