@@ -656,6 +656,61 @@
     "groupTitle": "抖音"
   },
   {
+    "type": "get",
+    "url": "/user/login-qrcode/status",
+    "title": "查询二维码状态",
+    "name": "CheckQrcodeStatus",
+    "group": "用户",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "scene",
+        "description": "<p>二维码场景值</p>"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
+    "type": "post",
+    "url": "/user/login-qrcode/confirm",
+    "title": "确认扫码登录",
+    "name": "ConfirmQrcodeLogin",
+    "group": "用户",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "scene",
+        "description": "<p>二维码场景值</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Object",
+        "optional": false,
+        "field": "adminInfo",
+        "description": "<p>管理员信息</p>"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
+    "type": "post",
+    "url": "/api/user/login-qrcode",
+    "title": "生成登录二维码",
+    "name": "GenerateLoginQrcode",
+    "group": "用户",
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
     "type": "post",
     "url": "/user/register",
     "title": "用户注册",

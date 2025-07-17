@@ -195,6 +195,12 @@ export const deleteUser = async (id) => {
   }
 };
 
+
+/**
+ * 获取用户信息
+ * @param {Object} user - 用户对象 {id} || {openid}
+ * @returns {Promise<Object>} - 用户信息
+ */
 export const getUserInfo = async (user) => {
   const id = user.id || null;
   const openid = user.openid || null;

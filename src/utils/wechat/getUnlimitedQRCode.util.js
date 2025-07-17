@@ -1,0 +1,37 @@
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import getStableAccessToken from './getStableAccessToken.util.js';
+
+const getUnlimitedQRCode = async () => {
+  try {
+    // 生成唯一的scene值作为登录会话标识 6位数的UUID
+    const scene = uuidv4().substring(0, 6);
+    const access_token = await getStableAccessToken();
+    // 调用微信接口生成小程序码
+    const response = await axios({
+      method: 'post',
+      url: `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${access_token}`,
+      data: {
+        scene,
+        page: 'pages/login/qrcode',
+        check_path: false,
+        env_version: 'develop',
+      },
+      responseType: 'arraybuffer',
+    });
+    //返回scene和二维码
+    return {
+      scene,
+      qrcode: response.data.toString('base64'),
+      status: true,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: error.message,
+      scene: null,
+      qrcode: null,
+    };
+  }
+};
+export default getUnlimitedQRCode;
