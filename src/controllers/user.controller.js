@@ -5,6 +5,7 @@ import { getUserInfo, registerUser, updateUser } from '../services/user.service.
 import { deleteVercelBlob } from './upload.controller.js';
 import getUnlimitedQRCode from '../utils/wechat/getUnlimitedQRCode.util.js';
 import AuthService from '../services/auth.service.js';
+import { generateToken } from '../utils/jwt.util.js';
 
 // 用户注册
 export const register = async (req, res) => {
@@ -111,18 +112,19 @@ export const generateLoginQrcode = async (req, res) => {
  */
 export const checkQrcodeStatus = async (req, res) => {
   const { scene } = req.query;
-
   if (!scene) {
-    return res.status(400).send({
-      code: 4000,
-      msg: 'scene不能为空',
-    });
+    return res.error('参数不完整');
+  }
+  const data = await AuthService.checkLoginStatus(scene);
+
+  console.log('================');
+  console.log(data);
+
+  if ('error' in data) {
+    return res.error(data.error);
   }
 
-  res.send({
-    code: 2000,
-    data: true,
-  });
+  res.success(data, '查询二维码登录状态成功');
 };
 
 /**
@@ -140,22 +142,21 @@ export const confirmQrcodeLogin = async (req, res) => {
     });
   }
 
-  const userInfo = await getUserInfo(req.user);
-
-  console.log(userInfo);
-  if (userInfo.role === 'admin') {
-    res.send({
-      code: 2000,
-      message: '确认登录成功',
-      data: {
-        scene,
-        userInfo,
-      },
-    });
-  } else {
-    res.send({
-      code: 4000,
-      message: '您不是管理员，无法登录',
-    });
+  const info = await getUserInfo(req.user);
+  const { success, message } = await AuthService.confirmLogin(scene, info);
+  if (success) {
+    const token = generateToken({ id: info._id, openid: info.openid, role: info.role });
+    const userInfo = {
+      ...info,
+    };
+    const resData = {
+      token,
+      userInfo,
+      role: info.role,
+      openid: info.openid,
+    };
+    res.success(resData, message);
+  }else{
+    res.error(message);
   }
 };

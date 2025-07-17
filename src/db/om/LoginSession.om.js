@@ -7,9 +7,7 @@ const loginSessionSchema = new Schema(
   {
     scene: { type: 'string' }, // 会话ID
     status: { type: 'string' }, // 状态: waiting/confirmed/expired
-    qrcode: { type: 'string' }, // 二维码URL
     openid: { type: 'string' }, // 微信用户openid
-    userInfo: { type: 'string' }, // 用户信息(JSON字符串)
     socketId: { type: 'string' }, // 关联的WebSocket ID
     createdAt: { type: 'date' }, // 创建时间
     expiresAt: { type: 'date' }, // 过期时间
