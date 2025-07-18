@@ -69,7 +69,7 @@ export const getUserList = async (req, res) => {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       createTime: user.createTime,
-      // 不返回密码和openid等敏感信息
+      openid: user.openid,
     }));
 
     console.log(chalk.green('处理后的用户列表:', userList.length));
@@ -93,41 +93,3 @@ export const getUserList = async (req, res) => {
   }
 };
 
-/**
- * 测试数据库连接和查询
- * @param {Object} req - 请求对象
- * @param {Object} res - 响应对象
- */
-export const testDatabaseConnection = async (req, res) => {
-  try {
-    console.log(chalk.blue('测试数据库连接...'));
-
-    // 直接查询所有用户
-    const allUsers = await db.select().from(userTable).execute();
-    console.log(chalk.green('直接查询结果:', allUsers.length));
-
-    // 查询用户总数
-    const countResult = await db
-      .select({ count: sql`count(*)` })
-      .from(userTable)
-      .execute();
-    console.log(chalk.green('用户总数:', countResult[0].count));
-
-    res.status(200).json({
-      code: 2000,
-      message: '数据库连接测试成功',
-      data: {
-        totalUsers: countResult[0].count,
-        sampleUsers: allUsers.slice(0, 3), // 只返回前3个用户作为示例
-      },
-    });
-  } catch (error) {
-    console.log(chalk.red('数据库连接测试错误:', error.message));
-    console.log(chalk.red('错误堆栈:', error.stack));
-    res.status(500).json({
-      code: 5000,
-      message: '数据库连接测试失败',
-      error: error.message,
-    });
-  }
-};

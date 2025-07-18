@@ -202,7 +202,7 @@
   },
   {
     "type": "get",
-    "url": "/admin/user/users",
+    "url": "/api/admin/user/users",
     "title": "获取用户列表",
     "name": "GetUserList",
     "group": "后台管理",
@@ -496,7 +496,7 @@
   },
   {
     "type": "get",
-    "url": "/admin/user/test-db",
+    "url": "/api/admin/user/test-db",
     "title": "测试数据库连接",
     "name": "TestDatabaseConnection",
     "group": "后台管理",
