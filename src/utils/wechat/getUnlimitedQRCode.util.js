@@ -12,7 +12,7 @@ const getUnlimitedQRCode = async (page, scene) => {
 
   try {
     // 生成唯一的scene值作为登录会话标识 6位数的UUID
-    const scene = uuidv4().substring(0, 6);
+
     const access_token = await getStableAccessToken();
     // 调用微信接口生成小程序码
     const response = await axios({

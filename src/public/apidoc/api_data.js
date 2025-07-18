@@ -33,8 +33,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "src/public/apidoc/main.js",
-    "group": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
-    "groupTitle": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
+    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
+    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
     "name": ""
   },
   {
@@ -176,7 +176,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/admin/user/login-qrcode/confirm",
+    "url": "/api/admin/user/login-qrcode/confirm",
     "title": "确认扫码登录",
     "name": "ConfirmQrcodeLogin",
     "group": "后台管理",

@@ -1,19 +1,17 @@
 const responseMiddleware = (req, res, next) => {
   // 成功响应 - 状态码 200
-  res.success = (data = null, message = '操作成功') => {
+  res.success = (data = null, message = '操作成功', code = 2000) => {
     return res.status(200).json({
-      code: 2000,
-
+      code,
       message,
       data,
     });
   };
 
   // 创建成功响应 - 状态码 201
-  res.created = (data = null, message = '创建成功') => {
+  res.created = (data = null, message = '创建成功', code = 2001) => {
     return res.status(201).json({
-      code: 201,
-
+      code: code,
       message,
       data,
     });
@@ -48,7 +46,7 @@ const responseMiddleware = (req, res, next) => {
   res.forbidden = (message = '禁止访问') => {
     return res.status(403).json({
       code: 403,
-      
+
       message,
     });
   };
@@ -57,7 +55,7 @@ const responseMiddleware = (req, res, next) => {
   res.serverError = (message = '服务器内部错误') => {
     return res.status(500).json({
       code: 500,
-      
+
       message,
     });
   };

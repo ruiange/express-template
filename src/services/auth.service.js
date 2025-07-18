@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import loginSessionRepository from '../db/om/LoginSession.om.js';
 import getUnlimitedQRCode from '../utils/wechat/getUnlimitedQRCode.util.js';
+import chalk from 'chalk';
 
 class AuthService {
   // 创建登录会话
   static async createLoginSession(page) {
-    const scene = uuidv4();
-
+    const scene = uuidv4().substring(0, 8);
     const qrcode = await getUnlimitedQRCode(page, scene);
 
     const now = new Date();
@@ -38,23 +38,39 @@ class AuthService {
       .return.first();
 
     if (!session) {
-      return { error: '会话不存在' };
+      return { message: '会话不存在', success: false, code: 20001 };
     }
 
-    if(session.expiresAt  < now){
-      return { error: '会话已过期' };
+    if (session.expiresAt < now) {
+      return { message: '会话已过期', success: false, code: 20002 };
     }
-    console.log(session);
+
+    if (session.status === 'waiting') {
+      return {
+        status: session.status,
+        expiresAt: session.expiresAt,
+        message: '登录中...',
+        success: true,
+        code: 20003,
+      };
+    }
 
     return {
       status: session.status,
       expiresAt: session.expiresAt,
+      message: '登录成功',
+      success: true,
+      openid: session.openid,
     };
   }
 
   // 确认登录（小程序端调用）
   static async confirmLogin(scene, userInfo) {
-    const session = await loginSessionRepository.fetch(scene);
+    const session = await loginSessionRepository
+      .search()
+      .where('scene')
+      .equals(scene)
+      .return.first();
 
     if (!session) {
       return { message: '会话不存在', success: false };

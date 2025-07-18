@@ -3,7 +3,7 @@ define({
   "version": "1.0.0",
   "description": "API接口文档",
   "title": "API接口文档",
-  "url": "http://127.0.0.1:3000/api",
+  "url": "http://127.0.0.1:3000",
   "sampleUrl": false,
   "defaultVersion": "0.0.0",
   "addon": {
@@ -19,7 +19,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2025-07-17T15:37:07.454Z",
+    "time": "2025-07-18T02:53:17.682Z",
     "url": "https://apidocjs.com",
     "version": "0.29.0"
   }

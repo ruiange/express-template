@@ -99,7 +99,6 @@ export const updateProfile = async (req, res) => {
  */
 export const generateLoginQrcode = async (req, res) => {
   //const { message, qrcode, scene, status } = await getUnlimitedQRCode('pages/login/scan');
-
   const session = await AuthService.createLoginSession('pages/login/scan');
   res.success(session, '获取二维码成功');
 };
@@ -115,16 +114,28 @@ export const checkQrcodeStatus = async (req, res) => {
   if (!scene) {
     return res.error('参数不完整');
   }
-  const data = await AuthService.checkLoginStatus(scene);
+  const { status, expiresAt, message, success, openid, code } =
+    await AuthService.checkLoginStatus(scene);
 
-  console.log('================');
-  console.log(data);
-
-  if ('error' in data) {
-    return res.error(data.error);
+  if (!success) {
+    return res.success(success, message, code);
   }
 
-  res.success(data, '查询二维码登录状态成功');
+  if (status !== 'confirmed') {
+    return res.success(status, message, code);
+  }
+  const info = await getUserInfo({ openid });
+  const token = generateToken({ id: info._id, openid: info.openid, role: info.role });
+  const userInfo = {
+    ...info,
+  };
+  const resData = {
+    token,
+    userInfo,
+    role: info.role,
+    openid: info.openid,
+  };
+  res.success(resData, message);
 };
 
 /**
@@ -145,18 +156,8 @@ export const confirmQrcodeLogin = async (req, res) => {
   const info = await getUserInfo(req.user);
   const { success, message } = await AuthService.confirmLogin(scene, info);
   if (success) {
-    const token = generateToken({ id: info._id, openid: info.openid, role: info.role });
-    const userInfo = {
-      ...info,
-    };
-    const resData = {
-      token,
-      userInfo,
-      role: info.role,
-      openid: info.openid,
-    };
-    res.success(resData, message);
-  }else{
+    res.success(success, message);
+  } else {
     res.error(message);
   }
 };

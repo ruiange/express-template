@@ -116,7 +116,7 @@ adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
 
 
 /**
- * @api {post} /admin/user/login-qrcode/confirm 确认扫码登录
+ * @api {post} /api/admin/user/login-qrcode/confirm 确认扫码登录
  * @apiName ConfirmQrcodeLogin
  * @apiGroup 后台管理
  *
