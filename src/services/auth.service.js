@@ -24,6 +24,7 @@ class AuthService {
     return {
       ...data,
       qrcode,
+      env: process.env.NODE_ENV
     };
   }
 

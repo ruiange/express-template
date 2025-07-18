@@ -27,9 +27,9 @@ const getUnlimitedQRCode = async (page, scene) => {
       responseType: 'arraybuffer',
     });
     //返回scene和二维码
-    return response.data.toString('base64')
+    return response.data.toString('base64');
   } catch (error) {
-    return null
+    return null;
   }
 };
 export default getUnlimitedQRCode;
