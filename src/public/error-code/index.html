@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错误码对照表</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f7fa;
+            --border-color: #e0e6ed;
+            --text-color: #334155;
+            --light-text: #64748b;
+            --hover-color: #f1f5f9;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            padding: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: var(--text-color);
+            background-color: #f8fafc;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 32px;
+            font-weight: 600;
+        }
+
+        .search-container {
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 12px 16px;
+            width: 300px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--secondary-color);
+        }
+
+        tr:hover {
+            background-color: var(--hover-color);
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--light-text);
+            margin-top: 24px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+        }
+
+        .footer {
+            margin-top: 48px;
+            text-align: center;
+            color: var(--light-text);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+
+            h1 {
+                margin-bottom: 24px;
+            }
+
+            .search-container {
+                margin: 16px 0;
+            }
+
+            input[type="text"] {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>错误码对照表</h1>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="输入错误码或描述进行搜索...">
+</div>
+
+<div class="table-container">
+    <table id="errorTable">
+        <thead>
+        <tr>
+            <th>错误码</th>
+            <th>错误名称</th>
+            <th>描述</th>
+            <th>解决方案</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- 动态内容将在这里插入 -->
+        <tr><td colspan="4">暂无数据</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <p>© 2025 错误码管理系统</p>
+</div>
+
+<script>
+    // 示例数据（可以替换为从服务器获取的数据）
+    const errorData = [
+        { code: '400', name: 'BAD_REQUEST', description: '请求格式错误', solution: '检查请求参数和格式' },
+        { code: '401', name: 'UNAUTHORIZED', description: '未授权访问', solution: '提供有效的身份验证凭证' },
+        { code: '403', name: 'FORBIDDEN', description: '禁止访问', solution: '检查权限配置' },
+        { code: '404', name: 'NOT_FOUND', description: '资源未找到', solution: '检查请求的URL' },
+        { code: '500', name: 'INTERNAL_SERVER_ERROR', description: '内部服务器错误', solution: '检查服务器日志' },
+        // 添加更多错误码数据
+    ];
+
+    // 获取DOM元素
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('tableBody');
+
+    // 渲染表格数据
+    function renderTable(data) {
+        if (data.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="4" class="no-results">未找到匹配的错误码</td></tr>';
+            return;
+        }
+
+        tableBody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${item.description}</td>
+                    <td>${item.solution}</td>
+                </tr>
+            `).join('');
+    }
+
+    // 搜索过滤功能
+    function filterTable(searchTerm) {
+        const filteredData = errorData.filter(item =>
+          item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.solution.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        renderTable(filteredData);
+    }
+
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', () => {
+        renderTable(errorData);
+
+        searchInput.addEventListener('input', (e) => {
+            filterTable(e.target.value);
+        });
+    });
+</script>
+</body>
+</html>

@@ -495,22 +495,6 @@ define({ "api": [
     "groupTitle": "后台管理"
   },
   {
-    "type": "get",
-    "url": "/api/admin/user/test-db",
-    "title": "测试数据库连接",
-    "name": "TestDatabaseConnection",
-    "group": "后台管理",
-    "version": "1.0.0",
-    "description": "<p>测试数据库连接和用户表查询</p>",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "filename": "src/routes/admin/admin.user.route.js",
-    "groupTitle": "后台管理"
-  },
-  {
     "type": "put",
     "url": "/admin/audit/config",
     "title": "修改审核配置",
