@@ -1,6 +1,6 @@
 import { db } from '../config/db.js';
 import { eq } from 'drizzle-orm';
-import { configTable } from '../db/schema/admin.schema.js';
+import { configTable } from '../db/schemas/admin.schema.js';
 
 export const updateAuditConfigByKey = async (auditConfigValue) => {
   const key = process.env.MINI_PROGRAM_APPID;

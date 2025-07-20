@@ -1,7 +1,7 @@
 import { getAuditConfigByKey, updateAuditConfigByKey } from '../services/admin.service.js';
 import { getAllUsers } from '../services/user.service.js';
 import { db, sql } from '../config/db.js';
-import { userTable } from '../db/schema/user.schema.js';
+import { userTable } from '../db/schemas/user.schema.js';
 import chalk from 'chalk';
 
 export const auditConfigController = async (req, res) => {

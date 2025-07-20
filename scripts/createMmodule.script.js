@@ -15,7 +15,7 @@ const targetDirs = {
   controller: path.join('src', 'controllers'),
   route: path.join('src', 'routes'),
   service: path.join('src', 'services'),
-  schema: path.join('src', 'db', 'schemas') // admin.schema.js 放在这里
+  schema: path.join('src', 'db', 'schemas') // admin.schemas.js 放在这里
 };
 
 // 文件模板内容（ESM 风格）

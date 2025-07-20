@@ -1,5 +1,5 @@
 import { db } from '../config/db.js';
-import { wealthTable } from '../db/schema/wealth.schema.js';
+import { wealthTable } from '../db/schemas/wealth.schema.js';
 import { desc, eq, sql } from 'drizzle-orm';
 
 /**

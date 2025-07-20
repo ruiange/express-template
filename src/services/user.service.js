@@ -1,6 +1,6 @@
 // user.service.js
 
-import { userTable } from '../db/schema/user.schema.js';
+import { userTable } from '../db/schemas/user.schema.js';
 import { eq, asc, like, or, sql } from 'drizzle-orm';
 import { db } from '../config/db.js';
 import chalk from 'chalk';
