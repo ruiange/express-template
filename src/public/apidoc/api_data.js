@@ -33,8 +33,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "src/public/apidoc/main.js",
-    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
-    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
+    "group": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
+    "groupTitle": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
     "name": ""
   },
   {
@@ -515,15 +515,791 @@ define({ "api": [
     "groupTitle": "后台管理"
   },
   {
-    "type": "get",
-    "url": "/wallpaper",
-    "title": "获取壁纸",
-    "name": "getWallpaper",
+    "type": "post",
+    "url": "/api/wallpaper",
+    "title": "创建壁纸",
+    "name": "CreateWallpaper",
     "group": "壁纸",
-    "description": "<p>获取壁纸</p>",
-    "version": "1.0.0",
+    "description": "<p>创建新的壁纸</p>",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "description": "<p>壁纸标题</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "description",
+        "description": "<p>壁纸描述</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "filePath",
+        "description": "<p>文件存储路径</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "thumbnailPath",
+        "description": "<p>缩略图路径</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "fileSize",
+        "description": "<p>文件大小(字节)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "width",
+        "description": "<p>图片宽度(像素)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "height",
+        "description": "<p>图片高度(像素)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "fileType",
+        "description": "<p>文件类型(jpg, png等)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "categoryId",
+        "description": "<p>分类ID</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": false,
+        "field": "isPublic",
+        "description": "<p>是否公开</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>创建的壁纸数据</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
     "groupTitle": "壁纸"
+  },
+  {
+    "type": "delete",
+    "url": "/api/wallpaper/:id",
+    "title": "删除壁纸",
+    "name": "DeleteWallpaper",
+    "group": "壁纸",
+    "description": "<p>删除壁纸</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>壁纸ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "post",
+    "url": "/api/wallpaper/:id/download",
+    "title": "下载壁纸",
+    "name": "DownloadWallpaper",
+    "group": "壁纸",
+    "description": "<p>下载壁纸并增加下载次数</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>壁纸ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>下载链接</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "get",
+    "url": "/api/wallpaper/latest",
+    "title": "获取最新壁纸",
+    "name": "GetLatestWallpapers",
+    "group": "壁纸",
+    "description": "<p>获取最新壁纸列表</p>",
+    "query": [
+      {
+        "group": "Query",
+        "type": "Number",
+        "optional": false,
+        "field": "limit",
+        "description": "<p>返回数量，默认为10</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "data",
+            "description": "<p>最新壁纸列表</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "get",
+    "url": "/api/wallpaper/popular",
+    "title": "获取热门壁纸",
+    "name": "GetPopularWallpapers",
+    "group": "壁纸",
+    "description": "<p>获取热门壁纸列表</p>",
+    "query": [
+      {
+        "group": "Query",
+        "type": "Number",
+        "optional": false,
+        "field": "limit",
+        "description": "<p>返回数量，默认为10</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "data",
+            "description": "<p>热门壁纸列表</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "get",
+    "url": "/api/wallpaper/:id",
+    "title": "获取壁纸详情",
+    "name": "GetWallpaper",
+    "group": "壁纸",
+    "description": "<p>根据ID获取壁纸详情</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>壁纸ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>壁纸数据</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "get",
+    "url": "/api/wallpaper",
+    "title": "获取壁纸列表",
+    "name": "GetWallpapers",
+    "group": "壁纸",
+    "description": "<p>获取壁纸列表，支持分页、搜索、分类筛选</p>",
+    "query": [
+      {
+        "group": "Query",
+        "type": "Number",
+        "optional": false,
+        "field": "page",
+        "description": "<p>页码，默认为1</p>"
+      },
+      {
+        "group": "Query",
+        "type": "Number",
+        "optional": false,
+        "field": "limit",
+        "description": "<p>每页数量，默认为10</p>"
+      },
+      {
+        "group": "Query",
+        "type": "String",
+        "optional": false,
+        "field": "search",
+        "description": "<p>搜索关键词</p>"
+      },
+      {
+        "group": "Query",
+        "type": "Number",
+        "optional": false,
+        "field": "categoryId",
+        "description": "<p>分类ID</p>"
+      },
+      {
+        "group": "Query",
+        "type": "Boolean",
+        "optional": false,
+        "field": "isPublic",
+        "description": "<p>是否公开，默认为true</p>"
+      },
+      {
+        "group": "Query",
+        "type": "String",
+        "optional": false,
+        "field": "sortBy",
+        "description": "<p>排序字段(uploadDate, viewCount, downloadCount)</p>"
+      },
+      {
+        "group": "Query",
+        "type": "String",
+        "optional": false,
+        "field": "sortOrder",
+        "description": "<p>排序方向(asc, desc)</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>壁纸列表和分页信息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "put",
+    "url": "/api/wallpaper/:id",
+    "title": "更新壁纸",
+    "name": "UpdateWallpaper",
+    "group": "壁纸",
+    "description": "<p>更新壁纸信息</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>壁纸ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "description": "<p>壁纸标题</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "description",
+        "description": "<p>壁纸描述</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "filePath",
+        "description": "<p>文件存储路径</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "thumbnailPath",
+        "description": "<p>缩略图路径</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "fileSize",
+        "description": "<p>文件大小(字节)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "width",
+        "description": "<p>图片宽度(像素)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "height",
+        "description": "<p>图片高度(像素)</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "fileType",
+        "description": "<p>文件类型</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "categoryId",
+        "description": "<p>分类ID</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": false,
+        "field": "isPublic",
+        "description": "<p>是否公开</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>更新后的壁纸数据</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸"
+  },
+  {
+    "type": "post",
+    "url": "/api/wallpaper/category",
+    "title": "创建分类",
+    "name": "CreateCategory",
+    "group": "壁纸分类",
+    "description": "<p>创建新的壁纸分类</p>",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "description": "<p>分类名称</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "description",
+        "description": "<p>分类描述</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>创建的分类数据</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸分类"
+  },
+  {
+    "type": "delete",
+    "url": "/api/wallpaper/category/:id",
+    "title": "删除分类",
+    "name": "DeleteCategory",
+    "group": "壁纸分类",
+    "description": "<p>删除分类（只有当分类下没有壁纸时才能删除）</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>分类ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息（当分类下还有壁纸时）</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸分类"
+  },
+  {
+    "type": "get",
+    "url": "/api/wallpaper/category",
+    "title": "获取所有分类",
+    "name": "GetCategories",
+    "group": "壁纸分类",
+    "description": "<p>获取所有壁纸分类</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "data",
+            "description": "<p>分类列表</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸分类"
+  },
+  {
+    "type": "get",
+    "url": "/api/wallpaper/category/:id",
+    "title": "获取分类详情",
+    "name": "GetCategory",
+    "group": "壁纸分类",
+    "description": "<p>根据ID获取分类详情</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>分类ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>分类数据</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸分类"
+  },
+  {
+    "type": "put",
+    "url": "/api/wallpaper/category/:id",
+    "title": "更新分类",
+    "name": "UpdateCategory",
+    "group": "壁纸分类",
+    "description": "<p>更新分类信息</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>分类ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "description": "<p>分类名称</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "description",
+        "description": "<p>分类描述</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>更新后的分类数据</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸分类"
   },
   {
     "type": "get",

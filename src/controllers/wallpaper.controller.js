@@ -1,60 +1,528 @@
-export const getWallpaper = async (req, res) => {
-  const imageUrls = [
-    'https://img.picui.cn/free/2025/07/06/686a0275716e4.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01e51718c.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01e527153.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01e5cf3a2.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01e63b7d6.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01e629c88.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01e9d424f.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01eab0bd8.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01ebdeb65.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01ecac436.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01ee7b34f.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01ef7f047.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f0d1422.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f2d9570.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f37ce2a.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f4467c9.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01eb6176e.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f5a5574.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f909ce4.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01fa5e7ad.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01f9287d7.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01fb6c86c.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01fd79c9b.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01ff1247f.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01fa85412.webp',
-    'https://img.picui.cn/free/2025/07/06/686a01ffdb9d7.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0200d9b0b.webp',
-    'https://img.picui.cn/free/2025/07/06/686a02040b201.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0204ba8c1.webp',
-    'https://img.picui.cn/free/2025/07/06/686a020589eb3.webp',
-    'https://img.picui.cn/free/2025/07/06/686a020700553.webp',
-    'https://img.picui.cn/free/2025/07/06/686a020928dad.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0208bfefc.webp',
-    'https://img.picui.cn/free/2025/07/06/686a025b62100.webp',
-    'https://img.picui.cn/free/2025/07/06/686a025b52531.webp',
-    'https://img.picui.cn/free/2025/07/06/686a025c4711d.webp',
-    'https://img.picui.cn/free/2025/07/06/686a025c34da6.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026054c1c.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0260b501e.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0262c4dc3.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026570f36.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026834026.webp',
-    'https://img.picui.cn/free/2025/07/06/686a02680399a.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026af35d1.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026e83c34.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026d77e3e.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0271cd6ca.webp',
-    'https://img.picui.cn/free/2025/07/06/686a02745ef3f.webp',
-    'https://img.picui.cn/free/2025/07/06/686a0275716e4.webp',
-    'https://img.picui.cn/free/2025/07/06/686a026305db3.webp',
-  ];
+// wallpaper.controller.js
 
-  return res.json({
-    code: 2000,
-    data: imageUrls,
-    message: '获取成功',
-  });
+import chalk from 'chalk';
+import {
+  createWallpaper,
+  getWallpaperById,
+  getAllWallpapers,
+  updateWallpaper,
+  deleteWallpaper,
+  incrementDownloadCount,
+  getPopularWallpapers,
+  getLatestWallpapers,
+  createCategory,
+  getAllCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory
+} from '../services/wallpaper.service.js';
+
+/**
+ * 创建壁纸
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const createWallpaperController = async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      filePath,
+      thumbnailPath,
+      fileSize,
+      width,
+      height,
+      fileType,
+      categoryId,
+      isPublic = true
+    } = req.body;
+
+    // 验证必填字段
+    if (!title || !filePath || !thumbnailPath || !fileType) {
+      return res.status(400).json({
+        code: 4000,
+        message: '标题、文件路径、缩略图路径和文件类型为必填项'
+      });
+    }
+
+    const wallpaperData = {
+      title,
+      description,
+      filePath,
+      thumbnailPath,
+      fileSize: fileSize ? parseInt(fileSize) : null,
+      width: width ? parseInt(width) : null,
+      height: height ? parseInt(height) : null,
+      fileType,
+      categoryId: categoryId ? parseInt(categoryId) : null,
+      isPublic: Boolean(isPublic)
+    };
+
+    const newWallpaper = await createWallpaper(wallpaperData);
+
+    res.status(201).json({
+      code: 2000,
+      message: '壁纸创建成功',
+      data: newWallpaper
+    });
+  } catch (error) {
+    console.log(chalk.red('创建壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 获取壁纸详情
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const getWallpaperController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wallpaperId = parseInt(id);
+
+    if (isNaN(wallpaperId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的壁纸ID'
+      });
+    }
+
+    const wallpaper = await getWallpaperById(wallpaperId);
+
+    if (!wallpaper) {
+      return res.status(404).json({
+        code: 4004,
+        message: '壁纸不存在'
+      });
+    }
+
+    res.json({
+      code: 2000,
+      data: wallpaper
+    });
+  } catch (error) {
+    console.log(chalk.red('获取壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 获取壁纸列表
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const getWallpapersController = async (req, res) => {
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      search = '',
+      categoryId,
+      isPublic = 'true',
+      sortBy = 'uploadDate',
+      sortOrder = 'desc'
+    } = req.query;
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      search,
+      categoryId: categoryId ? parseInt(categoryId) : undefined,
+      isPublic: isPublic === 'true',
+      sortBy,
+      sortOrder
+    };
+
+    const result = await getAllWallpapers(options);
+
+    res.json({
+      code: 2000,
+      data: result
+    });
+  } catch (error) {
+    console.log(chalk.red('获取壁纸列表控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 更新壁纸
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const updateWallpaperController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wallpaperId = parseInt(id);
+
+    if (isNaN(wallpaperId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的壁纸ID'
+      });
+    }
+
+    const updateData = req.body;
+    
+    // 转换数字字段
+    if (updateData.fileSize) updateData.fileSize = parseInt(updateData.fileSize);
+    if (updateData.width) updateData.width = parseInt(updateData.width);
+    if (updateData.height) updateData.height = parseInt(updateData.height);
+    if (updateData.categoryId) updateData.categoryId = parseInt(updateData.categoryId);
+    if (updateData.isPublic !== undefined) updateData.isPublic = Boolean(updateData.isPublic);
+
+    const updatedWallpaper = await updateWallpaper(wallpaperId, updateData);
+
+    if (!updatedWallpaper) {
+      return res.status(404).json({
+        code: 4004,
+        message: '壁纸不存在'
+      });
+    }
+
+    res.json({
+      code: 2000,
+      message: '壁纸更新成功',
+      data: updatedWallpaper
+    });
+  } catch (error) {
+    console.log(chalk.red('更新壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 删除壁纸
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const deleteWallpaperController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wallpaperId = parseInt(id);
+
+    if (isNaN(wallpaperId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的壁纸ID'
+      });
+    }
+
+    await deleteWallpaper(wallpaperId);
+
+    res.json({
+      code: 2000,
+      message: '壁纸删除成功'
+    });
+  } catch (error) {
+    console.log(chalk.red('删除壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 下载壁纸（增加下载次数）
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const downloadWallpaperController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wallpaperId = parseInt(id);
+
+    if (isNaN(wallpaperId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的壁纸ID'
+      });
+    }
+
+    const wallpaper = await getWallpaperById(wallpaperId);
+
+    if (!wallpaper) {
+      return res.status(404).json({
+        code: 4004,
+        message: '壁纸不存在'
+      });
+    }
+
+    // 增加下载次数
+    await incrementDownloadCount(wallpaperId);
+
+    res.json({
+      code: 2000,
+      message: '下载成功',
+      data: {
+        downloadUrl: wallpaper.filePath,
+        thumbnailUrl: wallpaper.thumbnailPath
+      }
+    });
+  } catch (error) {
+    console.log(chalk.red('下载壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 获取热门壁纸
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const getPopularWallpapersController = async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+    const limitNum = parseInt(limit);
+
+    const popularWallpapers = await getPopularWallpapers(limitNum);
+
+    res.json({
+      code: 2000,
+      data: popularWallpapers
+    });
+  } catch (error) {
+    console.log(chalk.red('获取热门壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 获取最新壁纸
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const getLatestWallpapersController = async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+    const limitNum = parseInt(limit);
+
+    const latestWallpapers = await getLatestWallpapers(limitNum);
+
+    res.json({
+      code: 2000,
+      data: latestWallpapers
+    });
+  } catch (error) {
+    console.log(chalk.red('获取最新壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+// ==================== 分类相关控制器 ====================
+
+/**
+ * 创建分类
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const createCategoryController = async (req, res) => {
+  try {
+    const { name, description } = req.body;
+
+    if (!name) {
+      return res.status(400).json({
+        code: 4000,
+        message: '分类名称为必填项'
+      });
+    }
+
+    const categoryData = {
+      name,
+      description: description || null
+    };
+
+    const newCategory = await createCategory(categoryData);
+
+    res.status(201).json({
+      code: 2000,
+      message: '分类创建成功',
+      data: newCategory
+    });
+  } catch (error) {
+    console.log(chalk.red('创建分类控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 获取所有分类
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const getCategoriesController = async (req, res) => {
+  try {
+    const categories = await getAllCategories();
+
+    res.json({
+      code: 2000,
+      data: categories
+    });
+  } catch (error) {
+    console.log(chalk.red('获取分类列表控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 获取分类详情
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const getCategoryController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const categoryId = parseInt(id);
+
+    if (isNaN(categoryId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的分类ID'
+      });
+    }
+
+    const category = await getCategoryById(categoryId);
+
+    if (!category) {
+      return res.status(404).json({
+        code: 4004,
+        message: '分类不存在'
+      });
+    }
+
+    res.json({
+      code: 2000,
+      data: category
+    });
+  } catch (error) {
+    console.log(chalk.red('获取分类控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 更新分类
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const updateCategoryController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const categoryId = parseInt(id);
+
+    if (isNaN(categoryId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的分类ID'
+      });
+    }
+
+    const updateData = req.body;
+
+    const updatedCategory = await updateCategory(categoryId, updateData);
+
+    if (!updatedCategory) {
+      return res.status(404).json({
+        code: 4004,
+        message: '分类不存在'
+      });
+    }
+
+    res.json({
+      code: 2000,
+      message: '分类更新成功',
+      data: updatedCategory
+    });
+  } catch (error) {
+    console.log(chalk.red('更新分类控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * 删除分类
+ * @param {Object} req - 请求对象
+ * @param {Object} res - 响应对象
+ */
+export const deleteCategoryController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const categoryId = parseInt(id);
+
+    if (isNaN(categoryId)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的分类ID'
+      });
+    }
+
+    await deleteCategory(categoryId);
+
+    res.json({
+      code: 2000,
+      message: '分类删除成功'
+    });
+  } catch (error) {
+    console.log(chalk.red('删除分类控制器错误:', error.message));
+    
+    if (error.message === '该分类下还有壁纸，无法删除') {
+      return res.status(400).json({
+        code: 4000,
+        message: error.message
+      });
+    }
+    
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message
+    });
+  }
 };
