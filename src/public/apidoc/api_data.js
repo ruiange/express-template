@@ -845,7 +845,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/wallpaper",
+    "url": "/api/wallpaper/list",
     "title": "获取壁纸列表",
     "name": "GetWallpapers",
     "group": "壁纸",
