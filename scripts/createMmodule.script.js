@@ -1,4 +1,4 @@
-// create-module.js
+// scripts/createModule.script.js
 
 import fs from 'fs';
 import path from 'path';
@@ -10,72 +10,52 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+// 获取当前脚本所在的目录（ESM 兼容方式）
+const scriptPath = new URL(import.meta.url).pathname;
+let __dirname = scriptPath.replace(/^file:\/\/\//, '');
+__dirname = __dirname.replace(/^\//, '');
+
 // 定义目标目录映射
 const targetDirs = {
   controller: path.join('src', 'controllers'),
-  route: path.join('src', 'routes'),
+  route: path.join('src', 'routes','modules'),
   service: path.join('src', 'services'),
-  schema: path.join('src', 'db', 'schemas') // admin.schemas.js 放在这里
+  schema: path.join('src', 'db', 'schemas')
 };
 
-// 文件模板内容（ESM 风格）
+// ===== 模板内容 =====
 const templates = {
-  controller: (name) => `// ${name}.controller.js
+  // 极简控制器模板
+  controller: (name) => `// ${name}.controller.js\n`,
 
-import ${name}Service from '../services/${name}.service.js';
+  // Drizzle ORM Schema 模板
+  schema: (name) => `import { pgTable, varchar, integer, timestamp, text } from 'drizzle-orm/pg-core';
 
-export async function get${capitalizeFirstLetter(name)}s(req, res) {
-  try {
-    const data = await ${name}Service.get${capitalizeFirstLetter(name)}s();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-// 可以继续添加其他方法如 getById, create, update, delete 等
-`,
-
-  schema: (name) => `// ${name}.schema.js
-
-import mongoose from 'mongoose';
-
-const ${name}Schema = new mongoose.Schema({
-  // 在这里定义你的字段
-  name: {
-    type: String,
-    required: true
-  },
-  // 添加更多字段...
+/**
+ * 可以根据需求定义 ${name} 表的字段
+ * 示例字段结构：
+ * - id: 主键，自增整数
+ * - name: 名称，非空
+ * - createdAt: 创建时间，默认当前时间
+ */
+export const ${name}Table = pgTable('${name}s', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar('name', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull()
+  // 在此添加更多字段...
 });
-
-const ${name}Model = mongoose.model('${name}', ${name}Schema);
-export default ${name}Model;
 `,
 
-  route: (name) => `// ${name}.route.js
+  // 极简路由模板
+  route: (name) => `// ${name}.route.js\n\nimport express from 'express';
 
-import express from 'express';
-import ${name}Controller from '../controllers/${name}.controller.js';
+const ${name}Route = express.Router();
 
-const router = express.Router();
-
-router.get('/', ${name}Controller.get${capitalizeFirstLetter(name)}s);
-// 添加更多路由如 getById, create, update, delete 等
-
-export default router;
+export default ${name}Route;
 `,
 
-  service: (name) => `// ${name}.service.js
-
-import ${name}Model from '../db/schemas/${name}.schema.js'; // 注意路径调整
-
-export async function get${capitalizeFirstLetter(name)}s() {
-  return await ${name}Model.find();
-}
-
-// 可以继续添加其他方法如 getById, create, update, delete 等
-`
+  // 极简服务模板
+  service: (name) => `// ${name}.service.js\n`
 };
 
 // 辅助函数：首字母大写
@@ -83,7 +63,20 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// 询问用户输入模块名称
+// 渲染模板
+const renderTemplate = (templateFunc, name) => {
+  return templateFunc(name);
+};
+
+// 加载模板函数
+const loadTemplate = (templateName) => {
+  if (!templates[templateName]) {
+    throw new Error(`模板 ${templateName} 不存在！`);
+  }
+  return templates[templateName];
+};
+
+// 主流程
 rl.question('请输入模块名称（如 admin）：', async (moduleName) => {
   moduleName = moduleName.trim().toLowerCase();
 
@@ -93,33 +86,30 @@ rl.question('请输入模块名称（如 admin）：', async (moduleName) => {
     return;
   }
 
-  // 要创建的文件列表及其目标目录
   const filesToCreate = [
-    { type: 'controller', name: `${moduleName}.controller.js`, content: templates.controller(moduleName) },
-    { type: 'schema', name: `${moduleName}.schema.js`, content: templates.schema(moduleName) },
-    { type: 'route', name: `${moduleName}.route.js`, content: templates.route(moduleName) },
-    { type: 'service', name: `${moduleName}.service.js`, content: templates.service(moduleName) }
+    { type: 'controller', name: `${moduleName}.controller.js` },
+    { type: 'schema', name: `${moduleName}.schema.js` },
+    { type: 'route', name: `${moduleName}.route.js` },
+    { type: 'service', name: `${moduleName}.service.js` }
   ];
 
-  // 目标根目录（假设当前目录是项目的根目录）
   const targetRootDir = process.cwd();
-
   let createdCount = 0;
 
-  // 遍历并创建文件
-  for (const { type, name, content } of filesToCreate) {
+  for (const { type, name } of filesToCreate) {
     const targetDir = path.join(targetRootDir, targetDirs[type]);
     const filePath = path.join(targetDir, name);
 
-    // 确保目标目录存在
     if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir, { recursive: true }); // 递归创建目录
+      fs.mkdirSync(targetDir, { recursive: true });
       console.log(`已创建目录：${targetDir}`);
     }
 
     if (fs.existsSync(filePath)) {
       console.log(`文件已存在，跳过创建：${name}`);
     } else {
+      const templateFunc = loadTemplate(type);
+      const content = renderTemplate(templateFunc, moduleName);
       fs.writeFileSync(filePath, content, 'utf8');
       console.log(`已创建文件：${filePath}`);
       createdCount++;
@@ -127,6 +117,5 @@ rl.question('请输入模块名称（如 admin）：', async (moduleName) => {
   }
 
   console.log(`✅ 共创建了 ${createdCount} 个文件。`);
-
   rl.close();
 });
