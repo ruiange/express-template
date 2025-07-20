@@ -44,7 +44,7 @@ const wallpaperRoute = express.Router();
 wallpaperRoute.post('/', authMiddleware, createWallpaperController);
 
 /**
- * @api {get} /api/wallpaper 获取壁纸列表
+ * @api {get} /api/wallpaper/list 获取壁纸列表
  * @apiName GetWallpapers
  * @apiGroup 壁纸
  * @apiDescription 获取壁纸列表，支持分页、搜索、分类筛选
@@ -60,7 +60,7 @@ wallpaperRoute.post('/', authMiddleware, createWallpaperController);
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {Object} data 壁纸列表和分页信息
  */
-wallpaperRoute.get('/', getWallpapersController);
+wallpaperRoute.get('/list', getWallpapersController);
 
 /**
  * @api {get} /api/wallpaper/popular 获取热门壁纸
