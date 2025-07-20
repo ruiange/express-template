@@ -12,7 +12,8 @@
     "migrate": "npx drizzle-kit migrate",
     "push": "npx drizzle-kit push",
     "database-push": "npm run generate && npm run migrate && npm run push",
-    "upload": "node build/upload.js"
+    "upload": "node build/upload.js",
+    "创建模块": "node scripts/createMmodule.script.js"
   },
   "keywords": [
     "express",
