@@ -65,6 +65,33 @@ class AuthService {
     };
   }
 
+  /**
+   * 修改登录会话
+   * @param scene
+   * @param userInfo
+   * @returns {Promise<{message: string, success: boolean}|{success: boolean, message: string}>}
+   */
+  static async updateLoginSession(scene, userInfo) {
+    const session = await loginSessionRepository
+      .search()
+      .where('scene')
+      .equals(scene)
+      .return.first();
+    if (!session) {
+      return { message: '会话不存在', success: false };
+    }
+    session.status = 'scanning';
+    session.openid = userInfo.openid;
+    await loginSessionRepository.save(session);
+    return {
+      status: session.status,
+      expiresAt: session.expiresAt,
+      message: '扫码成功',
+      success: true,
+      openid: session.openid,
+    };
+  }
+
   // 确认登录（小程序端调用）
   static async confirmLogin(scene, userInfo) {
     const session = await loginSessionRepository
@@ -77,7 +104,7 @@ class AuthService {
       return { message: '会话不存在', success: false };
     }
 
-    if (session.status !== 'waiting') {
+    if (session.status !== 'waiting' && session.status!=='scanning') {
       return { message: '会话已处理', success: false };
     }
 
@@ -89,6 +116,7 @@ class AuthService {
 
     return { success: true, message: '登录成功' };
   }
+
 
   // 清理过期会话
   static async cleanExpiredSessions() {

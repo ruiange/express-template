@@ -161,3 +161,15 @@ export const confirmQrcodeLogin = async (req, res) => {
     res.error(message);
   }
 };
+
+export const qrCodeScanning = async (req, res) => {
+  const { scene } = req.body;
+  if (!scene) {
+    return res.status(400).send({
+      code: 4000,
+      message: '参数不完整',
+    });
+  }
+  await AuthService.updateLoginSession(scene, req.user)
+  res.success(true, '更新成功');
+};

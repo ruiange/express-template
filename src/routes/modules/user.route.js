@@ -62,6 +62,15 @@ userRoute.put('/', authMiddleware, updateProfile);
 userRoute.post('/login-qrcode', generateLoginQrcode);
 
 /**
+ * @api {post} /api/user/login-qrcode/scanning 扫描登录二维码
+ * @apiName qrCodeScanning
+ * @apiGroup 用户
+ *
+ * @apibody {String} scene 二维码场景值
+ */
+userRoute.post('/login-qrcode/scanning', qrCodeScanning);
+
+/**
  * @api {get} /api/user/login-qrcode/status 查询二维码状态
  * @apiName CheckQrcodeStatus
  * @apiGroup 用户
