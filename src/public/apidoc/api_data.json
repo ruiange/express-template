@@ -203,7 +203,7 @@
             "group": "Parameter",
             "type": "Number",
             "optional": true,
-            "field": "pageSize",
+            "field": "limit",
             "defaultValue": "10",
             "description": "<p>每页数量</p>"
           },
@@ -261,7 +261,7 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "questions",
+            "field": "list",
             "description": "<p>题目列表</p>"
           },
           {
@@ -289,7 +289,7 @@
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "pagination.pageSize",
+            "field": "pagination.limit",
             "description": "<p>每页数量</p>"
           },
           {
@@ -2281,7 +2281,7 @@
             "group": "Parameter",
             "type": "Number",
             "optional": true,
-            "field": "pageSize",
+            "field": "limit",
             "defaultValue": "10",
             "description": "<p>每页数量</p>"
           },
@@ -2367,7 +2367,7 @@
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "pagination.pageSize",
+            "field": "pagination.limit",
             "description": "<p>每页数量</p>"
           },
           {
