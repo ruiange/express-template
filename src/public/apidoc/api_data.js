@@ -1587,55 +1587,64 @@ define({ "api": [
     "name": "CreateQuestion",
     "group": "题库",
     "version": "1.0.0",
-    "parameter": {
+    "header": {
       "fields": {
-        "Parameter": [
+        "Header": [
           {
-            "group": "Parameter",
+            "group": "Header",
             "type": "String",
             "optional": false,
-            "field": "title",
-            "description": "<p>题目标题</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>题目内容</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "answer",
-            "description": "<p>题目答案</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "difficulty",
-            "defaultValue": "3",
-            "description": "<p>难度级别</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "category",
-            "description": "<p>题目分类</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "tags",
-            "description": "<p>题目标签</p>"
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
           }
         ]
       }
     },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "description": "<p>题目标题</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "content",
+        "description": "<p>题目内容</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "answer",
+        "description": "<p>题目答案</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": true,
+        "field": "difficulty",
+        "defaultValue": "3",
+        "description": "<p>难度级别</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "category",
+        "description": "<p>题目分类</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "tags",
+        "description": "<p>题目标签</p>"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -2045,6 +2054,19 @@ define({ "api": [
     "name": "UpdateQuestion",
     "group": "题库",
     "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2054,52 +2076,54 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p>题目ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "title",
-            "description": "<p>题目标题</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "content",
-            "description": "<p>题目内容</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "answer",
-            "description": "<p>题目答案</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "difficulty",
-            "description": "<p>难度级别</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "category",
-            "description": "<p>题目分类</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "tags",
-            "description": "<p>题目标签</p>"
           }
         ]
       }
     },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "title",
+        "description": "<p>题目标题</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "content",
+        "description": "<p>题目内容</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "answer",
+        "description": "<p>题目答案</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": true,
+        "field": "difficulty",
+        "description": "<p>难度级别</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "category",
+        "description": "<p>题目分类</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "tags",
+        "description": "<p>题目标签</p>"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
