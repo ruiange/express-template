@@ -39,352 +39,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/question/create",
-    "title": "创建题目",
-    "name": "CreateQuestion",
-    "group": "Question",
-    "version": "1.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "title",
-            "description": "<p>题目标题</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>题目内容</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "answer",
-            "description": "<p>题目答案</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "difficulty",
-            "defaultValue": "3",
-            "description": "<p>难度级别</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "category",
-            "description": "<p>题目分类</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "tags",
-            "description": "<p>题目标签</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "question",
-            "description": "<p>创建的题目</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/controllers/question.controller.js",
-    "groupTitle": "Question"
-  },
-  {
-    "type": "delete",
-    "url": "/api/question/:id",
-    "title": "删除题目",
-    "name": "DeleteQuestion",
-    "group": "Question",
-    "version": "1.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>题目ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>删除成功</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/controllers/question.controller.js",
-    "groupTitle": "Question"
-  },
-  {
-    "type": "get",
-    "url": "/api/question/:id",
-    "title": "获取题目详情",
-    "name": "GetQuestionDetail",
-    "group": "Question",
-    "version": "1.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>题目ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "question",
-            "description": "<p>题目详情</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/controllers/question.controller.js",
-    "groupTitle": "Question"
-  },
-  {
-    "type": "get",
-    "url": "/api/question/list",
-    "title": "获取题库列表",
-    "name": "GetQuestionList",
-    "group": "Question",
-    "version": "1.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "page",
-            "defaultValue": "1",
-            "description": "<p>页码</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "limit",
-            "defaultValue": "10",
-            "description": "<p>每页数量</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "category",
-            "description": "<p>分类筛选</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "tags",
-            "description": "<p>标签筛选</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "difficulty",
-            "description": "<p>难度筛选</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "keyword",
-            "description": "<p>关键词搜索</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "sortBy",
-            "defaultValue": "createdAt",
-            "description": "<p>排序字段</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "sortOrder",
-            "defaultValue": "desc",
-            "description": "<p>排序方式，asc或desc</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "list",
-            "description": "<p>题目列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "pagination",
-            "description": "<p>分页信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.total",
-            "description": "<p>总数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.page",
-            "description": "<p>当前页码</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.limit",
-            "description": "<p>每页数量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.totalPages",
-            "description": "<p>总页数</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/controllers/question.controller.js",
-    "groupTitle": "Question"
-  },
-  {
-    "type": "put",
-    "url": "/api/question/:id",
-    "title": "更新题目",
-    "name": "UpdateQuestion",
-    "group": "Question",
-    "version": "1.0.0",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>题目ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "title",
-            "description": "<p>题目标题</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "content",
-            "description": "<p>题目内容</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "answer",
-            "description": "<p>题目答案</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "difficulty",
-            "description": "<p>难度级别</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "category",
-            "description": "<p>题目分类</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "tags",
-            "description": "<p>题目标签</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "question",
-            "description": "<p>更新后的题目</p>"
-          }
-        ]
-      }
-    },
-    "filename": "src/controllers/question.controller.js",
-    "groupTitle": "Question"
-  },
-  {
-    "type": "post",
     "url": "/upload",
     "title": "上传文件",
     "name": "UploadFile",
@@ -2273,7 +1927,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": true,
-            "field": "page",
+            "field": "current",
             "defaultValue": "1",
             "description": "<p>页码</p>"
           },
@@ -2281,7 +1935,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": true,
-            "field": "limit",
+            "field": "pageSize",
             "defaultValue": "10",
             "description": "<p>每页数量</p>"
           },
@@ -2339,7 +1993,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "questions",
+            "field": "list",
             "description": "<p>题目列表</p>"
           },
           {
@@ -2360,14 +2014,14 @@ define({ "api": [
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "pagination.page",
+            "field": "pagination.current",
             "description": "<p>当前页码</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "pagination.limit",
+            "field": "pagination.pageSize",
             "description": "<p>每页数量</p>"
           },
           {

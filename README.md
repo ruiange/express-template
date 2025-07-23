@@ -83,8 +83,8 @@ API 文档自动生成并部署在 `/apidoc` 路径下。本地开发时可以�
 **接口地址：** `GET /api/question/list`
 
 **查询参数：**
-- `page` (可选): 页码，默认为1
-- `limit` (可选): 每页数量，默认为10
+- `current` (可选): 页码，默认为1
+- `pageSize` (可选): 每页数量，默认为10
 - `category` (可选): 分类筛选
 - `tags` (可选): 标签筛选
 - `difficulty` (可选): 难度筛选
@@ -94,7 +94,7 @@ API 文档自动生成并部署在 `/apidoc` 路径下。本地开发时可以�
 
 **请求示例：**
 ```
-GET /api/question/list?page=1&limit=10&category=前端&difficulty=3
+GET /api/question/list?current=1&pageSize=10&category=前端&difficulty=3
 ```
 
 **响应示例：**
@@ -117,8 +117,8 @@ GET /api/question/list?page=1&limit=10&category=前端&difficulty=3
     ],
     "pagination": {
       "total": 100,
-      "page": 1,
-      "limit": 10,
+      "current": 1,
+      "pageSize": 10,
       "totalPages": 10
     }
   }

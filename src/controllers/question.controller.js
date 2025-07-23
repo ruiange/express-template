@@ -5,8 +5,8 @@ class QuestionController {
   static async getQuestionList(req, res) {
     try {
       const options = {
-        page: parseInt(req.query.page) || 1,
-        limit: parseInt(req.query.limit) || 10,
+        current: parseInt(req.query.current) || 1,
+        pageSize: parseInt(req.query.pageSize) || 10,
         category: req.query.category,
         tags: req.query.tags,
         difficulty: req.query.difficulty ? parseInt(req.query.difficulty) : undefined,

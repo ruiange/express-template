@@ -12,8 +12,8 @@ const questionRoute = express.Router();
  * @apiGroup 题库
  * @apiVersion 1.0.0
  * 
- * @apiParam {Number} [page=1] 页码
- * @apiParam {Number} [limit=10] 每页数量
+ * @apiParam {Number} [current=1] 页码
+ * @apiParam {Number} [pageSize=10] 每页数量
  * @apiParam {String} [category] 分类筛选
  * @apiParam {String} [tags] 标签筛选
  * @apiParam {Number} [difficulty] 难度筛选
@@ -21,11 +21,11 @@ const questionRoute = express.Router();
  * @apiParam {String} [sortBy=createdAt] 排序字段
  * @apiParam {String} [sortOrder=desc] 排序方式，asc或desc
  * 
- * @apiSuccess {Object[]} questions 题目列表
+ * @apiSuccess {Object[]} list 题目列表
  * @apiSuccess {Object} pagination 分页信息
  * @apiSuccess {Number} pagination.total 总数
- * @apiSuccess {Number} pagination.page 当前页码
- * @apiSuccess {Number} pagination.limit 每页数量
+ * @apiSuccess {Number} pagination.current 当前页码
+ * @apiSuccess {Number} pagination.pageSize 每页数量
  * @apiSuccess {Number} pagination.totalPages 总页数
  */
 questionRoute.get('/list', QuestionController.getQuestionList);
