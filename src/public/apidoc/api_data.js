@@ -33,8 +33,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "src/public/apidoc/main.js",
-    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
-    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
+    "group": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
+    "groupTitle": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
     "name": ""
   },
   {
@@ -1544,6 +1544,25 @@ define({ "api": [
         }
       ]
     },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户"
+  },
+  {
+    "type": "post",
+    "url": "/api/user/login-qrcode/scanning",
+    "title": "扫描登录二维码",
+    "name": "qrCodeScanning",
+    "group": "用户",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "scene",
+        "description": "<p>二维码场景值</p>"
+      }
+    ],
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
     "groupTitle": "用户"

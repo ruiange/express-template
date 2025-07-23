@@ -2,7 +2,7 @@ import express from 'express';
 import {
   checkQrcodeStatus,
   confirmQrcodeLogin,
-  generateLoginQrcode,
+  generateLoginQrcode, qrCodeScanning,
   register,
   updateProfile,
   viewProfile,
