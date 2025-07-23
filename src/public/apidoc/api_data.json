@@ -1594,6 +1594,13 @@
             "group": "Header",
             "type": "String",
             "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
             "field": "Content-Type",
             "description": "<p>application/json</p>"
           }
@@ -1752,6 +1759,19 @@
     "name": "DeleteQuestion",
     "group": "题库",
     "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2057,6 +2077,13 @@
     "header": {
       "fields": {
         "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
           {
             "group": "Header",
             "type": "String",

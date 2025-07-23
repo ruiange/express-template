@@ -38,7 +38,7 @@ questionRoute.get('/list', QuestionController.getQuestionList);
  * @apiName GetQuestionDetail
  * @apiGroup 题库
  * @apiVersion 1.0.0
- * 
+ *
  * @apiParam {Number} id 题目ID
  * 
  * @apiSuccess {Object} question 题目详情
@@ -63,7 +63,8 @@ questionRoute.get('/:id', QuestionController.getQuestionDetail);
  * @apiName CreateQuestion
  * @apiGroup 题库
  * @apiVersion 1.0.0
- * 
+ *
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
  * @apiHeader {String} Content-Type application/json
  * 
  * @apiBody {String} title 题目标题
@@ -95,7 +96,7 @@ questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.
  * @apiName UpdateQuestion
  * @apiGroup 题库
  * @apiVersion 1.0.0
- * 
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
  * @apiHeader {String} Content-Type application/json
  * 
  * @apiParam {Number} id 题目ID
@@ -128,7 +129,7 @@ questionRoute.put('/:id',authMiddleware,adminMiddleware, QuestionController.upda
  * @apiName DeleteQuestion
  * @apiGroup 题库
  * @apiVersion 1.0.0
- * 
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
  * @apiParam {Number} id 题目ID
  * 
  * @apiSuccess {Boolean} success 删除成功
