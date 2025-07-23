@@ -2,28 +2,6 @@
 import questionService from '../services/question.service.js';
 
 class QuestionController {
-  /**
-   * @api {get} /api/question/list 获取题库列表
-   * @apiName GetQuestionList
-   * @apiGroup Question
-   * @apiVersion 1.0.0
-   * 
-   * @apiParam {Number} [page=1] 页码
-   * @apiParam {Number} [limit=10] 每页数量
-   * @apiParam {String} [category] 分类筛选
-   * @apiParam {String} [tags] 标签筛选
-   * @apiParam {Number} [difficulty] 难度筛选
-   * @apiParam {String} [keyword] 关键词搜索
-   * @apiParam {String} [sortBy=createdAt] 排序字段
-   * @apiParam {String} [sortOrder=desc] 排序方式，asc或desc
-   * 
-   * @apiSuccess {Object[]} list 题目列表
-   * @apiSuccess {Object} pagination 分页信息
-   * @apiSuccess {Number} pagination.total 总数
-   * @apiSuccess {Number} pagination.page 当前页码
-   * @apiSuccess {Number} pagination.limit 每页数量
-   * @apiSuccess {Number} pagination.totalPages 总页数
-   */
   static async getQuestionList(req, res) {
     try {
       const options = {
@@ -34,9 +12,8 @@ class QuestionController {
         difficulty: req.query.difficulty ? parseInt(req.query.difficulty) : undefined,
         keyword: req.query.keyword,
         sortBy: req.query.sortBy || 'createdAt',
-        sortOrder: req.query.sortOrder || 'desc'
+        sortOrder: req.query.sortOrder || 'desc',
       };
-
 
       const result = await questionService.getQuestionList(options);
       res.success(result);
@@ -45,16 +22,6 @@ class QuestionController {
     }
   }
 
-  /**
-   * @api {get} /api/question/:id 获取题目详情
-   * @apiName GetQuestionDetail
-   * @apiGroup Question
-   * @apiVersion 1.0.0
-   * 
-   * @apiParam {Number} id 题目ID
-   * 
-   * @apiSuccess {Object} question 题目详情
-   */
   static async getQuestionDetail(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -73,21 +40,6 @@ class QuestionController {
     }
   }
 
-  /**
-   * @api {post} /api/question/create 创建题目
-   * @apiName CreateQuestion
-   * @apiGroup Question
-   * @apiVersion 1.0.0
-   * 
-   * @apiParam {String} title 题目标题
-   * @apiParam {String} content 题目内容
-   * @apiParam {String} answer 题目答案
-   * @apiParam {Number} [difficulty=3] 难度级别
-   * @apiParam {String} [category] 题目分类
-   * @apiParam {String} [tags] 题目标签
-   * 
-   * @apiSuccess {Object} question 创建的题目
-   */
   static async createQuestion(req, res) {
     try {
       const { title, content, answer, difficulty, category, tags } = req.body;
@@ -103,7 +55,7 @@ class QuestionController {
         answer,
         difficulty: difficulty || 3,
         category,
-        tags
+        tags,
       };
 
       const newQuestion = await questionService.createQuestion(questionData);
@@ -113,22 +65,6 @@ class QuestionController {
     }
   }
 
-  /**
-   * @api {put} /api/question/:id 更新题目
-   * @apiName UpdateQuestion
-   * @apiGroup Question
-   * @apiVersion 1.0.0
-   * 
-   * @apiParam {Number} id 题目ID
-   * @apiParam {String} [title] 题目标题
-   * @apiParam {String} [content] 题目内容
-   * @apiParam {String} [answer] 题目答案
-   * @apiParam {Number} [difficulty] 难度级别
-   * @apiParam {String} [category] 题目分类
-   * @apiParam {String} [tags] 题目标签
-   * 
-   * @apiSuccess {Object} question 更新后的题目
-   */
   static async updateQuestion(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -162,16 +98,6 @@ class QuestionController {
     }
   }
 
-  /**
-   * @api {delete} /api/question/:id 删除题目
-   * @apiName DeleteQuestion
-   * @apiGroup Question
-   * @apiVersion 1.0.0
-   * 
-   * @apiParam {Number} id 题目ID
-   * 
-   * @apiSuccess {Boolean} success 删除成功
-   */
   static async deleteQuestion(req, res) {
     try {
       const id = parseInt(req.params.id);
