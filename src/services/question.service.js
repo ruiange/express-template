@@ -83,7 +83,7 @@ export const getQuestionList = async (options = {}) => {
   const total = Number(countResult[0]?.count || '0');
 
   return {
-    questions,
+    list:questions,
     pagination: {
       total,
       page,

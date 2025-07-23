@@ -17,7 +17,7 @@ class QuestionController {
    * @apiParam {String} [sortBy=createdAt] 排序字段
    * @apiParam {String} [sortOrder=desc] 排序方式，asc或desc
    * 
-   * @apiSuccess {Object[]} questions 题目列表
+   * @apiSuccess {Object[]} list 题目列表
    * @apiSuccess {Object} pagination 分页信息
    * @apiSuccess {Number} pagination.total 总数
    * @apiSuccess {Number} pagination.page 当前页码
