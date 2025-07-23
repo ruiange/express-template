@@ -2,6 +2,8 @@
 
 import express from 'express';
 import QuestionController from '../../controllers/question.controller.js';
+import { authMiddleware } from '../../middlewares/auth.middleware.js';
+import { adminMiddleware } from '../../middlewares/admin.middleware.js';
 
 const questionRoute = express.Router();
 
@@ -85,7 +87,7 @@ questionRoute.get('/:id', QuestionController.getQuestionDetail);
  * @apiError {String} message 错误信息
  * @apiError {Number} code 错误代码
  */
-questionRoute.post('/create', QuestionController.createQuestion);
+questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.createQuestion);
 
 /**
  * @api {put} /api/question/:id 更新题目
@@ -118,7 +120,7 @@ questionRoute.post('/create', QuestionController.createQuestion);
  * @apiError {String} message 错误信息
  * @apiError {Number} code 错误代码
  */
-questionRoute.put('/:id', QuestionController.updateQuestion);
+questionRoute.put('/:id',authMiddleware,adminMiddleware, QuestionController.updateQuestion);
 
 /**
  * @api {delete} /api/question/:id 删除题目
@@ -134,6 +136,6 @@ questionRoute.put('/:id', QuestionController.updateQuestion);
  * @apiError {String} message 错误信息
  * @apiError {Number} code 错误代码
  */
-questionRoute.delete('/:id', QuestionController.deleteQuestion);
+questionRoute.delete('/:id',authMiddleware,adminMiddleware, QuestionController.deleteQuestion);
 
 export default questionRoute;
