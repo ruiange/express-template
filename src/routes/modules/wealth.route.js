@@ -10,6 +10,6 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 const wealthRoute = express.Router();
 
 wealthRoute.post('/muyu', authMiddleware, muyuAddWealth);
-wealthRoute.get('/muyu', authMiddleware, muyuRankList);
+wealthRoute.get('/muyu', muyuRankList);
 
 export default wealthRoute;
