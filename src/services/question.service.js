@@ -8,7 +8,7 @@ import { db } from '../config/db.js';
  * 获取题库列表
  * @param {Object} options - 查询选项
  * @param {number} options.page - 页码，默认为1
- * @param {number} options.pageSize - 每页数量，默认为10
+ * @param {number} options.limit - 每页数量，默认为10
  * @param {string} options.category - 分类筛选
  * @param {string} options.tags - 标签筛选
  * @param {number} options.difficulty - 难度筛选
@@ -20,7 +20,7 @@ import { db } from '../config/db.js';
 export const getQuestionList = async (options = {}) => {
   const {
     page = 1,
-    pageSize = 10,
+    limit = 10,
     category,
     tags,
     difficulty,
@@ -71,8 +71,8 @@ export const getQuestionList = async (options = {}) => {
   }
 
   // 应用分页
-  const offset = (page - 1) * pageSize;
-  query = query.limit(pageSize).offset(offset);
+  const offset = (page - 1) * limit;
+  query = query.limit(limit).offset(offset);
 
   // 执行查询
   const [questions, countResult] = await Promise.all([
@@ -87,8 +87,8 @@ export const getQuestionList = async (options = {}) => {
     pagination: {
       total,
       page,
-      pageSize,
-      totalPages: Math.ceil(total / pageSize)
+      limit,
+      totalPages: Math.ceil(total / limit)
     }
   };
 };

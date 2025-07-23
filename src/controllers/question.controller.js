@@ -9,7 +9,7 @@ class QuestionController {
    * @apiVersion 1.0.0
    * 
    * @apiParam {Number} [page=1] 页码
-   * @apiParam {Number} [pageSize=10] 每页数量
+   * @apiParam {Number} [limit=10] 每页数量
    * @apiParam {String} [category] 分类筛选
    * @apiParam {String} [tags] 标签筛选
    * @apiParam {Number} [difficulty] 难度筛选
@@ -21,14 +21,14 @@ class QuestionController {
    * @apiSuccess {Object} pagination 分页信息
    * @apiSuccess {Number} pagination.total 总数
    * @apiSuccess {Number} pagination.page 当前页码
-   * @apiSuccess {Number} pagination.pageSize 每页数量
+   * @apiSuccess {Number} pagination.limit 每页数量
    * @apiSuccess {Number} pagination.totalPages 总页数
    */
   static async getQuestionList(req, res) {
     try {
       const options = {
         page: parseInt(req.query.page) || 1,
-        pageSize: parseInt(req.query.pageSize) || 10,
+        limit: parseInt(req.query.limit) || 10,
         category: req.query.category,
         tags: req.query.tags,
         difficulty: req.query.difficulty ? parseInt(req.query.difficulty) : undefined,
@@ -36,6 +36,7 @@ class QuestionController {
         sortBy: req.query.sortBy || 'createdAt',
         sortOrder: req.query.sortOrder || 'desc'
       };
+
 
       const result = await questionService.getQuestionList(options);
       res.success(result);
