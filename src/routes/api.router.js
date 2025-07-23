@@ -8,6 +8,8 @@ import uploadRoute from './modules/upload.route.js';
 import aiRoute from './modules/ai.route.js';
 import wallpaperRoute from './modules/wallpaper.route.js';
 import adminRoute from './admin/admin.route.js';
+import questionRoute from './modules/question.route.js';
+
 
 const apiRouter = express.Router();
 
@@ -20,4 +22,5 @@ apiRouter.use('/upload', uploadRoute);
 apiRouter.use('/ai', aiRoute);
 apiRouter.use('/wallpaper', wallpaperRoute);
 apiRouter.use('/admin', adminRoute);
+apiRouter.use('/question',questionRoute)
 export default apiRouter;
