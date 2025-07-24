@@ -7,6 +7,7 @@ import { pgTable, varchar, integer, timestamp } from 'drizzle-orm/pg-core';
  * email: 邮箱，唯一且非空。
  * nickname: 昵称，可为空。
  * avatar: 头像 URL，可为空。
+ * membership: 会员等级，默认为 0，
  * role: 角色，默认为 'user'，可选值为 'user' 或 'admin'。
  * createdAt: 创建时间，默认为当前时间。
  * updatedAt: 更新时间，默认为当前时间。
@@ -24,6 +25,7 @@ export const userTable = pgTable('users', {
   email: varchar('email', { length: 255 }).unique(),
   nickname: varchar('nickname', { length: 255 }),
   avatar: varchar('avatar', { length: 255 }),
+  membership: integer('membership').default(0).notNull(),
   role: varchar('role', { length: 5 }).default('user').notNull(), // enum ['user', 'admin']
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
