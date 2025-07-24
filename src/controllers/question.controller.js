@@ -30,7 +30,8 @@ class QuestionController {
       }
 
       const question = await questionService.getQuestionById(id);
-      res.success(question);
+      const { createdAt, updatedAt, ...questionDetail } = question;
+      res.success(questionDetail);
     } catch (error) {
       if (error.message === '题目不存在') {
         res.error(error.message, 404);
@@ -42,23 +43,13 @@ class QuestionController {
 
   static async createQuestion(req, res) {
     try {
-      const { title, content, answer, difficulty, category, tags } = req.body;
-
+      const { title } = req.body;
       // 验证必填字段
-      if (!title || !content || !answer) {
-        return res.error('标题、内容和答案为必填项');
+      if (!title) {
+        return res.error('标题必填项');
       }
 
-      const questionData = {
-        title,
-        content,
-        answer,
-        difficulty: difficulty || 3,
-        category,
-        tags,
-      };
-
-      const newQuestion = await questionService.createQuestion(questionData);
+      const newQuestion = await questionService.createQuestion(req.body);
       res.created(newQuestion, '题目创建成功');
     } catch (error) {
       res.error(error.message);
@@ -79,15 +70,10 @@ class QuestionController {
         return res.error('至少需要提供一个更新字段');
       }
 
-      const questionData = {};
-      if (title) questionData.title = title;
-      if (content) questionData.content = content;
-      if (answer) questionData.answer = answer;
-      if (difficulty !== undefined) questionData.difficulty = difficulty;
-      if (category) questionData.category = category;
-      if (tags) questionData.tags = tags;
+      const questionData = req.body
 
-      const updatedQuestion = await questionService.updateQuestion(id, questionData);
+
+      const updatedQuestion = await questionService.updateQuestion(id,questionData);
       res.success(updatedQuestion, '题目更新成功');
     } catch (error) {
       if (error.message === '题目不存在') {
