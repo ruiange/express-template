@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { deleteVercelBlob, uploadController } from '../../controllers/upload.controller.js';
+import {  uploadController } from '../../controllers/upload.controller.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 
 const uploadRoute = express.Router();
@@ -21,6 +21,6 @@ const upload = multer();
  */
 uploadRoute.post('/', upload.single('file'), authMiddleware, uploadController);
 
-uploadRoute.delete('/', authMiddleware, deleteVercelBlob);
+
 
 export default uploadRoute;

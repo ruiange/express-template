@@ -2,10 +2,10 @@ import { dateDiff } from '../utils/index.js';
 import chalk from 'chalk';
 import dayjs from 'dayjs';
 import { getUserInfo, registerUser, updateUser } from '../services/user.service.js';
-import { deleteVercelBlob } from './upload.controller.js';
 import getUnlimitedQRCode from '../utils/wechat/getUnlimitedQRCode.util.js';
 import AuthService from '../services/auth.service.js';
 import { generateToken } from '../utils/jwt.util.js';
+import { deleteBlobService } from '../services/upload.service.js';
 
 // 用户注册
 export const register = async (req, res) => {
@@ -77,7 +77,8 @@ export const updateProfile = async (req, res) => {
       signature,
     };
     if (info.avatar && info.avatar !== avatar) {
-      await deleteVercelBlob(info.avatar);
+      console.log(chalk.red('删除旧头像'))
+      await deleteBlobService(info.avatar);
     }
 
     const userInfo = await updateUser(info.id, params);

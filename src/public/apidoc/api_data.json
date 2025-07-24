@@ -33,9 +33,19 @@
     "url": "",
     "version": "0.0.0",
     "filename": "src/public/apidoc/main.js",
-    "group": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
-    "groupTitle": "C:\\Users\\bombi\\Documents\\GitHub\\express-template\\src\\public\\apidoc\\main.js",
+    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
+    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\public\\apidoc\\main.js",
     "name": ""
+  },
+  {
+    "type": "delete",
+    "url": "/api/admin/user/delete",
+    "title": "批量删除用户",
+    "version": "0.0.0",
+    "filename": "src/routes/admin/admin.user.route.js",
+    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\routes\\admin\\admin.user.route.js",
+    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\routes\\admin\\admin.user.route.js",
+    "name": "DeleteApiAdminUserDelete"
   },
   {
     "type": "post",

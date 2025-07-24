@@ -5,14 +5,15 @@ export const authMiddleware = async (req, res, next) => {
     // 从请求头获取token
     const authHeader = req.headers.authorization || req.headers.Authorization;
     if (!authHeader) {
-      return res.status(401).json({ code: 4001, message: '未提供认证token' });
+      console.log('未提供认证token');
+      return res.unauthorized('未提供认证token');
     }
 
     // 验证token格式
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
     if (!token) {
-      return res.status(401).json({ code: 4001, message: '无效的token格式' });
+      return res.unauthorized('无效的token格式');
     }
 
     try {

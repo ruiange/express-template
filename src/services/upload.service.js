@@ -105,11 +105,34 @@ export const r2Upload = async (file, path) => {
  * 文件存储介质判断
  * @param filePath
  */
-const storageMediumJudgment = (filePath) => {};
+const storageMediumJudgment = (filePath) => {
+  if(filePath.includes('vercel-storage.com')){
+    return 'vercel'
+  }
+};
 
 /**
  * 删除文件
  * @param filePath
  * @returns {Promise<void>}
  */
-export const deleteBlobService = async (filePath) => {};
+export const deleteBlobService = async (filePath) => {
+  const medium  =storageMediumJudgment(filePath)
+  if(medium === 'vercel'){
+    await deleteVercelBlob(filePath)
+  }
+};
+
+export const deleteVercelBlob = async (filePath) => {
+  console.log(filePath,'filePath')
+  const pathname = new URL(filePath).pathname.slice(1);
+  console.log(pathname,'pathname')
+  try {
+    await del(pathname, {
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

@@ -5,6 +5,7 @@ import {
   r2Upload,
   vercelBlobUpload,
 } from '../services/upload.service.js';
+import chalk from 'chalk';
 
 /**
  * 文件上传控制器
@@ -13,6 +14,7 @@ import {
  * @returns
  */
 export const uploadController = async (req, res) => {
+  console.log(chalk('来传文件了啊'))
   try {
     const file = req.file;
     const path = req.body.path || 'default';
@@ -47,18 +49,7 @@ export const uploadController = async (req, res) => {
   }
 };
 
-export const deleteVercelBlob = async (filePath) => {
-  const pathname = new URL(filePath).pathname.slice(1);
 
-  try {
-    await del(pathname, {
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    });
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
 
 /**
  * 文件删除控制器
