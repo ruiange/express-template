@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, './public')));
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || '*' /* 允许的跨域来源 */,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] /* 允许的HTTP方法 */,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'] /* 允许的HTTP方法 */,
   })
 );
 app.use(requestLogMiddleware);

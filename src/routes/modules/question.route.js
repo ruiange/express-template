@@ -121,7 +121,7 @@ questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.
  * @apiError {String} message 错误信息
  * @apiError {Number} code 错误代码
  */
-questionRoute.put('/:id',authMiddleware,adminMiddleware, QuestionController.updateQuestion);
+questionRoute.patch('/:id',authMiddleware,adminMiddleware, QuestionController.updateQuestion);
 
 /**
  * @api {delete} /api/question/:id 删除题目
