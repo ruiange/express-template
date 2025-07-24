@@ -78,7 +78,7 @@ export const getUserList = async (req, res) => {
       code: 2000,
       message: '获取用户列表成功',
       data: {
-        users: userList,
+        list: result,
         pagination: result.pagination,
       },
     });
