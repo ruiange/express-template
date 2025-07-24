@@ -84,4 +84,3 @@ export const getUserList = async (req, res) => {
     });
   }
 };
-
