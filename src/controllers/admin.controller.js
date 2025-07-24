@@ -59,18 +59,10 @@ export const getUserList = async (req, res) => {
     );
 
     // 构建响应数据，隐藏敏感信息
-    const userList = result.users.map((user) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      nickname: user.nickname,
-      avatar: user.avatar,
-      role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      createTime: user.createTime,
-      openid: user.openid,
-    }));
+    const userList = result.users.map((user) => {
+      let userObj = { ...user };
+      delete userObj.password;
+    });
 
     console.log(chalk.green('处理后的用户列表:', userList.length));
 
@@ -78,7 +70,7 @@ export const getUserList = async (req, res) => {
       code: 2000,
       message: '获取用户列表成功',
       data: {
-        list: result,
+        list: userList,
         pagination: result.pagination,
       },
     });
