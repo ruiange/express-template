@@ -40,15 +40,17 @@ export const getAuditConfigController = async (req, res) => {
  */
 export const getUserList = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = '' } = req.query;
+    const { current = 1, pageSize = 10, search = '', role, membership } = req.query;
 
-    console.log(chalk.blue('获取用户列表请求参数:', page, limit, search));
+    console.log(chalk.blue('获取用户列表请求参数:', current, pageSize, search, role, membership));
 
-    // 获取用户列表（支持分页和搜索）
+    // 获取用户列表（支持分页、搜索和筛选）
     const result = await getAllUsers({
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: parseInt(current),
+      limit: parseInt(pageSize),
       search: search.trim(),
+      role: role,
+      membership: membership,
     });
 
     console.log(
@@ -62,6 +64,7 @@ export const getUserList = async (req, res) => {
     const userList = result.users.map((user) => {
       let userObj = { ...user };
       delete userObj.password;
+      return userObj;
     });
 
     console.log(chalk.green('处理后的用户列表:', userList.length));

@@ -95,16 +95,19 @@ export const getUserByOpenid = async (openid) => {
  */
 export const getAllUsers = async (options = {}) => {
   try {
-    const { page = 1, limit = 10, search = '' } = options;
+    const { page = 1, limit = 10, search = '', role, membership } = options;
     const offset = (page - 1) * limit;
 
-    console.log(chalk.yellow('getAllUsers 参数:', { page, limit, search, offset }));
+    console.log(chalk.yellow('getAllUsers 参数:', { page, limit, search, role, membership, offset }));
 
     let query = db.select().from(userTable);
 
+    // 构建查询条件
+    const conditions = [];
+    
     // 如果有搜索关键词，添加搜索条件
     if (search) {
-      query = query.where(
+      conditions.push(
         or(
           like(userTable.username, `%${search}%`),
           like(userTable.nickname, `%${search}%`),
@@ -113,19 +116,26 @@ export const getAllUsers = async (options = {}) => {
       );
     }
 
-    // 获取总数
-    const countQuery = search
-      ? db
-          .select({ count: sql`count(*)` })
-          .from(userTable)
-          .where(
-            or(
-              like(userTable.username, `%${search}%`),
-              like(userTable.nickname, `%${search}%`),
-              like(userTable.email, `%${search}%`)
-            )
-          )
-      : db.select({ count: sql`count(*)` }).from(userTable);
+    // 添加角色筛选条件
+    if (role) {
+      conditions.push(eq(userTable.role, role));
+    }
+
+    // 添加会员等级筛选条件
+    if (membership !== undefined && membership !== '') {
+      conditions.push(eq(userTable.membership, parseInt(membership)));
+    }
+
+    // 应用所有条件
+    if (conditions.length > 0) {
+      query = query.where(...conditions);
+    }
+
+    // 构建计数查询条件
+    let countQuery = db.select({ count: sql`count(*)` }).from(userTable);
+    if (conditions.length > 0) {
+      countQuery = countQuery.where(...conditions);
+    }
 
     console.log(chalk.yellow('执行计数查询...'));
     const [{ count }] = await countQuery.execute();
