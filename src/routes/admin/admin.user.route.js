@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUserList } from '../../controllers/admin.controller.js';
+import { deleteUsers, getUserList } from '../../controllers/admin.controller.js';
 import { adminMiddleware } from '../../middlewares/admin.middleware.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { confirmQrcodeLogin } from '../../controllers/user.controller.js';
@@ -105,6 +105,11 @@ const adminUserRoute = express.Router();
 adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
 
 /**
+ * @api {delete} /api/admin/user/delete 批量删除用户
+ */
+adminUserRoute.delete('/delete', authMiddleware, adminMiddleware, deleteUsers);
+
+/**
  * @api {post} /api/admin/user/login-qrcode/confirm 确认扫码登录
  * @apiName ConfirmQrcodeLogin
  * @apiGroup 后台管理
@@ -113,5 +118,6 @@ adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
  * @apiBody {Object} adminInfo 管理员信息
  */
 adminUserRoute.post('/login-qrcode/confirm', authMiddleware, adminMiddleware, confirmQrcodeLogin);
+
 
 export default adminUserRoute;

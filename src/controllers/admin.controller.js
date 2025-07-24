@@ -1,5 +1,5 @@
 import { getAuditConfigByKey, updateAuditConfigByKey } from '../services/admin.service.js';
-import { getAllUsers } from '../services/user.service.js';
+import { deleteUserByIds, getAllUsers } from '../services/user.service.js';
 import { db, sql } from '../config/db.js';
 import { userTable } from '../db/schemas/user.schema.js';
 import chalk from 'chalk';
@@ -86,4 +86,26 @@ export const getUserList = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+export const deleteUsers = async (req, res) => {
+  const ids = req.body.ids || [];
+  if (!ids.length) {
+    return res.error({
+      code: 4000,
+      message: '请选择要删除的用户',
+    });
+  }
+  const rowCount = await deleteUserByIds(ids);
+  if (rowCount <= 0) {
+    return res.error({
+      code: 4000,
+      message: '删除失败',
+    });
+  }
+  res.success({
+    code: 2000,
+    message: '删除成功',
+    data: rowCount,
+  });
 };

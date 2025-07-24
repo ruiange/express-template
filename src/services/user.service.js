@@ -1,7 +1,7 @@
 // user.service.js
 
 import { userTable } from '../db/schemas/user.schema.js';
-import { eq, asc, like, or, sql } from 'drizzle-orm';
+import { eq, asc, like, or, sql, inArray } from 'drizzle-orm';
 import { db } from '../config/db.js';
 import chalk from 'chalk';
 
@@ -98,13 +98,15 @@ export const getAllUsers = async (options = {}) => {
     const { page = 1, limit = 10, search = '', role, membership } = options;
     const offset = (page - 1) * limit;
 
-    console.log(chalk.yellow('getAllUsers 参数:', { page, limit, search, role, membership, offset }));
+    console.log(
+      chalk.yellow('getAllUsers 参数:', { page, limit, search, role, membership, offset })
+    );
 
     let query = db.select().from(userTable);
 
     // 构建查询条件
     const conditions = [];
-    
+
     // 如果有搜索关键词，添加搜索条件
     if (search) {
       conditions.push(
@@ -199,12 +201,24 @@ export const updateUser = async (id, userData) => {
  */
 export const deleteUser = async (id) => {
   try {
-    await db.delete(userTable).where(eq(userTable.id, id)).execute();
+    const result = await db.delete(userTable).where(eq(userTable.id, id)).execute();
+    console.log(result, '删除用户成功');
+    return result;
   } catch (error) {
     throw error;
   }
 };
-
+/**
+ * 根据id批量删除用户
+ */
+export const deleteUserByIds = async (ids) => {
+  try {
+    const { rowCount } = await db.delete(userTable).where(inArray(userTable.id, ids)).execute();
+    return rowCount;
+  } catch (error) {
+    throw error;
+  }
+};
 
 /**
  * 获取用户信息
