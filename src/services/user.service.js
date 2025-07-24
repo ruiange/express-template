@@ -149,7 +149,7 @@ export const getAllUsers = async (options = {}) => {
     return {
       users,
       pagination: {
-        currentPage: page,
+        current: page,
         pageSize: limit,
         total: parseInt(count),
         totalPages: Math.ceil(parseInt(count) / limit),
