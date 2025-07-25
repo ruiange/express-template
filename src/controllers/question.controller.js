@@ -1,5 +1,6 @@
 // question.controller.js
 import questionService from '../services/question.service.js';
+import { marked } from 'marked';
 
 class QuestionController {
   static async getQuestionList(req, res) {
@@ -31,6 +32,10 @@ class QuestionController {
 
       const question = await questionService.getQuestionById(id);
       const { createdAt, updatedAt, ...questionDetail } = question;
+      console.log(questionDetail.answer)
+      const html = marked.parse(questionDetail.answer);
+      console.error(html)
+      questionDetail.answer = html;
       res.success(questionDetail);
     } catch (error) {
       if (error.message === '题目不存在') {
