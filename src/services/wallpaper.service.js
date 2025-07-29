@@ -1,7 +1,7 @@
 // wallpaper.service.js
 
-import { wallpapers, categories } from '../db/schemas/wallpaper.schema.js';
-import { eq, asc, desc, like, or, sql, and, gte, lte, inArray } from 'drizzle-orm';
+import { categories, wallpapers } from '../db/schemas/wallpaper.schema.js';
+import { and, asc, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
 import { db } from '../config/db.js';
 import chalk from 'chalk';
 
@@ -155,6 +155,15 @@ export const getAllWallpapers = async (options = {}) => {
     console.log(chalk.red('getAllWallpapers 错误:', error.message));
     throw error;
   }
+};
+
+/**
+ * 更加ids批量查询数据
+ * @param {Array} ids - ids
+ * @returns {Promise<Array>}
+ */
+export const getWallpapersByIds =async (ids) => {
+  return db.select().from(wallpapers).where(inArray(wallpapers.id, ids));
 };
 
 /**

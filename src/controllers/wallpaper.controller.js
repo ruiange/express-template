@@ -16,11 +16,25 @@ import {
   updateCategory,
   deleteCategory,
   batchDeleteWallpaper,
+  getWallpapersByIds,
 } from '../services/wallpaper.service.js';
+import { batchUpdateFileStatus, markFileStatus } from '../services/fileResource.service.js';
 
 /**
  * 创建壁纸
  * @param {Object} req - 请求对象
+ * @param {Object} req.body - 请求体
+ * @param {string} [req.body.title] - 壁纸标题 (最大255字符)
+ * @param {string} [req.body.description] - 壁纸描述
+ * @param {string} req.body.filePath - 文件存储路径 (必填，最大512字符)
+ * @param {string} [req.body.thumbnailPath] - 缩略图路径 (最大512字符)
+ * @param {string} [req.body.fileKey] - 存储文件的key (最大512字符)
+ * @param {number|string} [req.body.fileSize] - 文件大小(字节)
+ * @param {number|string} [req.body.width] - 图片宽度(像素)
+ * @param {number|string} [req.body.height] - 图片高度(像素)
+ * @param {string} [req.body.fileType] - 文件类型(jpg, png等，最大50字符)
+ * @param {number|string} [req.body.categoryId] - 分类ID(外键)
+ * @param {boolean|string} [req.body.isPublic=true] - 是否公开
  * @param {Object} res - 响应对象
  */
 export const createWallpaperController = async (req, res) => {
@@ -30,6 +44,7 @@ export const createWallpaperController = async (req, res) => {
       description,
       filePath,
       thumbnailPath,
+      fileKey,
       fileSize,
       width,
       height,
@@ -42,32 +57,46 @@ export const createWallpaperController = async (req, res) => {
     if (!filePath) {
       return res.status(400).json({
         code: 4000,
-        message: '请先上传壁纸',
+        message: '请先上传文件',
       });
     }
 
+    // 构建壁纸数据对象，严格按照schema定义
     const wallpaperData = {
-      title,
-      description,
-      filePath,
-      thumbnailPath,
+      title: title || null,
+      description: description || null,
+      filePath, // 必填字段
+      thumbnailPath: thumbnailPath || null,
+      fileKey: fileKey || null,
       fileSize: fileSize ? parseInt(fileSize) : null,
       width: width ? parseInt(width) : null,
       height: height ? parseInt(height) : null,
-      fileType,
+      fileType: fileType || null,
       categoryId: categoryId ? parseInt(categoryId) : null,
-      isPublic: Boolean(isPublic),
+      isPublic: isPublic !== undefined ? Boolean(isPublic) : true, // 默认为true，符合schema定义
     };
 
     const newWallpaper = await createWallpaper(wallpaperData);
+    await markFileStatus(filePath, 'active')
+      .then((r) => {
+        console.log(r);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
-    res.status(201).json({
-      code: 2000,
-      message: '壁纸创建成功',
-      data: newWallpaper,
-    });
+    res.created(newWallpaper, '壁纸创建成功');
   } catch (error) {
     console.log(chalk.red('创建壁纸控制器错误:', error.message));
+
+    // 处理数据库约束错误
+    if (error.message.includes('foreign key constraint')) {
+      return res.status(400).json({
+        code: 4000,
+        message: '指定的分类不存在',
+      });
+    }
+
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
@@ -226,8 +255,15 @@ export const deleteWallpaperController = async (req, res) => {
       });
     }
     const info = await getWallpaperById(wallpaperId);
-    console.log(info.filePath);
-    //    await deleteWallpaper(wallpaperId);
+    console.log(info.fileKey);
+    markFileStatus(info.filePath, 'unused')
+      .then((r) => {
+        console.log('标记未使用');
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    await deleteWallpaper(wallpaperId);
 
     res.success(null, '壁纸删除成功');
   } catch (error) {
@@ -252,7 +288,19 @@ export const deleteWallpapersController = async (req, res) => {
         message: '无效的壁纸ID列表',
       });
     }
+    const list = await getWallpapersByIds(ids);
+    console.log(list);
 
+    const pathList = list.map((item) => item.filePath);
+
+    batchUpdateFileStatus(pathList, 'unused')
+      .then((r) => {
+        console.log(r);
+        console.log(chalk.yellow(`[批量更新文件状态未=为未使用] ${ids.join(', ')}`));
+      })
+      .catch((e) => {
+        console.error('[批量更新文件状态未=为未使用失败]', e.message);
+      });
     await batchDeleteWallpaper(ids);
 
     res.success(null, '批量删除成功');

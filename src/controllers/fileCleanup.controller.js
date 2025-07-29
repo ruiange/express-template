@@ -1,9 +1,7 @@
 import {
   batchCleanupFiles,
   getFileResourceStats,
-  getFilesToCleanup,
-  markFileAsUsed,
-  markFileAsUnused
+  getFilesToCleanup, markFileStatus,
 } from '../services/fileResource.service.js';
 import chalk from 'chalk';
 
@@ -102,7 +100,7 @@ export const markAsUsed = async (req, res) => {
       });
     }
     
-    const success = await markFileAsUsed(fileUrl);
+    const success = await markFileStatus(fileUrl,'active');
     
     if (success) {
       res.json({
@@ -141,7 +139,7 @@ export const markAsUnused = async (req, res) => {
       });
     }
     
-    const success = await markFileAsUnused(fileUrl);
+    const success = await markFileStatus(fileUrl,'unused');
     
     if (success) {
       res.json({
