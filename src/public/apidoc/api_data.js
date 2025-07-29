@@ -53,20 +53,44 @@ define({ "api": [
     "title": "上传文件",
     "name": "UploadFile",
     "group": "上传",
-    "description": "<p>Upload a file to the server</p>",
-    "parameter": {
+    "description": "<p>使用 multipart/form-data 类型的表单上传文件到服务器。</p>",
+    "header": {
       "fields": {
-        "Parameter": [
+        "Header": [
           {
-            "group": "Parameter",
-            "type": "File",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "file",
-            "description": "<p>The file to upload</p>"
+            "field": "Content-Type",
+            "description": "<p>必须设置为 multipart/form-data</p>"
           }
         ]
       }
     },
+    "body": [
+      {
+        "group": "Body",
+        "type": "File",
+        "optional": true,
+        "field": "file",
+        "description": "<p>要上传的文件（通过 multipart/form-data 表单提交）</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "path",
+        "description": "<p>文件保存的路径（可选）</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "upType",
+        "defaultValue": "vercel",
+        "description": "<p>存储桶（可选）默认为vercel，可选vercel、qiniu、r2</p>"
+      }
+    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -74,15 +98,15 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "message",
-            "description": "<p>Success message</p>"
+            "field": "filename",
+            "description": "<p>上传后的文件名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
-            "optional": false,
-            "field": "filename",
-            "description": "<p>Uploaded file name</p>"
+            "optional": true,
+            "field": "url",
+            "description": "<p>文件访问 URL（如果可用）</p>"
           }
         ]
       }
@@ -94,7 +118,23 @@ define({ "api": [
             "group": "Error 400",
             "optional": false,
             "field": "BadRequest",
-            "description": "<p>Invalid file format</p>"
+            "description": "<p>无效的文件格式或未提供文件</p>"
+          }
+        ],
+        "Error 413": [
+          {
+            "group": "Error 413",
+            "optional": false,
+            "field": "PayloadTooLarge",
+            "description": "<p>文件大小超过限制</p>"
+          }
+        ],
+        "Error 415": [
+          {
+            "group": "Error 415",
+            "optional": false,
+            "field": "UnsupportedMediaType",
+            "description": "<p>不支持的媒体类型</p>"
           }
         ],
         "Error 500": [
@@ -102,7 +142,7 @@ define({ "api": [
             "group": "Error 500",
             "optional": false,
             "field": "InternalServerError",
-            "description": "<p>Server error</p>"
+            "description": "<p>服务器处理文件时出错</p>"
           }
         ]
       }

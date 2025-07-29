@@ -25,6 +25,10 @@ export const uploadController = async (req, res) => {
     }
 
     let url = null;
+    if (upType === 'r2') {
+      const { url:r2Url } = await r2Upload(file, path);
+      url = r2Url;
+    }
     if (upType === 'vercel') {
       url = await vercelBlobUpload(file, path);
     }
@@ -32,9 +36,7 @@ export const uploadController = async (req, res) => {
       url = await qiNiuUpload(file, path);
     }
 
-    if (upType === 'r2') {
-      url = await r2Upload(file, path);
-    }
+
 
     res.send({
       data: {
