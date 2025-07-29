@@ -1211,7 +1211,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/category",
+    "url": "/api/wallpaper/category/list",
     "title": "获取所有分类",
     "name": "GetCategories",
     "group": "壁纸分类",

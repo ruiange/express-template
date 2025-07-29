@@ -22,6 +22,20 @@
       "when": 1753761407703,
       "tag": "0002_famous_magus",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1753768904835,
+      "tag": "0003_omniscient_wong",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1753771750748,
+      "tag": "0004_orange_thunderbolts",
+      "breakpoints": true
     }
   ]
 }

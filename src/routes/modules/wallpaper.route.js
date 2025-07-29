@@ -12,7 +12,7 @@ import {
   getCategoriesController,
   getCategoryController,
   updateCategoryController,
-  deleteCategoryController
+  deleteCategoryController, deleteWallpapersController,
 } from '../../controllers/wallpaper.controller.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
 
@@ -138,6 +138,9 @@ wallpaperRoute.put('/:id', authMiddleware, updateWallpaperController);
  */
 wallpaperRoute.delete('/:id', authMiddleware, deleteWallpaperController);
 
+//批量删除
+wallpaperRoute.post('/batch-delete', authMiddleware, deleteWallpapersController);
+
 /**
  * @api {post} /api/wallpaper/:id/download 下载壁纸
  * @apiName DownloadWallpaper
@@ -170,7 +173,7 @@ wallpaperRoute.post('/:id/download', downloadWallpaperController);
 wallpaperRoute.post('/category', authMiddleware, createCategoryController);
 
 /**
- * @api {get} /api/wallpaper/category 获取所有分类
+ * @api {get} /api/wallpaper/category/list 获取所有分类
  * @apiName GetCategories
  * @apiGroup 壁纸分类
  * @apiDescription 获取所有壁纸分类

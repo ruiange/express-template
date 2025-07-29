@@ -14,7 +14,8 @@ import {
   getAllCategories,
   getCategoryById,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  batchDeleteWallpaper,
 } from '../services/wallpaper.service.js';
 
 /**
@@ -34,14 +35,14 @@ export const createWallpaperController = async (req, res) => {
       height,
       fileType,
       categoryId,
-      isPublic = true
+      isPublic = true,
     } = req.body;
 
     // 验证必填字段
-    if (!title || !filePath || !thumbnailPath || !fileType) {
+    if (!filePath) {
       return res.status(400).json({
         code: 4000,
-        message: '标题、文件路径、缩略图路径和文件类型为必填项'
+        message: '请先上传壁纸',
       });
     }
 
@@ -55,7 +56,7 @@ export const createWallpaperController = async (req, res) => {
       height: height ? parseInt(height) : null,
       fileType,
       categoryId: categoryId ? parseInt(categoryId) : null,
-      isPublic: Boolean(isPublic)
+      isPublic: Boolean(isPublic),
     };
 
     const newWallpaper = await createWallpaper(wallpaperData);
@@ -63,14 +64,14 @@ export const createWallpaperController = async (req, res) => {
     res.status(201).json({
       code: 2000,
       message: '壁纸创建成功',
-      data: newWallpaper
+      data: newWallpaper,
     });
   } catch (error) {
     console.log(chalk.red('创建壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -88,7 +89,7 @@ export const getWallpaperController = async (req, res) => {
     if (isNaN(wallpaperId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的壁纸ID'
+        message: '无效的壁纸ID',
       });
     }
 
@@ -97,20 +98,20 @@ export const getWallpaperController = async (req, res) => {
     if (!wallpaper) {
       return res.status(404).json({
         code: 4004,
-        message: '壁纸不存在'
+        message: '壁纸不存在',
       });
     }
 
     res.json({
       code: 2000,
-      data: wallpaper
+      data: wallpaper,
     });
   } catch (error) {
     console.log(chalk.red('获取壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -129,7 +130,7 @@ export const getWallpapersController = async (req, res) => {
       categoryId,
       isPublic = 'true',
       sortBy = 'uploadDate',
-      sortOrder = 'desc'
+      sortOrder = 'desc',
     } = req.query;
 
     const options = {
@@ -139,21 +140,21 @@ export const getWallpapersController = async (req, res) => {
       categoryId: categoryId ? parseInt(categoryId) : undefined,
       isPublic: isPublic === 'true',
       sortBy,
-      sortOrder
+      sortOrder,
     };
 
     const result = await getAllWallpapers(options);
 
     res.json({
       code: 2000,
-      data: result
+      data: result,
     });
   } catch (error) {
     console.log(chalk.red('获取壁纸列表控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -171,12 +172,12 @@ export const updateWallpaperController = async (req, res) => {
     if (isNaN(wallpaperId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的壁纸ID'
+        message: '无效的壁纸ID',
       });
     }
 
     const updateData = req.body;
-    
+
     // 转换数字字段
     if (updateData.fileSize) updateData.fileSize = parseInt(updateData.fileSize);
     if (updateData.width) updateData.width = parseInt(updateData.width);
@@ -189,21 +190,21 @@ export const updateWallpaperController = async (req, res) => {
     if (!updatedWallpaper) {
       return res.status(404).json({
         code: 4004,
-        message: '壁纸不存在'
+        message: '壁纸不存在',
       });
     }
 
     res.json({
       code: 2000,
       message: '壁纸更新成功',
-      data: updatedWallpaper
+      data: updatedWallpaper,
     });
   } catch (error) {
     console.log(chalk.red('更新壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -221,26 +222,49 @@ export const deleteWallpaperController = async (req, res) => {
     if (isNaN(wallpaperId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的壁纸ID'
+        message: '无效的壁纸ID',
       });
     }
+    const info = await getWallpaperById(wallpaperId);
+    console.log(info.filePath);
+    //    await deleteWallpaper(wallpaperId);
 
-    await deleteWallpaper(wallpaperId);
-
-    res.json({
-      code: 2000,
-      message: '壁纸删除成功'
-    });
+    res.success(null, '壁纸删除成功');
   } catch (error) {
     console.log(chalk.red('删除壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
 
+/**
+ * 批量删除
+ */
+export const deleteWallpapersController = async (req, res) => {
+  const ids = req.body.ids;
+  try {
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({
+        code: 4000,
+        message: '无效的壁纸ID列表',
+      });
+    }
+
+    await batchDeleteWallpaper(ids);
+
+    res.success(null, '批量删除成功');
+  } catch (error) {
+    console.log(chalk.red('批量删除壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message,
+    });
+  }
+};
 /**
  * 下载壁纸（增加下载次数）
  * @param {Object} req - 请求对象
@@ -254,7 +278,7 @@ export const downloadWallpaperController = async (req, res) => {
     if (isNaN(wallpaperId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的壁纸ID'
+        message: '无效的壁纸ID',
       });
     }
 
@@ -263,7 +287,7 @@ export const downloadWallpaperController = async (req, res) => {
     if (!wallpaper) {
       return res.status(404).json({
         code: 4004,
-        message: '壁纸不存在'
+        message: '壁纸不存在',
       });
     }
 
@@ -275,15 +299,15 @@ export const downloadWallpaperController = async (req, res) => {
       message: '下载成功',
       data: {
         downloadUrl: wallpaper.filePath,
-        thumbnailUrl: wallpaper.thumbnailPath
-      }
+        thumbnailUrl: wallpaper.thumbnailPath,
+      },
     });
   } catch (error) {
     console.log(chalk.red('下载壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -302,14 +326,14 @@ export const getPopularWallpapersController = async (req, res) => {
 
     res.json({
       code: 2000,
-      data: popularWallpapers
+      data: popularWallpapers,
     });
   } catch (error) {
     console.log(chalk.red('获取热门壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -328,14 +352,14 @@ export const getLatestWallpapersController = async (req, res) => {
 
     res.json({
       code: 2000,
-      data: latestWallpapers
+      data: latestWallpapers,
     });
   } catch (error) {
     console.log(chalk.red('获取最新壁纸控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -350,17 +374,17 @@ export const getLatestWallpapersController = async (req, res) => {
 export const createCategoryController = async (req, res) => {
   try {
     const { name, description } = req.body;
-
+    console.log('创建分类:', name, description);
     if (!name) {
       return res.status(400).json({
         code: 4000,
-        message: '分类名称为必填项'
+        message: '分类名称为必填项',
       });
     }
 
     const categoryData = {
       name,
-      description: description || null
+      description: description || null,
     };
 
     const newCategory = await createCategory(categoryData);
@@ -368,14 +392,14 @@ export const createCategoryController = async (req, res) => {
     res.status(201).json({
       code: 2000,
       message: '分类创建成功',
-      data: newCategory
+      data: newCategory,
     });
   } catch (error) {
     console.log(chalk.red('创建分类控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -386,19 +410,17 @@ export const createCategoryController = async (req, res) => {
  * @param {Object} res - 响应对象
  */
 export const getCategoriesController = async (req, res) => {
+  console.log(chalk.green('获取所有分类'));
   try {
-    const categories = await getAllCategories();
+    const categories = (await getAllCategories()) || [];
 
-    res.json({
-      code: 2000,
-      data: categories
-    });
+    res.success(categories, '获取所有分类成功');
   } catch (error) {
     console.log(chalk.red('获取分类列表控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -416,7 +438,7 @@ export const getCategoryController = async (req, res) => {
     if (isNaN(categoryId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的分类ID'
+        message: '无效的分类ID',
       });
     }
 
@@ -425,20 +447,20 @@ export const getCategoryController = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         code: 4004,
-        message: '分类不存在'
+        message: '分类不存在',
       });
     }
 
     res.json({
       code: 2000,
-      data: category
+      data: category,
     });
   } catch (error) {
     console.log(chalk.red('获取分类控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -456,7 +478,7 @@ export const updateCategoryController = async (req, res) => {
     if (isNaN(categoryId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的分类ID'
+        message: '无效的分类ID',
       });
     }
 
@@ -467,21 +489,21 @@ export const updateCategoryController = async (req, res) => {
     if (!updatedCategory) {
       return res.status(404).json({
         code: 4004,
-        message: '分类不存在'
+        message: '分类不存在',
       });
     }
 
     res.json({
       code: 2000,
       message: '分类更新成功',
-      data: updatedCategory
+      data: updatedCategory,
     });
   } catch (error) {
     console.log(chalk.red('更新分类控制器错误:', error.message));
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -499,7 +521,7 @@ export const deleteCategoryController = async (req, res) => {
     if (isNaN(categoryId)) {
       return res.status(400).json({
         code: 4000,
-        message: '无效的分类ID'
+        message: '无效的分类ID',
       });
     }
 
@@ -507,22 +529,22 @@ export const deleteCategoryController = async (req, res) => {
 
     res.json({
       code: 2000,
-      message: '分类删除成功'
+      message: '分类删除成功',
     });
   } catch (error) {
     console.log(chalk.red('删除分类控制器错误:', error.message));
-    
+
     if (error.message === '该分类下还有壁纸，无法删除') {
       return res.status(400).json({
         code: 4000,
-        message: error.message
+        message: error.message,
       });
     }
-    
+
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',
-      error: error.message
+      error: error.message,
     });
   }
 };

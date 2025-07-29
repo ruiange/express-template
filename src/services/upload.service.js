@@ -1,11 +1,7 @@
 import { put, del } from '@vercel/blob';
 import qiniu from 'qiniu';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  PutObjectCommand,
-  DeleteObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
+import { PutObjectCommand, DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import dotenv from 'dotenv';
 import s3CompatibleClient from '../utils/S3Client.util.js';
 import { recordFileResource } from './fileResource.service.js';
@@ -29,7 +25,7 @@ export const vercelBlobUpload = async (file, path) => {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     }
   );
-  
+
   // 记录文件资源
   try {
     await recordFileResource({
@@ -39,12 +35,12 @@ export const vercelBlobUpload = async (file, path) => {
       fileSize: file.size,
       mimeType: file.mimetype,
       storageProvider: 'vercel',
-      storagePath: filepath
+      storagePath: filepath,
     });
   } catch (error) {
     console.warn('[Vercel文件资源记录失败]', error.message);
   }
-  
+
   return url;
 };
 
@@ -88,7 +84,7 @@ export const qiNiuUpload = async (file, path) => {
       if (info.statusCode === 200) {
         console.log(body, '上传成功');
         const url = `${domain}/${body.key}`;
-        
+
         // 记录文件资源
         try {
           recordFileResource({
@@ -98,14 +94,14 @@ export const qiNiuUpload = async (file, path) => {
             fileSize: file.size,
             mimeType: file.mimetype,
             storageProvider: 'qiniu',
-            storagePath: key
-          }).catch(error => {
+            storagePath: key,
+          }).catch((error) => {
             console.warn('[七牛文件资源记录失败]', error.message);
           });
         } catch (error) {
           console.warn('[七牛文件资源记录失败]', error.message);
         }
-        
+
         resolve(url);
       } else {
         reject({ status: info.statusCode, body });
@@ -136,10 +132,10 @@ export const r2Upload = async (file, path) => {
       })
     );
 
-    const url = `${process.env.R2_PUBLIC_URL}/${bucketName}/${key}`;
-    console.log(chalk.green(`[R2 上传成功url] ${url}`))
-    console.log(chalk.green(`[R2 上传成功key] ${key}`))
-    
+    const url = `${process.env.R2_PUBLIC_URL}/${key}`;
+    console.log(chalk.green(`[R2 上传成功url] ${url}`));
+    console.log(chalk.green(`[R2 上传成功key] ${key}`));
+
     // 记录文件资源
     try {
       await recordFileResource({
@@ -149,12 +145,12 @@ export const r2Upload = async (file, path) => {
         fileSize: file.size,
         mimeType: file.mimetype,
         storageProvider: 'r2',
-        storagePath: key
+        storagePath: key,
       });
     } catch (error) {
       console.warn('[R2文件资源记录失败]', error.message);
     }
-    
+
     return { url, key };
   } catch (error) {
     console.error('[R2 上传错误]', error);
@@ -162,23 +158,21 @@ export const r2Upload = async (file, path) => {
   }
 };
 
-
-
 /**
  * 文件存储介质判断
  * @param filePath
  */
 const storageMediumJudgment = (filePath) => {
-  if(filePath.includes('vercel-storage.com')){
-    return 'vercel'
+  if (filePath.includes('vercel-storage.com')) {
+    return 'vercel';
   }
-  if(filePath.includes(process.env.QINIU_BUCKET_DOMAIN)){
-    return 'qiniu'
+  if (filePath.includes(process.env.QINIU_BUCKET_DOMAIN)) {
+    return 'qiniu';
   }
-  if(filePath.includes(process.env.R2_PUBLIC_URL)){
-    return 'r2'
+  if (filePath.includes(process.env.R2_PUBLIC_URL)) {
+    return 'r2';
   }
-  return 'unknown'
+  return 'unknown';
 };
 
 /**
@@ -189,9 +183,9 @@ const storageMediumJudgment = (filePath) => {
  */
 export const deleteBlobService = async (filePath, fileKey = null) => {
   const medium = storageMediumJudgment(filePath);
-  
+
   try {
-    switch(medium) {
+    switch (medium) {
       case 'vercel':
         return await deleteVercelBlob(filePath);
       case 'qiniu':
@@ -217,7 +211,7 @@ export const deleteBlobService = async (filePath, fileKey = null) => {
 const extractKeyFromUrl = (url, provider) => {
   try {
     const urlObj = new URL(url);
-    switch(provider) {
+    switch (provider) {
       case 'qiniu':
         return urlObj.pathname.slice(1); // 移除开头的 /
       case 'r2':
@@ -243,13 +237,13 @@ export const deleteQiNiuFile = async (key) => {
     const accessKey = process.env.QINIU_ACCESS_KEY;
     const secretKey = process.env.QINIU_SECRET_KEY;
     const bucket = process.env.QINIU_BUCKET_NAME;
-    
+
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     const config = new qiniu.conf.Config();
     config.zone = qiniu.zone.Zone_z0;
-    
+
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
-    
+
     return new Promise((resolve) => {
       bucketManager.delete(bucket, key, (err, respBody, respInfo) => {
         if (err) {
@@ -275,14 +269,12 @@ export const deleteQiNiuFile = async (key) => {
  * @param {string} key - 文件key
  * @returns {Promise<boolean>}
  */
-export const deleteR2File = async (key) => {
-
-};
+export const deleteR2File = async (key) => {};
 
 export const deleteVercelBlob = async (filePath) => {
-  console.log(filePath,'filePath')
+  console.log(filePath, 'filePath');
   const pathname = new URL(filePath).pathname.slice(1);
-  console.log(pathname,'pathname')
+  console.log(pathname, 'pathname');
   try {
     await del(pathname, {
       token: process.env.BLOB_READ_WRITE_TOKEN,

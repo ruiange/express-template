@@ -14,7 +14,7 @@ import chalk from 'chalk';
  * @returns
  */
 export const uploadController = async (req, res) => {
-  console.log(chalk('来传文件了啊'))
+  console.log(chalk('来传文件了啊'));
   try {
     const file = req.file;
     const path = req.body.path || 'default';
@@ -25,9 +25,11 @@ export const uploadController = async (req, res) => {
     }
 
     let url = null;
+    let key = null;
     if (upType === 'r2') {
-      const { url:r2Url } = await r2Upload(file, path);
+      const { url: r2Url, key: r2key } = await r2Upload(file, path);
       url = r2Url;
+      key = r2key;
     }
     if (upType === 'vercel') {
       url = await vercelBlobUpload(file, path);
@@ -36,22 +38,19 @@ export const uploadController = async (req, res) => {
       url = await qiNiuUpload(file, path);
     }
 
-
-
-    res.send({
-      data: {
-        url,
-      },
-      code: 2000,
-      msg: '上传成功',
-    });
+    // res.send({
+    //   data: {
+    //     url,
+    //   },
+    //   code: 2000,
+    //   msg: '上传成功',
+    // });
+    res.success({ url, key }, '上传成功');
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: '上传失败' });
   }
 };
-
-
 
 /**
  * 文件删除控制器
