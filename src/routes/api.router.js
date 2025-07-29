@@ -9,6 +9,7 @@ import aiRoute from './modules/ai.route.js';
 import wallpaperRoute from './modules/wallpaper.route.js';
 import adminRoute from './admin/admin.route.js';
 import questionRoute from './modules/question.route.js';
+import fileCleanupRoute from './fileCleanup.routes.js';
 
 
 const apiRouter = express.Router();
@@ -22,5 +23,6 @@ apiRouter.use('/upload', uploadRoute);
 apiRouter.use('/ai', aiRoute);
 apiRouter.use('/wallpaper', wallpaperRoute);
 apiRouter.use('/admin', adminRoute);
-apiRouter.use('/question',questionRoute)
+apiRouter.use('/question',questionRoute);
+apiRouter.use('/file-cleanup', fileCleanupRoute);
 export default apiRouter;

@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { requestLogMiddleware } from './middlewares/requestLog.middleware.js';
 import loggerMiddleware from './middlewares/logger.middleware.js';
+import { initFileCleanup, shutdownFileCleanup } from './init/fileCleanupInit.js';
 
 /** @type {Express} */
 const app = express();
@@ -44,4 +45,20 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`服务运行在:http://${getEnvIp()}:${port}`);
   console.log(`服务运行在:http://${getEnvIp()}:${port}/apidoc`);
+  
+  // 初始化文件清理系统
+  initFileCleanup();
+});
+
+// 优雅关闭处理
+process.on('SIGINT', () => {
+  console.log('\n正在关闭服务器...');
+  shutdownFileCleanup();
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('\n正在关闭服务器...');
+  shutdownFileCleanup();
+  process.exit(0);
 });

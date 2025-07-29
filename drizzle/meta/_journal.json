@@ -15,6 +15,13 @@
       "when": 1753344456892,
       "tag": "0001_conscious_wrecker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753761407703,
+      "tag": "0002_famous_magus",
+      "breakpoints": true
     }
   ]
 }

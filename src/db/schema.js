@@ -6,3 +6,4 @@ export * from './schemas/user.schema.js';
 export * from './schemas/admin.schema.js';
 export * from './schemas/wallpaper.schema.js';
 export * from './schemas/question.schema.js';
+export * from './schemas/fileResources.schema.js';
