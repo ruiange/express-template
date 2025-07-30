@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import fileCleanupController from '../controllers/fileCleanup.controller.js';
+import fileResourcesController from '../controllers/fileResources.controller.js';
 import chalk from 'chalk';
 
 /**
@@ -31,7 +31,7 @@ class FileCleanupScheduler {
       this.isRunning = true;
       try {
         console.log(chalk.blue('[文件清理调度器] 开始执行定时清理任务'));
-        const result = await fileCleanupController.scheduledCleanup();
+        const result = await fileResourcesController.scheduledCleanup();
         console.log(chalk.green(`[文件清理调度器] 定时任务完成: ${JSON.stringify(result)}`));
       } catch (error) {
         console.error(chalk.red('[文件清理调度器] 定时任务执行失败:'), error);
@@ -79,7 +79,7 @@ class FileCleanupScheduler {
     this.isRunning = true;
     try {
       console.log(chalk.blue('[文件清理调度器] 手动触发清理任务'));
-      const result = await fileCleanupController.scheduledCleanup();
+      const result = await fileResourcesController.scheduledCleanup();
       console.log(chalk.green(`[文件清理调度器] 手动任务完成: ${JSON.stringify(result)}`));
       return result;
     } finally {

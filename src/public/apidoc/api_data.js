@@ -38,450 +38,6 @@ define({ "api": [
     "name": ""
   },
   {
-    "type": "get",
-    "url": "/api/file-cleanup/all",
-    "title": "分页获取所有文件资源数据",
-    "name": "GetAllFiles",
-    "group": "FileCleanup",
-    "description": "<p>分页获取所有文件资源数据，支持状态和存储提供商过滤</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "current",
-            "defaultValue": "1",
-            "description": "<p>当前页码</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "pageSize",
-            "defaultValue": "20",
-            "description": "<p>每页数量</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "status",
-            "description": "<p>文件状态过滤（pending/active/unused/deleted）</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "storageProvider",
-            "description": "<p>存储提供商过滤</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>文件资源列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "pagination",
-            "description": "<p>分页信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.current",
-            "description": "<p>当前页码</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.pageSize",
-            "description": "<p>每页数量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.totalCount",
-            "description": "<p>总记录数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "pagination.totalPages",
-            "description": "<p>总页数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "pagination.hasNext",
-            "description": "<p>是否有下一页</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "pagination.hasPrev",
-            "description": "<p>是否有上一页</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/routes/modules/fileCleanup.route.js",
-    "groupTitle": "FileCleanup"
-  },
-  {
-    "type": "get",
-    "url": "/api/file-cleanup/list",
-    "title": "获取待清理文件列表",
-    "name": "GetCleanupList",
-    "group": "FileCleanup",
-    "description": "<p>获取待清理的文件列表</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "limit",
-            "defaultValue": "50",
-            "description": "<p>限制返回数量</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data",
-            "description": "<p>响应数据</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data.files",
-            "description": "<p>文件列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.count",
-            "description": "<p>文件数量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/routes/modules/fileCleanup.route.js",
-    "groupTitle": "FileCleanup"
-  },
-  {
-    "type": "get",
-    "url": "/api/file-cleanup/stats",
-    "title": "获取文件资源统计信息",
-    "name": "GetFileStats",
-    "group": "FileCleanup",
-    "description": "<p>获取文件资源的统计信息，包括各种状态的文件数量</p>",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data",
-            "description": "<p>统计数据</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.total",
-            "description": "<p>文件总数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.pending",
-            "description": "<p>待处理文件数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.active",
-            "description": "<p>活跃文件数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.unused",
-            "description": "<p>未使用文件数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.deleted",
-            "description": "<p>已删除文件数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/routes/modules/fileCleanup.route.js",
-    "groupTitle": "FileCleanup"
-  },
-  {
-    "type": "post",
-    "url": "/api/file-cleanup/manual",
-    "title": "手动执行文件清理",
-    "name": "ManualCleanup",
-    "group": "FileCleanup",
-    "description": "<p>手动触发文件清理任务</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "batchSize",
-            "defaultValue": "50",
-            "description": "<p>批量清理数量</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n  \"batchSize\": 50\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data",
-            "description": "<p>清理结果</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.total",
-            "description": "<p>总处理文件数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.success",
-            "description": "<p>成功清理数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.failed",
-            "description": "<p>清理失败数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/routes/modules/fileCleanup.route.js",
-    "groupTitle": "FileCleanup"
-  },
-  {
-    "type": "post",
-    "url": "/api/file-cleanup/mark-unused",
-    "title": "标记文件为未使用",
-    "name": "MarkFileAsUnused",
-    "group": "FileCleanup",
-    "description": "<p>将文件标记为未使用状态</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "fileUrl",
-            "description": "<p>文件URL</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n  \"fileUrl\": \"https://example.com/files/image.jpg\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/routes/modules/fileCleanup.route.js",
-    "groupTitle": "FileCleanup"
-  },
-  {
-    "type": "post",
-    "url": "/api/file-cleanup/mark-used",
-    "title": "标记文件为已使用",
-    "name": "MarkFileAsUsed",
-    "group": "FileCleanup",
-    "description": "<p>将文件标记为已使用状态</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "fileUrl",
-            "description": "<p>文件URL</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n  \"fileUrl\": \"https://example.com/files/image.jpg\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/routes/modules/fileCleanup.route.js",
-    "groupTitle": "FileCleanup"
-  },
-  {
     "type": "post",
     "url": "/upload",
     "title": "上传文件",
@@ -1761,6 +1317,450 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/routes/modules/wealth.route.js",
     "groupTitle": "财富"
+  },
+  {
+    "type": "get",
+    "url": "/api/file-cleanup/all",
+    "title": "分页获取所有文件资源数据",
+    "name": "GetAllFiles",
+    "group": "资源管理",
+    "description": "<p>分页获取所有文件资源数据，支持状态和存储提供商过滤</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "current",
+            "defaultValue": "1",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "20",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "status",
+            "description": "<p>文件状态过滤（pending/active/unused/deleted）</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "storageProvider",
+            "description": "<p>存储提供商过滤</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>文件资源列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "pagination",
+            "description": "<p>分页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.current",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.pageSize",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.totalCount",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.totalPages",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "pagination.hasNext",
+            "description": "<p>是否有下一页</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "pagination.hasPrev",
+            "description": "<p>是否有上一页</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileResources.route.js",
+    "groupTitle": "资源管理"
+  },
+  {
+    "type": "get",
+    "url": "/api/file-cleanup/list",
+    "title": "获取待清理文件列表",
+    "name": "GetCleanupList",
+    "group": "资源管理",
+    "description": "<p>获取待清理的文件列表</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "50",
+            "description": "<p>限制返回数量</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data.files",
+            "description": "<p>文件列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.count",
+            "description": "<p>文件数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileResources.route.js",
+    "groupTitle": "资源管理"
+  },
+  {
+    "type": "get",
+    "url": "/api/file-cleanup/stats",
+    "title": "获取文件资源统计信息",
+    "name": "GetFileStats",
+    "group": "资源管理",
+    "description": "<p>获取文件资源的统计信息，包括各种状态的文件数量</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>统计数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.total",
+            "description": "<p>文件总数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pending",
+            "description": "<p>待处理文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.active",
+            "description": "<p>活跃文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.unused",
+            "description": "<p>未使用文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.deleted",
+            "description": "<p>已删除文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileResources.route.js",
+    "groupTitle": "资源管理"
+  },
+  {
+    "type": "post",
+    "url": "/api/file-cleanup/manual",
+    "title": "手动执行文件清理",
+    "name": "ManualCleanup",
+    "group": "资源管理",
+    "description": "<p>手动触发文件清理任务</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "batchSize",
+            "defaultValue": "50",
+            "description": "<p>批量清理数量</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"batchSize\": 50\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>清理结果</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.total",
+            "description": "<p>总处理文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.success",
+            "description": "<p>成功清理数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.failed",
+            "description": "<p>清理失败数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileResources.route.js",
+    "groupTitle": "资源管理"
+  },
+  {
+    "type": "post",
+    "url": "/api/file-cleanup/mark-unused",
+    "title": "标记文件为未使用",
+    "name": "MarkFileAsUnused",
+    "group": "资源管理",
+    "description": "<p>将文件标记为未使用状态</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fileUrl",
+            "description": "<p>文件URL</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"fileUrl\": \"https://example.com/files/image.jpg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileResources.route.js",
+    "groupTitle": "资源管理"
+  },
+  {
+    "type": "post",
+    "url": "/api/file-cleanup/mark-used",
+    "title": "标记文件为已使用",
+    "name": "MarkFileAsUsed",
+    "group": "资源管理",
+    "description": "<p>将文件标记为已使用状态</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fileUrl",
+            "description": "<p>文件URL</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"fileUrl\": \"https://example.com/files/image.jpg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileResources.route.js",
+    "groupTitle": "资源管理"
   },
   {
     "type": "post",

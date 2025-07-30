@@ -9,7 +9,7 @@ import aiRoute from './modules/ai.route.js';
 import wallpaperRoute from './modules/wallpaper.route.js';
 import adminRoute from './admin/admin.route.js';
 import questionRoute from './modules/question.route.js';
-import fileCleanupRoute from './modules/fileCleanup.route.js';
+import fileResourcesRoute from './modules/fileResources.route.js';
 
 // 创建主路由实例
 const apiRouter = express.Router();
@@ -35,6 +35,6 @@ apiRouter.use('/admin', adminRoute);
 // 题库相关路由 - 题目的增删改查
 apiRouter.use('/question', questionRoute);
 // 文件清理相关路由 - 统计、清理未使用的文件资源
-apiRouter.use('/file-cleanup', fileCleanupRoute);
+apiRouter.use('/file-cleanup', fileResourcesRoute);
 
 export default apiRouter;

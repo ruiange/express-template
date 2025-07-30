@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { PutObjectCommand, DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import dotenv from 'dotenv';
 import s3CompatibleClient from '../utils/S3Client.util.js';
-import { recordFileResource } from './fileResource.service.js';
+import { recordFileResource } from './fileResources.service.js';
 import chalk from 'chalk';
 dotenv.config();
 

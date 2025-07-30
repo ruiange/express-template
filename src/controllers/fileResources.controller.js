@@ -4,14 +4,14 @@ import {
   getFilesToCleanup, 
   markFileStatus,
   getAllFileResources,
-} from '../services/fileResource.service.js';
+} from '../services/fileResources.service.js';
 import chalk from 'chalk';
 
 /**
- * 文件清理控制器类
- * 负责处理文件清理相关的HTTP请求
+ * 文件资源控制器类
+ * 负责处理文件资源相关的HTTP请求
  */
-class FileCleanupController {
+class FileResourcesController {
   /**
    * 获取文件资源统计信息
    * @param {Object} req - 请求对象
@@ -227,5 +227,5 @@ class FileCleanupController {
 }
 
 // 创建控制器实例并导出
-const fileCleanupController = new FileCleanupController();
-export default fileCleanupController;
+const fileResourcesController = new FileResourcesController();
+export default fileResourcesController;

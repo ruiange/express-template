@@ -25,7 +25,9 @@ export const requestLogMiddleware = async (req, res, next) => {
       user_agent: req.get('user-agent') || '',
     };
     try {
-      const result = await db.insert(logsTable).values(params);
+      if(process.env.NODE_ENV === 'development'){
+        const result = await db.insert(logsTable).values(params);
+      }
     } catch (error) {
       console.error('Error saving request log:', error.message);
     }

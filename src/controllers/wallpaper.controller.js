@@ -18,7 +18,7 @@ import {
   batchDeleteWallpaper,
   getWallpapersByIds,
 } from '../services/wallpaper.service.js';
-import { batchUpdateFileStatus, markFileStatus } from '../services/fileResource.service.js';
+import { batchUpdateFileStatus, markFileStatus } from '../services/fileResources.service.js';
 
 /**
  * 创建壁纸
