@@ -1,6 +1,6 @@
 import { db } from '../config/db.js';
 import { fileResourcesTable } from '../db/schema.js';
-import { eq, and, lt, isNull, or, inArray } from 'drizzle-orm';
+import { eq, and, lt, isNull, or, inArray, sql } from 'drizzle-orm';
 import { deleteBlobService } from './upload.service.js';
 import chalk from 'chalk';
 
@@ -205,7 +205,7 @@ export const getFileResourceStats = async () => {
     const stats = await db
       .select({
         status: fileResourcesTable.status,
-        count: db.count(),
+        count: sql`count(*)`,
       })
       .from(fileResourcesTable)
       .groupBy(fileResourcesTable.status);
@@ -261,7 +261,7 @@ export const getAllFileResources = async (options = {}) => {
 
     // 获取总数
     const totalCountResult = await db
-      .select({ count: db.count() })
+      .select({ count: sql`count(*)` })
       .from(fileResourcesTable)
       .where(conditions.length > 0 ? and(...conditions) : undefined);
     

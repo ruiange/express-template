@@ -251,7 +251,7 @@
   },
   {
     "type": "post",
-    "url": "/api/wallpaper",
+    "url": "/wallpaper",
     "title": "创建壁纸",
     "name": "CreateWallpaper",
     "group": "壁纸",
@@ -364,13 +364,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper"
+        "url": "http://127.0.0.1:3000/api/wallpaper"
       }
     ]
   },
   {
     "type": "delete",
-    "url": "/api/wallpaper/:id",
+    "url": "/wallpaper/:id",
     "title": "删除壁纸",
     "name": "DeleteWallpaper",
     "group": "壁纸",
@@ -413,13 +413,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id"
+        "url": "http://127.0.0.1:3000/api/wallpaper/:id"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/wallpaper/:id/download",
+    "url": "/wallpaper/:id/download",
     "title": "下载壁纸",
     "name": "DownloadWallpaper",
     "group": "壁纸",
@@ -469,13 +469,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id/download"
+        "url": "http://127.0.0.1:3000/api/wallpaper/:id/download"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/latest",
+    "url": "/wallpaper/latest",
     "title": "获取最新壁纸",
     "name": "GetLatestWallpapers",
     "group": "壁纸",
@@ -518,13 +518,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/latest"
+        "url": "http://127.0.0.1:3000/api/wallpaper/latest"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/popular",
+    "url": "/wallpaper/popular",
     "title": "获取热门壁纸",
     "name": "GetPopularWallpapers",
     "group": "壁纸",
@@ -567,13 +567,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/popular"
+        "url": "http://127.0.0.1:3000/api/wallpaper/popular"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/:id",
+    "url": "/wallpaper/:id",
     "title": "获取壁纸详情",
     "name": "GetWallpaper",
     "group": "壁纸",
@@ -616,13 +616,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id"
+        "url": "http://127.0.0.1:3000/api/wallpaper/:id"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/list",
+    "url": "/wallpaper/list",
     "title": "获取壁纸列表",
     "name": "GetWallpapers",
     "group": "壁纸",
@@ -707,13 +707,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/list"
+        "url": "http://127.0.0.1:3000/api/wallpaper/list"
       }
     ]
   },
   {
     "type": "put",
-    "url": "/api/wallpaper/:id",
+    "url": "/wallpaper/:id",
     "title": "更新壁纸",
     "name": "UpdateWallpaper",
     "group": "壁纸",
@@ -833,13 +833,13 @@
     "groupTitle": "壁纸",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id"
+        "url": "http://127.0.0.1:3000/api/wallpaper/:id"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/wallpaper/category",
+    "url": "/wallpaper/category",
     "title": "创建分类",
     "name": "CreateCategory",
     "group": "壁纸分类",
@@ -896,13 +896,13 @@
     "groupTitle": "壁纸分类",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/category"
+        "url": "http://127.0.0.1:3000/api/wallpaper/category"
       }
     ]
   },
   {
     "type": "delete",
-    "url": "/api/wallpaper/category/:id",
+    "url": "/wallpaper/category/:id",
     "title": "删除分类",
     "name": "DeleteCategory",
     "group": "壁纸分类",
@@ -958,13 +958,13 @@
     "groupTitle": "壁纸分类",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/:id"
+        "url": "http://127.0.0.1:3000/api/wallpaper/category/:id"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/category/list",
+    "url": "/wallpaper/category/list",
     "title": "获取所有分类",
     "name": "GetCategories",
     "group": "壁纸分类",
@@ -994,13 +994,13 @@
     "groupTitle": "壁纸分类",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/list"
+        "url": "http://127.0.0.1:3000/api/wallpaper/category/list"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/wallpaper/category/:id",
+    "url": "/wallpaper/category/:id",
     "title": "获取分类详情",
     "name": "GetCategory",
     "group": "壁纸分类",
@@ -1043,13 +1043,13 @@
     "groupTitle": "壁纸分类",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/:id"
+        "url": "http://127.0.0.1:3000/api/wallpaper/category/:id"
       }
     ]
   },
   {
     "type": "put",
-    "url": "/api/wallpaper/category/:id",
+    "url": "/wallpaper/category/:id",
     "title": "更新分类",
     "name": "UpdateCategory",
     "group": "壁纸分类",
@@ -1113,7 +1113,7 @@
     "groupTitle": "壁纸分类",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/:id"
+        "url": "http://127.0.0.1:3000/api/wallpaper/category/:id"
       }
     ]
   },
@@ -1489,7 +1489,7 @@
   },
   {
     "type": "get",
-    "url": "/api/file-cleanup/all",
+    "url": "/file-cleanup/all",
     "title": "文件资源数据列表",
     "name": "GetAllFiles",
     "group": "资源管理",
@@ -1611,13 +1611,13 @@
     "groupTitle": "资源管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/file-cleanup/all"
+        "url": "http://127.0.0.1:3000/api/file-cleanup/all"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/file-cleanup/list",
+    "url": "/file-cleanup/list",
     "title": "获取待清理文件列表",
     "name": "GetCleanupList",
     "group": "资源管理",
@@ -1682,13 +1682,13 @@
     "groupTitle": "资源管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/file-cleanup/list"
+        "url": "http://127.0.0.1:3000/api/file-cleanup/list"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/file-cleanup/stats",
+    "url": "/file-cleanup/stats",
     "title": "获取文件资源统计信息",
     "name": "GetFileStats",
     "group": "资源管理",
@@ -1760,13 +1760,13 @@
     "groupTitle": "资源管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/file-cleanup/stats"
+        "url": "http://127.0.0.1:3000/api/file-cleanup/stats"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/file-cleanup/manual",
+    "url": "/file-cleanup/manual",
     "title": "手动执行文件清理",
     "name": "ManualCleanup",
     "group": "资源管理",
@@ -1845,13 +1845,13 @@
     "groupTitle": "资源管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/file-cleanup/manual"
+        "url": "http://127.0.0.1:3000/api/file-cleanup/manual"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/file-cleanup/mark-unused",
+    "url": "/file-cleanup/mark-unused",
     "title": "标记文件为未使用",
     "name": "MarkFileAsUnused",
     "group": "资源管理",
@@ -1901,13 +1901,13 @@
     "groupTitle": "资源管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/file-cleanup/mark-unused"
+        "url": "http://127.0.0.1:3000/api/file-cleanup/mark-unused"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/file-cleanup/mark-used",
+    "url": "/file-cleanup/mark-used",
     "title": "标记文件为已使用",
     "name": "MarkFileAsUsed",
     "group": "资源管理",
@@ -1957,13 +1957,13 @@
     "groupTitle": "资源管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/file-cleanup/mark-used"
+        "url": "http://127.0.0.1:3000/api/file-cleanup/mark-used"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/question/create",
+    "url": "/question/create",
     "title": "创建题目",
     "description": "<p>创建新的题目</p>",
     "name": "CreateQuestion",
@@ -2138,13 +2138,13 @@
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/question/create"
+        "url": "http://127.0.0.1:3000/api/question/create"
       }
     ]
   },
   {
     "type": "delete",
-    "url": "/api/question/:id",
+    "url": "/question/:id",
     "title": "删除题目",
     "description": "<p>删除指定ID的题目</p>",
     "name": "DeleteQuestion",
@@ -2213,13 +2213,13 @@
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/question/:id"
+        "url": "http://127.0.0.1:3000/api/question/:id"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/question/:id",
+    "url": "/question/:id",
     "title": "获取题目详情",
     "description": "<p>根据ID获取题目的详细信息</p>",
     "name": "GetQuestionDetail",
@@ -2338,13 +2338,13 @@
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/question/:id"
+        "url": "http://127.0.0.1:3000/api/question/:id"
       }
     ]
   },
   {
     "type": "get",
-    "url": "/api/question/list",
+    "url": "/question/list",
     "title": "获取题库列表",
     "description": "<p>获取题库列表，支持分页、筛选和排序</p>",
     "name": "GetQuestionList",
@@ -2468,13 +2468,13 @@
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/question/list"
+        "url": "http://127.0.0.1:3000/api/question/list"
       }
     ]
   },
   {
     "type": "put",
-    "url": "/api/question/:id",
+    "url": "/question/:id",
     "title": "更新题目",
     "description": "<p>更新现有题目的信息</p>",
     "name": "UpdateQuestion",
@@ -2655,7 +2655,7 @@
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/api/question/:id"
+        "url": "http://127.0.0.1:3000/api/question/:id"
       }
     ]
   }
