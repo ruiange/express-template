@@ -188,6 +188,49 @@ export const updateWallpaper = async (id, wallpaperData) => {
 };
 
 /**
+ * 获取每日壁纸
+ * @param {string} date - 日期 (YYYY-MM-DD格式)，可选，默认为今天
+ * @returns {Promise<Object>} - 每日壁纸对象
+ */
+export const getDailyWallpaper = async (date) => {
+  try {
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    
+    // 使用日期作为种子生成伪随机数，确保同一天返回相同的壁纸
+    const dateNumber = parseInt(targetDate.replace(/-/g, ''));
+    
+    // 获取所有公开的壁纸总数
+    const [{ count }] = await db
+      .select({ count: sql`count(*)` })
+      .from(wallpapers)
+      .where(eq(wallpapers.isPublic, true))
+      .execute();
+    
+    if (count === 0) {
+      return null;
+    }
+    
+    // 基于日期计算偏移量
+    const offset = dateNumber % parseInt(count);
+    
+    // 获取该偏移量对应的壁纸
+    const [dailyWallpaper] = await db
+      .select()
+      .from(wallpapers)
+      .where(eq(wallpapers.isPublic, true))
+      .orderBy(asc(wallpapers.id))
+      .limit(1)
+      .offset(offset)
+      .execute();
+    
+    return dailyWallpaper || null;
+  } catch (error) {
+    console.log(chalk.red('获取每日壁纸错误:', error.message));
+    throw error;
+  }
+};
+
+/**
  * 删除壁纸
  * @param {number} id - 壁纸ID
  * @returns {Promise<void>}

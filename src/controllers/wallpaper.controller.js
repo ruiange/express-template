@@ -17,6 +17,7 @@ import {
   deleteCategory,
   batchDeleteWallpaper,
   getWallpapersByIds,
+  getDailyWallpaper,
 } from '../services/wallpaper.service.js';
 import { batchUpdateFileStatus, markFileStatus } from '../services/fileResources.service.js';
 
@@ -412,6 +413,51 @@ export const getLatestWallpapersController = async (req, res) => {
   }
 };
 
+/**
+ * 获取每日壁纸
+ * @param {Object} req - 请求对象
+ * @param {Object} req.query - 查询参数
+ * @param {string} [req.query.date] - 日期 (YYYY-MM-DD格式)，可选，默认为今天
+ * @param {Object} res - 响应对象
+ */
+export const getDailyWallpaperController = async (req, res) => {
+  try {
+    const { date } = req.query;
+    
+    // 验证日期格式（如果提供了日期）
+    if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return res.status(400).json({
+        code: 4000,
+        message: '日期格式错误，请使用YYYY-MM-DD格式',
+      });
+    }
+
+    const dailyWallpaper = await getDailyWallpaper(date);
+
+    if (!dailyWallpaper) {
+      return res.status(404).json({
+        code: 4004,
+        message: '暂无可用的每日壁纸',
+      });
+    }
+
+    res.json({
+      code: 2000,
+      data: {
+        ...dailyWallpaper,
+        date: date || new Date().toISOString().split('T')[0],
+      },
+    });
+  } catch (error) {
+    console.log(chalk.red('获取每日壁纸控制器错误:', error.message));
+    res.status(500).json({
+      code: 5000,
+      message: '服务器内部错误',
+      error: error.message,
+    });
+  }
+};
+
 // ==================== 分类相关控制器 ====================
 
 /**
@@ -422,11 +468,11 @@ export const getLatestWallpapersController = async (req, res) => {
 export const createCategoryController = async (req, res) => {
   try {
     const { name, description } = req.body;
-    console.log('创建分类:', name, description);
+
     if (!name) {
       return res.status(400).json({
         code: 4000,
-        message: '分类名称为必填项',
+        message: '分类名称不能为空',
       });
     }
 
@@ -437,11 +483,7 @@ export const createCategoryController = async (req, res) => {
 
     const newCategory = await createCategory(categoryData);
 
-    res.status(201).json({
-      code: 2000,
-      message: '分类创建成功',
-      data: newCategory,
-    });
+    res.created(newCategory, '分类创建成功');
   } catch (error) {
     console.log(chalk.red('创建分类控制器错误:', error.message));
     res.status(500).json({
@@ -458,11 +500,13 @@ export const createCategoryController = async (req, res) => {
  * @param {Object} res - 响应对象
  */
 export const getCategoriesController = async (req, res) => {
-  console.log(chalk.green('获取所有分类'));
   try {
-    const categories = (await getAllCategories()) || [];
+    const categories = await getAllCategories();
 
-    res.success(categories, '获取所有分类成功');
+    res.json({
+      code: 2000,
+      data: categories,
+    });
   } catch (error) {
     console.log(chalk.red('获取分类列表控制器错误:', error.message));
     res.status(500).json({
@@ -531,7 +575,6 @@ export const updateCategoryController = async (req, res) => {
     }
 
     const updateData = req.body;
-
     const updatedCategory = await updateCategory(categoryId, updateData);
 
     if (!updatedCategory) {
@@ -575,20 +618,9 @@ export const deleteCategoryController = async (req, res) => {
 
     await deleteCategory(categoryId);
 
-    res.json({
-      code: 2000,
-      message: '分类删除成功',
-    });
+    res.success(null, '分类删除成功');
   } catch (error) {
     console.log(chalk.red('删除分类控制器错误:', error.message));
-
-    if (error.message === '该分类下还有壁纸，无法删除') {
-      return res.status(400).json({
-        code: 4000,
-        message: error.message,
-      });
-    }
-
     res.status(500).json({
       code: 5000,
       message: '服务器内部错误',

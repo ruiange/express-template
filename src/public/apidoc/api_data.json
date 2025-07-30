@@ -475,6 +475,192 @@
   },
   {
     "type": "get",
+    "url": "/wallpaper/daily",
+    "title": "获取每日壁纸",
+    "name": "GetDailyWallpaper",
+    "group": "壁纸",
+    "description": "<p>获取每日壁纸，每天返回固定的一张壁纸</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "date",
+            "description": "<p>日期 (YYYY-MM-DD格式)，可选，默认为今天</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>每日壁纸数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.id",
+            "description": "<p>壁纸ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.title",
+            "description": "<p>壁纸标题</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.description",
+            "description": "<p>壁纸描述</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.filePath",
+            "description": "<p>文件路径</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.thumbnailPath",
+            "description": "<p>缩略图路径</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.fileSize",
+            "description": "<p>文件大小</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.width",
+            "description": "<p>图片宽度</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.height",
+            "description": "<p>图片高度</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.fileType",
+            "description": "<p>文件类型</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.categoryId",
+            "description": "<p>分类ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "data.isPublic",
+            "description": "<p>是否公开</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.viewCount",
+            "description": "<p>浏览次数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.downloadCount",
+            "description": "<p>下载次数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.uploadDate",
+            "description": "<p>上传日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.date",
+            "description": "<p>对应的日期</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误码</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "日期格式错误:",
+          "content": "HTTP/1.1 400 Bad Request\n{\n  \"code\": 4000,\n  \"message\": \"日期格式错误，请使用YYYY-MM-DD格式\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "暂无壁纸:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\": 4004,\n  \"message\": \"暂无可用的每日壁纸\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/wallpaper/daily"
+      }
+    ]
+  },
+  {
+    "type": "get",
     "url": "/wallpaper/latest",
     "title": "获取最新壁纸",
     "name": "GetLatestWallpapers",

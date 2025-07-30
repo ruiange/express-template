@@ -8,6 +8,7 @@ import {
   downloadWallpaperController,
   getPopularWallpapersController,
   getLatestWallpapersController,
+  getDailyWallpaperController,
   createCategoryController,
   getCategoriesController,
   getCategoryController,
@@ -87,6 +88,49 @@ wallpaperRoute.get('/popular', getPopularWallpapersController);
  * @apiSuccess {Array} data 最新壁纸列表
  */
 wallpaperRoute.get('/latest', getLatestWallpapersController);
+
+/**
+ * @api {get} /wallpaper/daily 获取每日壁纸
+ * @apiName GetDailyWallpaper
+ * @apiGroup 壁纸
+ * @apiDescription 获取每日壁纸，每天返回固定的一张壁纸
+ *
+ * @apiParam {String} [date] 日期 (YYYY-MM-DD格式)，可选，默认为今天
+ *
+ * @apiSuccess {Number} code 状态码
+ * @apiSuccess {Object} data 每日壁纸数据
+ * @apiSuccess {Number} data.id 壁纸ID
+ * @apiSuccess {String} data.title 壁纸标题
+ * @apiSuccess {String} data.description 壁纸描述
+ * @apiSuccess {String} data.filePath 文件路径
+ * @apiSuccess {String} data.thumbnailPath 缩略图路径
+ * @apiSuccess {Number} data.fileSize 文件大小
+ * @apiSuccess {Number} data.width 图片宽度
+ * @apiSuccess {Number} data.height 图片高度
+ * @apiSuccess {String} data.fileType 文件类型
+ * @apiSuccess {Number} data.categoryId 分类ID
+ * @apiSuccess {Boolean} data.isPublic 是否公开
+ * @apiSuccess {Number} data.viewCount 浏览次数
+ * @apiSuccess {Number} data.downloadCount 下载次数
+ * @apiSuccess {String} data.uploadDate 上传日期
+ * @apiSuccess {String} data.date 对应的日期
+ *
+ * @apiError {Number} code 错误码
+ * @apiError {String} message 错误信息
+ * @apiErrorExample {json} 日期格式错误:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "code": 4000,
+ *       "message": "日期格式错误，请使用YYYY-MM-DD格式"
+ *     }
+ * @apiErrorExample {json} 暂无壁纸:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "code": 4004,
+ *       "message": "暂无可用的每日壁纸"
+ *     }
+ */
+wallpaperRoute.get('/daily', getDailyWallpaperController);
 
 /**
  * @api {get} /wallpaper/:id 获取壁纸详情
