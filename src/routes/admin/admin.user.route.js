@@ -9,7 +9,7 @@ const adminUserRoute = express.Router();
 /**
  * @api {get} /admin/users 获取用户列表
  * @apiName GetUserList
- * @apiGroup Admin-User
+ * @apiGroup 用户管理
  * @apiDescription 管理员获取用户列表，支持分页、搜索和筛选
  *
  * @apiHeader {String} Authorization Bearer token，用户登录后获取
@@ -70,7 +70,7 @@ adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
 /**
  * @api {put} /admin/users/:id 更新用户信息
  * @apiName UpdateUser
- * @apiGroup Admin-User
+ * @apiGroup 用户管理
  * @apiDescription 管理员更新指定用户的信息
  *
  * @apiHeader {String} Authorization Bearer token，用户登录后获取
@@ -118,7 +118,7 @@ adminUserRoute.put('/users/:id', authMiddleware, adminMiddleware, updateUserCont
 /**
  * @api {delete} /admin/delete 批量删除用户
  * @apiName DeleteUsers
- * @apiGroup Admin-User
+ * @apiGroup 用户管理
  * @apiDescription 管理员批量删除用户
  *
  * @apiHeader {String} Authorization Bearer token，用户登录后获取
@@ -157,7 +157,7 @@ adminUserRoute.delete('/delete', authMiddleware, adminMiddleware, deleteUsers);
 /**
  * @api {post} /admin/login-qrcode/confirm 确认二维码登录
  * @apiName ConfirmQrcodeLogin
- * @apiGroup Admin-User
+ * @apiGroup 用户管理
  * @apiDescription 管理员确认用户的二维码登录请求
  *
  * @apiHeader {String} Authorization Bearer token，用户登录后获取
