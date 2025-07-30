@@ -20,6 +20,52 @@
 - Multer - 文件上传
 - ApiDoc - API 文档生成
 - dotenv - 环境变量配置
+- Nodemon - 开发环境热重载
+
+## Nodemon 配置
+
+项目已配置 `nodemon.json` 文件来优化开发体验：
+
+### 默认忽略规则
+- `node_modules/` - 依赖包目录
+- `src/public/` - 静态文件目录
+- `*.log`, `*.tmp`, `*.temp` - 临时文件
+- `build/`, `dist/`, `coverage/` - 构建和测试目录
+- `.git/` - Git 版本控制目录
+- `docs/`, `drizzle/` - 文档和数据库迁移文件
+- `src/public/apidoc/` - API 文档生成目录
+
+### 自定义配置
+
+如需修改 nodemon 行为，可以编辑 `nodemon.json` 文件：
+
+```json
+{
+  "watch": ["src"],          // 监听的目录
+  "ext": "js,json",          // 监听的文件扩展名
+  "ignore": [                 // 忽略的文件/目录
+    "node_modules/**/*",
+    "src/public/**/*"
+  ],
+  "delay": 1000,              // 重启延迟（毫秒）
+  "env": {
+    "NODE_ENV": "development"  // 环境变量
+  }
+}
+```
+
+### 常用忽略配置示例
+
+```json
+// 忽略特定文件类型
+"ignore": ["*.test.js", "*.spec.js"]
+
+// 忽略特定目录
+"ignore": ["uploads/**/*", "logs/**/*"]
+
+// 忽略数据库文件
+"ignore": ["*.db", "*.sqlite"]
+```
 
 ## 快速开始
 

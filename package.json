@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "生成文档": "apidoc -i src/ -o src/public/apidoc/",
+    "生成文档": "apidoc -i src/routes/ -o src/public/apidoc/",
     "generate": "npx drizzle-kit generate",
     "migrate": "npx drizzle-kit migrate",
     "push": "npx drizzle-kit push",

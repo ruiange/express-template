@@ -1,0 +1,22 @@
+{
+  "watch": ["src"],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules/**/*",
+    "src/public/**/*",
+    "*.log",
+    "*.tmp",
+    "*.temp",
+    "build/**/*",
+    "dist/**/*",
+    "coverage/**/*",
+    ".git/**/*",
+    "docs/**/*",
+    "drizzle/**/*",
+    "src/public/apidoc/**/*"
+  ],
+  "delay": 1000,
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
