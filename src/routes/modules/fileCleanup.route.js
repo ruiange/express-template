@@ -1,20 +1,14 @@
 import express from 'express';
-import {
-  getStats,
-  getCleanupList,
-  manualCleanup,
-  markAsUsed,
-  markAsUnused
-} from '../controllers/fileCleanup.controller.js';
+import fileCleanupController from '../../controllers/fileCleanup.controller.js';
 
-const router = express.Router();
+const fileCleanupRoute = express.Router();
 
 /**
  * @route GET /api/file-cleanup/stats
  * @desc 获取文件资源统计信息
  * @access Public
  */
-router.get('/stats', getStats);
+fileCleanupRoute.get('/stats', (req, res) => fileCleanupController.getStats(req, res));
 
 /**
  * @route GET /api/file-cleanup/list
@@ -22,7 +16,7 @@ router.get('/stats', getStats);
  * @query {number} limit - 限制返回数量，默认50
  * @access Public
  */
-router.get('/list', getCleanupList);
+fileCleanupRoute.get('/list', (req, res) => fileCleanupController.getCleanupList(req, res));
 
 /**
  * @route POST /api/file-cleanup/manual
@@ -30,7 +24,7 @@ router.get('/list', getCleanupList);
  * @body {number} batchSize - 批量清理数量，默认50
  * @access Public
  */
-router.post('/manual', manualCleanup);
+fileCleanupRoute.post('/manual', (req, res) => fileCleanupController.manualCleanup(req, res));
 
 /**
  * @route POST /api/file-cleanup/mark-used
@@ -40,7 +34,7 @@ router.post('/manual', manualCleanup);
  * @body {string} businessId - 业务ID（可选）
  * @access Public
  */
-router.post('/mark-used', markAsUsed);
+fileCleanupRoute.post('/mark-used', (req, res) => fileCleanupController.markAsUsed(req, res));
 
 /**
  * @route POST /api/file-cleanup/mark-unused
@@ -50,6 +44,6 @@ router.post('/mark-used', markAsUsed);
  * @body {string} businessId - 业务ID（可选）
  * @access Public
  */
-router.post('/mark-unused', markAsUnused);
+fileCleanupRoute.post('/mark-unused', (req, res) => fileCleanupController.markAsUnused(req, res));
 
-export default router;
+export default fileCleanupRoute;

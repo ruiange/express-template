@@ -9,7 +9,7 @@ import aiRoute from './modules/ai.route.js';
 import wallpaperRoute from './modules/wallpaper.route.js';
 import adminRoute from './admin/admin.route.js';
 import questionRoute from './modules/question.route.js';
-import fileCleanupRoute from './fileCleanup.routes.js';
+import fileCleanupRoute from './modules/fileCleanup.route.js';
 
 
 const apiRouter = express.Router();
