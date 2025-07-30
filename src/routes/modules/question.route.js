@@ -8,7 +8,7 @@ import { adminMiddleware } from '../../middlewares/admin.middleware.js';
 const questionRoute = express.Router();
 
 /**
- * @api {get} /api/question/list 获取题库列表
+ * @api {get} /question/list 获取题库列表
  * @apiDescription 获取题库列表，支持分页、筛选和排序
  * @apiName GetQuestionList
  * @apiGroup 题库
@@ -33,7 +33,7 @@ const questionRoute = express.Router();
 questionRoute.get('/list', QuestionController.getQuestionList);
 
 /**
- * @api {get} /api/question/:id 获取题目详情
+ * @api {get} /question/:id 获取题目详情
  * @apiDescription 根据ID获取题目的详细信息
  * @apiName GetQuestionDetail
  * @apiGroup 题库
@@ -58,7 +58,7 @@ questionRoute.get('/list', QuestionController.getQuestionList);
 questionRoute.get('/:id', QuestionController.getQuestionDetail);
 
 /**
- * @api {post} /api/question/create 创建题目
+ * @api {post} /question/create 创建题目
  * @apiDescription 创建新的题目
  * @apiName CreateQuestion
  * @apiGroup 题库
@@ -91,7 +91,7 @@ questionRoute.get('/:id', QuestionController.getQuestionDetail);
 questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.createQuestion);
 
 /**
- * @api {put} /api/question/:id 更新题目
+ * @api {put} /question/:id 更新题目
  * @apiDescription 更新现有题目的信息
  * @apiName UpdateQuestion
  * @apiGroup 题库
@@ -124,7 +124,7 @@ questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.
 questionRoute.patch('/:id',authMiddleware,adminMiddleware, QuestionController.updateQuestion);
 
 /**
- * @api {delete} /api/question/:id 删除题目
+ * @api {delete} /question/:id 删除题目
  * @apiDescription 删除指定ID的题目
  * @apiName DeleteQuestion
  * @apiGroup 题库

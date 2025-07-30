@@ -7,7 +7,12 @@
     "group": "AI对话",
     "version": "1.0.0",
     "filename": "src/routes/modules/ai.route.js",
-    "groupTitle": "AI对话"
+    "groupTitle": "AI对话",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/ai/name"
+      }
+    ]
   },
   {
     "type": "post",
@@ -115,7 +120,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/upload.route.js",
-    "groupTitle": "上传"
+    "groupTitle": "上传",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/upload"
+      }
+    ]
   },
   {
     "type": "get",
@@ -202,7 +212,12 @@
       ]
     },
     "filename": "src/routes/modules/nineYin.route.js",
-    "groupTitle": "九阴"
+    "groupTitle": "九阴",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/9yin/scan/news"
+      }
+    ]
   },
   {
     "type": "put",
@@ -212,7 +227,12 @@
     "group": "后台管理",
     "version": "1.0.0",
     "filename": "src/routes/admin/admin.audit.route.js",
-    "groupTitle": "后台管理"
+    "groupTitle": "后台管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/admin/audit/config"
+      }
+    ]
   },
   {
     "type": "get",
@@ -222,7 +242,12 @@
     "group": "后台管理",
     "version": "1.0.0",
     "filename": "src/routes/admin/admin.audit.route.js",
-    "groupTitle": "后台管理"
+    "groupTitle": "后台管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/admin/audit/config"
+      }
+    ]
   },
   {
     "type": "post",
@@ -336,7 +361,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper"
+      }
+    ]
   },
   {
     "type": "delete",
@@ -380,7 +410,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id"
+      }
+    ]
   },
   {
     "type": "post",
@@ -431,7 +466,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id/download"
+      }
+    ]
   },
   {
     "type": "get",
@@ -475,7 +515,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/latest"
+      }
+    ]
   },
   {
     "type": "get",
@@ -519,7 +564,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/popular"
+      }
+    ]
   },
   {
     "type": "get",
@@ -563,7 +613,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id"
+      }
+    ]
   },
   {
     "type": "get",
@@ -649,7 +704,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/list"
+      }
+    ]
   },
   {
     "type": "put",
@@ -770,7 +830,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸"
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/:id"
+      }
+    ]
   },
   {
     "type": "post",
@@ -828,7 +893,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸分类"
+    "groupTitle": "壁纸分类",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/category"
+      }
+    ]
   },
   {
     "type": "delete",
@@ -885,7 +955,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸分类"
+    "groupTitle": "壁纸分类",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/:id"
+      }
+    ]
   },
   {
     "type": "get",
@@ -916,7 +991,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸分类"
+    "groupTitle": "壁纸分类",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/list"
+      }
+    ]
   },
   {
     "type": "get",
@@ -960,7 +1040,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸分类"
+    "groupTitle": "壁纸分类",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/:id"
+      }
+    ]
   },
   {
     "type": "put",
@@ -1025,7 +1110,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/wallpaper.route.js",
-    "groupTitle": "壁纸分类"
+    "groupTitle": "壁纸分类",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/wallpaper/category/:id"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1061,7 +1151,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/mini.route.js",
-    "groupTitle": "小程序"
+    "groupTitle": "小程序",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/mini/v"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1125,7 +1220,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/mini.route.js",
-    "groupTitle": "小程序"
+    "groupTitle": "小程序",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/mini/login"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1135,7 +1235,12 @@
     "group": "抖音",
     "version": "1.0.0",
     "filename": "src/routes/modules/douyin.route.js",
-    "groupTitle": "抖音"
+    "groupTitle": "抖音",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/douyin/save"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1145,7 +1250,12 @@
     "group": "抖音",
     "version": "1.0.0",
     "filename": "src/routes/modules/douyin.route.js",
-    "groupTitle": "抖音"
+    "groupTitle": "抖音",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/douyin"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1155,7 +1265,12 @@
     "group": "抖音",
     "version": "1.0.0",
     "filename": "src/routes/modules/douyin.route.js",
-    "groupTitle": "抖音"
+    "groupTitle": "抖音",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/douyin/get"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1165,7 +1280,12 @@
     "group": "抖音",
     "version": "1.0.0",
     "filename": "src/routes/modules/douyin.route.js",
-    "groupTitle": "抖音"
+    "groupTitle": "抖音",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/douyin/dataList"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1188,7 +1308,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/user/login-qrcode/status"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1198,7 +1323,12 @@
     "group": "用户",
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/user/login-qrcode"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1276,7 +1406,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/user/register"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1299,7 +1434,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/user/login-qrcode/scanning"
+      }
+    ]
   },
   {
     "type": "put",
@@ -1309,7 +1449,12 @@
     "group": "用户",
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/user/"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1319,7 +1464,12 @@
     "group": "用户",
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
-    "groupTitle": "用户"
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/user/"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1330,7 +1480,12 @@
     "description": "<p>敲木鱼增加财富</p>",
     "version": "0.0.0",
     "filename": "src/routes/modules/wealth.route.js",
-    "groupTitle": "财富"
+    "groupTitle": "财富",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/wealth/muyu"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1453,7 +1608,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/fileResources.route.js",
-    "groupTitle": "资源管理"
+    "groupTitle": "资源管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/file-cleanup/all"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1519,7 +1679,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/fileResources.route.js",
-    "groupTitle": "资源管理"
+    "groupTitle": "资源管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/file-cleanup/list"
+      }
+    ]
   },
   {
     "type": "get",
@@ -1592,7 +1757,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/fileResources.route.js",
-    "groupTitle": "资源管理"
+    "groupTitle": "资源管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/file-cleanup/stats"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1672,7 +1842,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/fileResources.route.js",
-    "groupTitle": "资源管理"
+    "groupTitle": "资源管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/file-cleanup/manual"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1723,7 +1898,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/fileResources.route.js",
-    "groupTitle": "资源管理"
+    "groupTitle": "资源管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/file-cleanup/mark-unused"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1774,7 +1954,12 @@
     },
     "version": "0.0.0",
     "filename": "src/routes/modules/fileResources.route.js",
-    "groupTitle": "资源管理"
+    "groupTitle": "资源管理",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/file-cleanup/mark-used"
+      }
+    ]
   },
   {
     "type": "post",
@@ -1950,7 +2135,12 @@
       }
     },
     "filename": "src/routes/modules/question.route.js",
-    "groupTitle": "题库"
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/question/create"
+      }
+    ]
   },
   {
     "type": "delete",
@@ -2020,7 +2210,12 @@
       }
     },
     "filename": "src/routes/modules/question.route.js",
-    "groupTitle": "题库"
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/question/:id"
+      }
+    ]
   },
   {
     "type": "get",
@@ -2140,7 +2335,12 @@
       }
     },
     "filename": "src/routes/modules/question.route.js",
-    "groupTitle": "题库"
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/question/:id"
+      }
+    ]
   },
   {
     "type": "get",
@@ -2265,7 +2465,12 @@
       }
     },
     "filename": "src/routes/modules/question.route.js",
-    "groupTitle": "题库"
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/question/list"
+      }
+    ]
   },
   {
     "type": "put",
@@ -2447,6 +2652,11 @@
       }
     },
     "filename": "src/routes/modules/question.route.js",
-    "groupTitle": "题库"
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/question/:id"
+      }
+    ]
   }
 ]

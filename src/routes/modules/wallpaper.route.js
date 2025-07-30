@@ -21,7 +21,7 @@ const wallpaperRoute = express.Router();
 // ==================== 壁纸相关路由 ====================
 
 /**
- * @api {post} /api/wallpaper 创建壁纸
+ * @api {post} /wallpaper 创建壁纸
  * @apiName CreateWallpaper
  * @apiGroup 壁纸
  * @apiDescription 创建新的壁纸
@@ -44,7 +44,7 @@ const wallpaperRoute = express.Router();
 wallpaperRoute.post('/', authMiddleware, createWallpaperController);
 
 /**
- * @api {get} /api/wallpaper/list 获取壁纸列表
+ * @api {get} /wallpaper/list 获取壁纸列表
  * @apiName GetWallpapers
  * @apiGroup 壁纸
  * @apiDescription 获取壁纸列表，支持分页、搜索、分类筛选
@@ -63,7 +63,7 @@ wallpaperRoute.post('/', authMiddleware, createWallpaperController);
 wallpaperRoute.get('/list', getWallpapersController);
 
 /**
- * @api {get} /api/wallpaper/popular 获取热门壁纸
+ * @api {get} /wallpaper/popular 获取热门壁纸
  * @apiName GetPopularWallpapers
  * @apiGroup 壁纸
  * @apiDescription 获取热门壁纸列表
@@ -76,7 +76,7 @@ wallpaperRoute.get('/list', getWallpapersController);
 wallpaperRoute.get('/popular', getPopularWallpapersController);
 
 /**
- * @api {get} /api/wallpaper/latest 获取最新壁纸
+ * @api {get} /wallpaper/latest 获取最新壁纸
  * @apiName GetLatestWallpapers
  * @apiGroup 壁纸
  * @apiDescription 获取最新壁纸列表
@@ -89,7 +89,7 @@ wallpaperRoute.get('/popular', getPopularWallpapersController);
 wallpaperRoute.get('/latest', getLatestWallpapersController);
 
 /**
- * @api {get} /api/wallpaper/:id 获取壁纸详情
+ * @api {get} /wallpaper/:id 获取壁纸详情
  * @apiName GetWallpaper
  * @apiGroup 壁纸
  * @apiDescription 根据ID获取壁纸详情
@@ -102,7 +102,7 @@ wallpaperRoute.get('/latest', getLatestWallpapersController);
 wallpaperRoute.get('/:id', getWallpaperController);
 
 /**
- * @api {put} /api/wallpaper/:id 更新壁纸
+ * @api {put} /wallpaper/:id 更新壁纸
  * @apiName UpdateWallpaper
  * @apiGroup 壁纸
  * @apiDescription 更新壁纸信息
@@ -126,7 +126,7 @@ wallpaperRoute.get('/:id', getWallpaperController);
 wallpaperRoute.put('/:id', authMiddleware, updateWallpaperController);
 
 /**
- * @api {delete} /api/wallpaper/:id 删除壁纸
+ * @api {delete} /wallpaper/:id 删除壁纸
  * @apiName DeleteWallpaper
  * @apiGroup 壁纸
  * @apiDescription 删除壁纸
@@ -142,7 +142,7 @@ wallpaperRoute.delete('/:id', authMiddleware, deleteWallpaperController);
 wallpaperRoute.post('/batch-delete', authMiddleware, deleteWallpapersController);
 
 /**
- * @api {post} /api/wallpaper/:id/download 下载壁纸
+ * @api {post} /wallpaper/:id/download 下载壁纸
  * @apiName DownloadWallpaper
  * @apiGroup 壁纸
  * @apiDescription 下载壁纸并增加下载次数
@@ -158,7 +158,7 @@ wallpaperRoute.post('/:id/download', downloadWallpaperController);
 // ==================== 分类相关路由 ====================
 
 /**
- * @api {post} /api/wallpaper/category 创建分类
+ * @api {post} /wallpaper/category 创建分类
  * @apiName CreateCategory
  * @apiGroup 壁纸分类
  * @apiDescription 创建新的壁纸分类
@@ -173,7 +173,7 @@ wallpaperRoute.post('/:id/download', downloadWallpaperController);
 wallpaperRoute.post('/category', authMiddleware, createCategoryController);
 
 /**
- * @api {get} /api/wallpaper/category/list 获取所有分类
+ * @api {get} /wallpaper/category/list 获取所有分类
  * @apiName GetCategories
  * @apiGroup 壁纸分类
  * @apiDescription 获取所有壁纸分类
@@ -184,7 +184,7 @@ wallpaperRoute.post('/category', authMiddleware, createCategoryController);
 wallpaperRoute.get('/category/list', getCategoriesController);
 
 /**
- * @api {get} /api/wallpaper/category/:id 获取分类详情
+ * @api {get} /wallpaper/category/:id 获取分类详情
  * @apiName GetCategory
  * @apiGroup 壁纸分类
  * @apiDescription 根据ID获取分类详情
@@ -197,7 +197,7 @@ wallpaperRoute.get('/category/list', getCategoriesController);
 wallpaperRoute.get('/category/:id', getCategoryController);
 
 /**
- * @api {put} /api/wallpaper/category/:id 更新分类
+ * @api {put} /wallpaper/category/:id 更新分类
  * @apiName UpdateCategory
  * @apiGroup 壁纸分类
  * @apiDescription 更新分类信息
@@ -213,7 +213,7 @@ wallpaperRoute.get('/category/:id', getCategoryController);
 wallpaperRoute.put('/category/:id', authMiddleware, updateCategoryController);
 
 /**
- * @api {delete} /api/wallpaper/category/:id 删除分类
+ * @api {delete} /wallpaper/category/:id 删除分类
  * @apiName DeleteCategory
  * @apiGroup 壁纸分类
  * @apiDescription 删除分类（只有当分类下没有壁纸时才能删除）

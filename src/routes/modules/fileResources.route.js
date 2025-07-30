@@ -4,7 +4,7 @@ import fileResourcesController from '../../controllers/fileResources.controller.
 const fileResourcesRoute = express.Router();
 
 /**
- * @api {get} /api/file-cleanup/stats 获取文件资源统计信息
+ * @api {get} /file-cleanup/stats 获取文件资源统计信息
  * @apiName GetFileStats
  * @apiGroup 资源管理
  * @apiDescription 获取文件资源的统计信息，包括各种状态的文件数量
@@ -21,7 +21,7 @@ const fileResourcesRoute = express.Router();
 fileResourcesRoute.get('/stats', (req, res) => fileResourcesController.getStats(req, res));
 
 /**
- * @api {get} /api/file-cleanup/list 获取待清理文件列表
+ * @api {get} /file-cleanup/list 获取待清理文件列表
  * @apiName GetCleanupList
  * @apiGroup 资源管理
  * @apiDescription 获取待清理的文件列表
@@ -37,7 +37,7 @@ fileResourcesRoute.get('/stats', (req, res) => fileResourcesController.getStats(
 fileResourcesRoute.get('/list', (req, res) => fileResourcesController.getCleanupList(req, res));
 
 /**
- * @api {post} /api/file-cleanup/manual 手动执行文件清理
+ * @api {post} /file-cleanup/manual 手动执行文件清理
  * @apiName ManualCleanup
  * @apiGroup 资源管理
  * @apiDescription 手动触发文件清理任务
@@ -59,7 +59,7 @@ fileResourcesRoute.get('/list', (req, res) => fileResourcesController.getCleanup
 fileResourcesRoute.post('/manual', (req, res) => fileResourcesController.manualCleanup(req, res));
 
 /**
- * @api {post} /api/file-cleanup/mark-used 标记文件为已使用
+ * @api {post} /file-cleanup/mark-used 标记文件为已使用
  * @apiName MarkFileAsUsed
  * @apiGroup 资源管理
  * @apiDescription 将文件标记为已使用状态
@@ -77,7 +77,7 @@ fileResourcesRoute.post('/manual', (req, res) => fileResourcesController.manualC
 fileResourcesRoute.post('/mark-used', (req, res) => fileResourcesController.markAsUsed(req, res));
 
 /**
- * @api {post} /api/file-cleanup/mark-unused 标记文件为未使用
+ * @api {post} /file-cleanup/mark-unused 标记文件为未使用
  * @apiName MarkFileAsUnused
  * @apiGroup 资源管理
  * @apiDescription 将文件标记为未使用状态
@@ -95,7 +95,7 @@ fileResourcesRoute.post('/mark-used', (req, res) => fileResourcesController.mark
 fileResourcesRoute.post('/mark-unused', (req, res) => fileResourcesController.markAsUnused(req, res));
 
 /**
- * @api {get} /api/file-cleanup/all 文件资源数据列表
+ * @api {get} /file-cleanup/all 文件资源数据列表
  * @apiName GetAllFiles
  * @apiGroup 资源管理
  * @apiDescription 分页获取所有文件资源数据，支持状态和存储提供商过滤
