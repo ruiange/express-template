@@ -67,12 +67,12 @@ questionRoute.get('/:id', QuestionController.getQuestionDetail);
  * @apiHeader {String} Authorization Bearer token，需要管理员权限
  * @apiHeader {String} Content-Type application/json
  * 
- * @apiBody {String} title 题目标题
- * @apiBody {String} content 题目内容
- * @apiBody {String} answer 题目答案
- * @apiBody {Number} [difficulty=3] 难度级别
- * @apiBody {String} [category] 题目分类
- * @apiBody {String} [tags] 题目标签
+ * @apiParam {String} title 题目标题
+ * @apiParam {String} content 题目内容
+ * @apiParam {String} answer 题目答案
+ * @apiParam {Number} [difficulty=3] 难度级别
+ * @apiParam {String} [category] 题目分类
+ * @apiParam {String} [tags] 题目标签
  * 
  * @apiSuccess {Object} question 创建的题目
  * @apiSuccess {Number} question.id 题目ID
@@ -100,12 +100,12 @@ questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.
  * @apiHeader {String} Content-Type application/json
  * 
  * @apiParam {Number} id 题目ID
- * @apiBody {String} [title] 题目标题
- * @apiBody {String} [content] 题目内容
- * @apiBody {String} [answer] 题目答案
- * @apiBody {Number} [difficulty] 难度级别
- * @apiBody {String} [category] 题目分类
- * @apiBody {String} [tags] 题目标签
+ * @apiParam {String} [title] 题目标题
+ * @apiParam {String} [content] 题目内容
+ * @apiParam {String} [answer] 题目答案
+ * @apiParam {Number} [difficulty] 难度级别
+ * @apiParam {String} [category] 题目分类
+ * @apiParam {String} [tags] 题目标签
  * 
  * @apiSuccess {Object} question 更新后的题目
  * @apiSuccess {Number} question.id 题目ID

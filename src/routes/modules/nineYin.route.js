@@ -9,7 +9,7 @@ const nineYinRoute = express.Router();
  * @apiGroup 九阴
  * @apiVersion 1.0.0
  *
- * @apiParams {Number} [page=0] 页码，默认为0
+ * @apiParam {Number} [page=0] 页码，默认为0
  *
  * @apiDescription 从九阴官网爬取最新的新闻列表信息
  *

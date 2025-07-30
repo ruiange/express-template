@@ -26,16 +26,16 @@ const wallpaperRoute = express.Router();
  * @apiGroup 壁纸
  * @apiDescription 创建新的壁纸
  *
- * @apiBody {String} title 壁纸标题
- * @apiBody {String} description 壁纸描述
- * @apiBody {String} filePath 文件存储路径
- * @apiBody {String} thumbnailPath 缩略图路径
- * @apiBody {Number} fileSize 文件大小(字节)
- * @apiBody {Number} width 图片宽度(像素)
- * @apiBody {Number} height 图片高度(像素)
- * @apiBody {String} fileType 文件类型(jpg, png等)
- * @apiBody {Number} categoryId 分类ID
- * @apiBody {Boolean} isPublic 是否公开
+ * @apiParam {String} title 壁纸标题
+ * @apiParam {String} description 壁纸描述
+ * @apiParam {String} filePath 文件存储路径
+ * @apiParam {String} thumbnailPath 缩略图路径
+ * @apiParam {Number} fileSize 文件大小(字节)
+ * @apiParam {Number} width 图片宽度(像素)
+ * @apiParam {Number} height 图片高度(像素)
+ * @apiParam {String} fileType 文件类型(jpg, png等)
+ * @apiParam {Number} categoryId 分类ID
+ * @apiParam {Boolean} isPublic 是否公开
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {String} message 成功消息
@@ -49,13 +49,13 @@ wallpaperRoute.post('/', authMiddleware, createWallpaperController);
  * @apiGroup 壁纸
  * @apiDescription 获取壁纸列表，支持分页、搜索、分类筛选
  *
- * @apiQuery {Number} page 页码，默认为1
- * @apiQuery {Number} limit 每页数量，默认为10
- * @apiQuery {String} search 搜索关键词
- * @apiQuery {Number} categoryId 分类ID
- * @apiQuery {Boolean} isPublic 是否公开，默认为true
- * @apiQuery {String} sortBy 排序字段(uploadDate, viewCount, downloadCount)
- * @apiQuery {String} sortOrder 排序方向(asc, desc)
+ * @apiParam {Number} page 页码，默认为1
+ * @apiParam {Number} limit 每页数量，默认为10
+ * @apiParam {String} search 搜索关键词
+ * @apiParam {Number} categoryId 分类ID
+ * @apiParam {Boolean} isPublic 是否公开，默认为true
+ * @apiParam {String} sortBy 排序字段(uploadDate, viewCount, downloadCount)
+ * @apiParam {String} sortOrder 排序方向(asc, desc)
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {Object} data 壁纸列表和分页信息
@@ -68,7 +68,7 @@ wallpaperRoute.get('/list', getWallpapersController);
  * @apiGroup 壁纸
  * @apiDescription 获取热门壁纸列表
  *
- * @apiQuery {Number} limit 返回数量，默认为10
+ * @apiParam {Number} limit 返回数量，默认为10
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {Array} data 热门壁纸列表
@@ -81,7 +81,7 @@ wallpaperRoute.get('/popular', getPopularWallpapersController);
  * @apiGroup 壁纸
  * @apiDescription 获取最新壁纸列表
  *
- * @apiQuery {Number} limit 返回数量，默认为10
+ * @apiParam {Number} limit 返回数量，默认为10
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {Array} data 最新壁纸列表
@@ -108,16 +108,16 @@ wallpaperRoute.get('/:id', getWallpaperController);
  * @apiDescription 更新壁纸信息
  *
  * @apiParam {Number} id 壁纸ID
- * @apiBody {String} title 壁纸标题
- * @apiBody {String} description 壁纸描述
- * @apiBody {String} filePath 文件存储路径
- * @apiBody {String} thumbnailPath 缩略图路径
- * @apiBody {Number} fileSize 文件大小(字节)
- * @apiBody {Number} width 图片宽度(像素)
- * @apiBody {Number} height 图片高度(像素)
- * @apiBody {String} fileType 文件类型
- * @apiBody {Number} categoryId 分类ID
- * @apiBody {Boolean} isPublic 是否公开
+ * @apiParam {String} title 壁纸标题
+ * @apiParam {String} description 壁纸描述
+ * @apiParam {String} filePath 文件存储路径
+ * @apiParam {String} thumbnailPath 缩略图路径
+ * @apiParam {Number} fileSize 文件大小(字节)
+ * @apiParam {Number} width 图片宽度(像素)
+ * @apiParam {Number} height 图片高度(像素)
+ * @apiParam {String} fileType 文件类型
+ * @apiParam {Number} categoryId 分类ID
+ * @apiParam {Boolean} isPublic 是否公开
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {String} message 成功消息
@@ -163,8 +163,8 @@ wallpaperRoute.post('/:id/download', downloadWallpaperController);
  * @apiGroup 壁纸分类
  * @apiDescription 创建新的壁纸分类
  *
- * @apiBody {String} name 分类名称
- * @apiBody {String} description 分类描述
+ * @apiParam {String} name 分类名称
+ * @apiParam {String} description 分类描述
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {String} message 成功消息
@@ -203,8 +203,8 @@ wallpaperRoute.get('/category/:id', getCategoryController);
  * @apiDescription 更新分类信息
  *
  * @apiParam {Number} id 分类ID
- * @apiBody {String} name 分类名称
- * @apiBody {String} description 分类描述
+ * @apiParam {String} name 分类名称
+ * @apiParam {String} description 分类描述
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {String} message 成功消息

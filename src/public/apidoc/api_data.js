@@ -57,30 +57,34 @@ define({ "api": [
         ]
       }
     },
-    "body": [
-      {
-        "group": "Body",
-        "type": "File",
-        "optional": true,
-        "field": "file",
-        "description": "<p>要上传的文件（通过 multipart/form-data 表单提交）</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "path",
-        "description": "<p>文件保存的路径（可选）</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "upType",
-        "defaultValue": "vercel",
-        "description": "<p>存储桶（可选）默认为vercel，可选vercel、qiniu、r2</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": true,
+            "field": "file",
+            "description": "<p>要上传的文件（通过 multipart/form-data 表单提交）</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "path",
+            "description": "<p>文件保存的路径（可选）</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "upType",
+            "defaultValue": "vercel",
+            "description": "<p>存储桶（可选）默认为vercel，可选vercel、qiniu、r2</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -148,6 +152,20 @@ define({ "api": [
     "name": "GetNineYinNews",
     "group": "九阴",
     "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "page",
+            "defaultValue": "0",
+            "description": "<p>页码，默认为0</p>"
+          }
+        ]
+      }
+    },
     "description": "<p>从九阴官网爬取最新的新闻列表信息</p>",
     "success": {
       "fields": {
@@ -241,78 +259,82 @@ define({ "api": [
     "name": "CreateWallpaper",
     "group": "壁纸",
     "description": "<p>创建新的壁纸</p>",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "title",
-        "description": "<p>壁纸标题</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "description",
-        "description": "<p>壁纸描述</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "filePath",
-        "description": "<p>文件存储路径</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "thumbnailPath",
-        "description": "<p>缩略图路径</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "fileSize",
-        "description": "<p>文件大小(字节)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "width",
-        "description": "<p>图片宽度(像素)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "height",
-        "description": "<p>图片高度(像素)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "fileType",
-        "description": "<p>文件类型(jpg, png等)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "categoryId",
-        "description": "<p>分类ID</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Boolean",
-        "optional": false,
-        "field": "isPublic",
-        "description": "<p>是否公开</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>壁纸标题</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>壁纸描述</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "filePath",
+            "description": "<p>文件存储路径</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "thumbnailPath",
+            "description": "<p>缩略图路径</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "fileSize",
+            "description": "<p>文件大小(字节)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "width",
+            "description": "<p>图片宽度(像素)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "height",
+            "description": "<p>图片高度(像素)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fileType",
+            "description": "<p>文件类型(jpg, png等)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "categoryId",
+            "description": "<p>分类ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "isPublic",
+            "description": "<p>是否公开</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -446,15 +468,19 @@ define({ "api": [
     "name": "GetLatestWallpapers",
     "group": "壁纸",
     "description": "<p>获取最新壁纸列表</p>",
-    "query": [
-      {
-        "group": "Query",
-        "type": "Number",
-        "optional": false,
-        "field": "limit",
-        "description": "<p>返回数量，默认为10</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "limit",
+            "description": "<p>返回数量，默认为10</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -486,15 +512,19 @@ define({ "api": [
     "name": "GetPopularWallpapers",
     "group": "壁纸",
     "description": "<p>获取热门壁纸列表</p>",
-    "query": [
-      {
-        "group": "Query",
-        "type": "Number",
-        "optional": false,
-        "field": "limit",
-        "description": "<p>返回数量，默认为10</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "limit",
+            "description": "<p>返回数量，默认为10</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -570,57 +600,61 @@ define({ "api": [
     "name": "GetWallpapers",
     "group": "壁纸",
     "description": "<p>获取壁纸列表，支持分页、搜索、分类筛选</p>",
-    "query": [
-      {
-        "group": "Query",
-        "type": "Number",
-        "optional": false,
-        "field": "page",
-        "description": "<p>页码，默认为1</p>"
-      },
-      {
-        "group": "Query",
-        "type": "Number",
-        "optional": false,
-        "field": "limit",
-        "description": "<p>每页数量，默认为10</p>"
-      },
-      {
-        "group": "Query",
-        "type": "String",
-        "optional": false,
-        "field": "search",
-        "description": "<p>搜索关键词</p>"
-      },
-      {
-        "group": "Query",
-        "type": "Number",
-        "optional": false,
-        "field": "categoryId",
-        "description": "<p>分类ID</p>"
-      },
-      {
-        "group": "Query",
-        "type": "Boolean",
-        "optional": false,
-        "field": "isPublic",
-        "description": "<p>是否公开，默认为true</p>"
-      },
-      {
-        "group": "Query",
-        "type": "String",
-        "optional": false,
-        "field": "sortBy",
-        "description": "<p>排序字段(uploadDate, viewCount, downloadCount)</p>"
-      },
-      {
-        "group": "Query",
-        "type": "String",
-        "optional": false,
-        "field": "sortOrder",
-        "description": "<p>排序方向(asc, desc)</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页码，默认为1</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "limit",
+            "description": "<p>每页数量，默认为10</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "search",
+            "description": "<p>搜索关键词</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "categoryId",
+            "description": "<p>分类ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "isPublic",
+            "description": "<p>是否公开，默认为true</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortBy",
+            "description": "<p>排序字段(uploadDate, viewCount, downloadCount)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortOrder",
+            "description": "<p>排序方向(asc, desc)</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -661,82 +695,80 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p>壁纸ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>壁纸标题</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>壁纸描述</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "filePath",
+            "description": "<p>文件存储路径</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "thumbnailPath",
+            "description": "<p>缩略图路径</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "fileSize",
+            "description": "<p>文件大小(字节)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "width",
+            "description": "<p>图片宽度(像素)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "height",
+            "description": "<p>图片高度(像素)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fileType",
+            "description": "<p>文件类型</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "categoryId",
+            "description": "<p>分类ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "isPublic",
+            "description": "<p>是否公开</p>"
           }
         ]
       }
     },
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "title",
-        "description": "<p>壁纸标题</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "description",
-        "description": "<p>壁纸描述</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "filePath",
-        "description": "<p>文件存储路径</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "thumbnailPath",
-        "description": "<p>缩略图路径</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "fileSize",
-        "description": "<p>文件大小(字节)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "width",
-        "description": "<p>图片宽度(像素)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "height",
-        "description": "<p>图片高度(像素)</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "fileType",
-        "description": "<p>文件类型</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": false,
-        "field": "categoryId",
-        "description": "<p>分类ID</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Boolean",
-        "optional": false,
-        "field": "isPublic",
-        "description": "<p>是否公开</p>"
-      }
-    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -775,22 +807,26 @@ define({ "api": [
     "name": "CreateCategory",
     "group": "壁纸分类",
     "description": "<p>创建新的壁纸分类</p>",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "name",
-        "description": "<p>分类名称</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "description",
-        "description": "<p>分类描述</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>分类名称</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>分类描述</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -970,26 +1006,24 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p>分类ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>分类名称</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>分类描述</p>"
           }
         ]
       }
     },
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "name",
-        "description": "<p>分类名称</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "description",
-        "description": "<p>分类描述</p>"
-      }
-    ],
     "success": {
       "fields": {
         "Success 200": [
@@ -1201,29 +1235,33 @@ define({ "api": [
     "name": "RegisterUser",
     "group": "用户",
     "description": "<p>新用户注册接口</p>",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "username",
-        "description": "<p>用户名</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "password",
-        "description": "<p>密码</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "email",
-        "description": "<p>电子邮箱</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>用户名</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>密码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>电子邮箱</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -1274,15 +1312,19 @@ define({ "api": [
     "title": "扫描登录二维码",
     "name": "qrCodeScanning",
     "group": "用户",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "scene",
-        "description": "<p>二维码场景值</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "scene",
+            "description": "<p>二维码场景值</p>"
+          }
+        ]
       }
-    ],
+    },
     "version": "0.0.0",
     "filename": "src/routes/modules/user.route.js",
     "groupTitle": "用户"
@@ -1321,7 +1363,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/file-cleanup/all",
-    "title": "分页获取所有文件资源数据",
+    "title": "文件资源数据列表",
     "name": "GetAllFiles",
     "group": "资源管理",
     "description": "<p>分页获取所有文件资源数据，支持状态和存储提供商过滤</p>",
@@ -1790,51 +1832,55 @@ define({ "api": [
         ]
       }
     },
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "title",
-        "description": "<p>题目标题</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "content",
-        "description": "<p>题目内容</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "answer",
-        "description": "<p>题目答案</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": true,
-        "field": "difficulty",
-        "defaultValue": "3",
-        "description": "<p>难度级别</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "category",
-        "description": "<p>题目分类</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "tags",
-        "description": "<p>题目标签</p>"
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>题目标题</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>题目内容</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "answer",
+            "description": "<p>题目答案</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "difficulty",
+            "defaultValue": "3",
+            "description": "<p>难度级别</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "category",
+            "description": "<p>题目分类</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "tags",
+            "description": "<p>题目标签</p>"
+          }
+        ]
       }
-    ],
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -2286,54 +2332,52 @@ define({ "api": [
             "optional": false,
             "field": "id",
             "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "title",
+            "description": "<p>题目标题</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "content",
+            "description": "<p>题目内容</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "answer",
+            "description": "<p>题目答案</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "difficulty",
+            "description": "<p>难度级别</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "category",
+            "description": "<p>题目分类</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "tags",
+            "description": "<p>题目标签</p>"
           }
         ]
       }
     },
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "title",
-        "description": "<p>题目标题</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "content",
-        "description": "<p>题目内容</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "answer",
-        "description": "<p>题目答案</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Number",
-        "optional": true,
-        "field": "difficulty",
-        "description": "<p>难度级别</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "category",
-        "description": "<p>题目分类</p>"
-      },
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": true,
-        "field": "tags",
-        "description": "<p>题目标签</p>"
-      }
-    ],
     "success": {
       "fields": {
         "Success 200": [

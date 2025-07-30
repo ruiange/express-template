@@ -13,11 +13,9 @@ const upload = multer();
  *
  * @apiHeader {String} Content-Type 必须设置为 multipart/form-data
  *
- * @apiConsumes multipart/form-data
- *
- * @apiBody {File} [file] 要上传的文件（通过 multipart/form-data 表单提交）
- * @apiBody {String} [path] 文件保存的路径（可选）
- * @apiBody {String} [upType=vercel] 存储桶（可选）默认为vercel，可选vercel、qiniu、r2
+ * @apiParam {File} [file] 要上传的文件（通过 multipart/form-data 表单提交）
+ * @apiParam {String} [path] 文件保存的路径（可选）
+ * @apiParam {String} [upType=vercel] 存储桶（可选）默认为vercel，可选vercel、qiniu、r2
  * @apiSuccess {String} filename 上传后的文件名
  * @apiSuccess {String} [url] 文件访问 URL（如果可用）
  *

@@ -17,9 +17,9 @@ const userRoute = express.Router();
  * @apiGroup 用户
  * @apiDescription 新用户注册接口
  *
- * @apiBody {String} username 用户名
- * @apiBody {String} password 密码
- * @apiBody {String} email 电子邮箱
+ * @apiParam {String} username 用户名
+ * @apiParam {String} password 密码
+ * @apiParam {String} email 电子邮箱
  *
  * @apiSuccess {String} message 注册成功提示
  *
@@ -66,7 +66,7 @@ userRoute.post('/login-qrcode', generateLoginQrcode);
  * @apiName qrCodeScanning
  * @apiGroup 用户
  *
- * @apibody {String} scene 二维码场景值
+ * @apiParam {String} scene 二维码场景值
  */
 userRoute.post('/login-qrcode/scanning', qrCodeScanning);
 
@@ -75,7 +75,7 @@ userRoute.post('/login-qrcode/scanning', qrCodeScanning);
  * @apiName CheckQrcodeStatus
  * @apiGroup 用户
  *
- * @apiparam {String} scene 二维码场景值
+ * @apiParam {String} scene 二维码场景值
  */
 userRoute.get('/login-qrcode/status', checkQrcodeStatus);
 
