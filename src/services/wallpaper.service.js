@@ -293,15 +293,13 @@ export const incrementDownloadCount = async (id) => {
  */
 export const getPopularWallpapers = async (limit = 10) => {
   try {
-    const popularWallpapers = await db
+    return await db
       .select()
       .from(wallpapers)
       .where(eq(wallpapers.isPublic, true))
       .orderBy(desc(wallpapers.viewCount))
       .limit(limit)
       .execute();
-
-    return popularWallpapers;
   } catch (error) {
     console.log(chalk.red('获取热门壁纸错误:', error.message));
     throw error;
