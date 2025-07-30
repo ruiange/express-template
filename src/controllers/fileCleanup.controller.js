@@ -1,7 +1,9 @@
 import {
   batchCleanupFiles,
   getFileResourceStats,
-  getFilesToCleanup, markFileStatus,
+  getFilesToCleanup, 
+  markFileStatus,
+  getAllFileResources,
 } from '../services/fileResource.service.js';
 import chalk from 'chalk';
 
@@ -162,6 +164,45 @@ class FileCleanupController {
       res.status(500).json({
         success: false,
         message: '标记文件为未使用失败',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * 分页获取所有文件资源数据
+   * @param {Object} req - 请求对象
+   * @param {Object} res - 响应对象
+   */
+  async getAllFiles(req, res) {
+    try {
+      const {
+        page = 1,
+        limit = 20,
+        status,
+        storageProvider
+      } = req.query;
+
+      const options = {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        status,
+        storageProvider
+      };
+
+      const result = await getAllFileResources(options);
+      
+      res.json({
+        success: true,
+        data: result.data,
+        pagination: result.pagination,
+        message: '获取文件资源列表成功'
+      });
+    } catch (error) {
+      console.error('[获取文件资源列表失败]', error);
+      res.status(500).json({
+        success: false,
+        message: '获取文件资源列表失败',
         error: error.message
       });
     }

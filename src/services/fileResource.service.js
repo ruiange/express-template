@@ -229,3 +229,68 @@ export const getFileResourceStats = async () => {
     return { total: 0, pending: 0, active: 0, unused: 0, deleted: 0 };
   }
 };
+
+/**
+ * 分页获取所有文件资源数据
+ * @param {Object} options - 查询选项
+ * @param {number} options.page - 页码，从1开始
+ * @param {number} options.limit - 每页数量，默认20
+ * @param {string} options.status - 文件状态过滤，可选
+ * @param {string} options.storageProvider - 存储提供商过滤，可选
+ * @returns {Promise<Object>} 分页数据
+ */
+export const getAllFileResources = async (options = {}) => {
+  try {
+    const {
+      page = 1,
+      limit = 20,
+      status,
+      storageProvider
+    } = options;
+
+    const offset = (page - 1) * limit;
+    
+    // 构建查询条件
+    const conditions = [];
+    if (status) {
+      conditions.push(eq(fileResourcesTable.status, status));
+    }
+    if (storageProvider) {
+      conditions.push(eq(fileResourcesTable.storageProvider, storageProvider));
+    }
+
+    // 获取总数
+    const totalCountResult = await db
+      .select({ count: db.count() })
+      .from(fileResourcesTable)
+      .where(conditions.length > 0 ? and(...conditions) : undefined);
+    
+    const totalCount = totalCountResult[0]?.count || 0;
+
+    // 获取分页数据
+    const files = await db
+      .select()
+      .from(fileResourcesTable)
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(fileResourcesTable.createdAt)
+      .limit(limit)
+      .offset(offset);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+      data: files,
+      pagination: {
+        page,
+        limit,
+        totalCount,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
+      }
+    };
+  } catch (error) {
+    console.error('[分页获取文件资源失败]', error);
+    throw error;
+  }
+};

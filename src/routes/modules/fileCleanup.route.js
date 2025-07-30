@@ -46,4 +46,15 @@ fileCleanupRoute.post('/mark-used', (req, res) => fileCleanupController.markAsUs
  */
 fileCleanupRoute.post('/mark-unused', (req, res) => fileCleanupController.markAsUnused(req, res));
 
+/**
+ * @route GET /api/file-cleanup/all
+ * @desc 分页获取所有文件资源数据
+ * @query {number} page - 页码，默认1
+ * @query {number} limit - 每页数量，默认20
+ * @query {string} status - 文件状态过滤（pending/active/unused/deleted）
+ * @query {string} storageProvider - 存储提供商过滤
+ * @access Public
+ */
+fileCleanupRoute.get('/all', (req, res) => fileCleanupController.getAllFiles(req, res));
+
 export default fileCleanupRoute;
