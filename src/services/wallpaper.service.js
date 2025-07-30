@@ -50,8 +50,8 @@ export const getWallpaperById = async (id) => {
 /**
  * 获取所有壁纸（支持分页、搜索、分类筛选）
  * @param {Object} options - 查询选项
- * @param {number} options.page - 页码，默认为1
- * @param {number} options.limit - 每页数量，默认为10
+ * @param {number} options.page - 页码，默认为1（内部使用，对应前端的current参数）
+ * @param {number} options.limit - 每页数量，默认为10（内部使用，对应前端的pageSize参数）
  * @param {string} options.search - 搜索关键词
  * @param {number} options.categoryId - 分类ID
  * @param {boolean} options.isPublic - 是否公开

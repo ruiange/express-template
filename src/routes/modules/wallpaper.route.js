@@ -50,8 +50,8 @@ wallpaperRoute.post('/', authMiddleware, createWallpaperController);
  * @apiGroup 壁纸
  * @apiDescription 获取壁纸列表，支持分页、搜索、分类筛选
  *
- * @apiParam {Number} page 页码，默认为1
- * @apiParam {Number} limit 每页数量，默认为10
+ * @apiParam {Number} current 当前页码，默认为1
+ * @apiParam {Number} pageSize 每页数量，默认为10
  * @apiParam {String} search 搜索关键词
  * @apiParam {Number} categoryId 分类ID
  * @apiParam {Boolean} isPublic 是否公开，默认为true

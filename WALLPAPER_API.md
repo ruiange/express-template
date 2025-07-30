@@ -52,12 +52,12 @@ Content-Type: application/json
 
 #### 2. 获取壁纸列表
 ```http
-GET /api/wallpaper?page=1&limit=10&search=风景&categoryId=1&isPublic=true&sortBy=uploadDate&sortOrder=desc
+GET /api/wallpaper?current=1&pageSize=10&search=风景&categoryId=1&isPublic=true&sortBy=uploadDate&sortOrder=desc
 ```
 
 查询参数：
-- `page`: 页码 (默认: 1)
-- `limit`: 每页数量 (默认: 10)
+- `current`: 当前页码 (默认: 1)
+- `pageSize`: 每页数量 (默认: 10)
 - `search`: 搜索关键词
 - `categoryId`: 分类ID
 - `isPublic`: 是否公开 (默认: true)
@@ -204,7 +204,7 @@ src/
 ```javascript
 // 获取壁纸列表
 const getWallpapers = async () => {
-  const response = await fetch('/api/wallpaper?page=1&limit=10');
+  const response = await fetch('/api/wallpaper?current=1&pageSize=10');
   const data = await response.json();
   return data;
 };
@@ -238,4 +238,4 @@ const downloadWallpaper = async (id) => {
 1. 文件上传需要配合现有的上传服务使用
 2. 确保数据库连接正常
 3. 认证中间件需要正确配置
-4. 建议在生产环境中添加更多的验证和错误处理 
+4. 建议在生产环境中添加更多的验证和错误处理

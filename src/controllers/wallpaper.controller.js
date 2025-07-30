@@ -154,8 +154,8 @@ export const getWallpaperController = async (req, res) => {
 export const getWallpapersController = async (req, res) => {
   try {
     const {
-      page = 1,
-      limit = 10,
+      current = 1,
+      pageSize = 10,
       search = '',
       categoryId,
       isPublic = 'true',
@@ -164,8 +164,8 @@ export const getWallpapersController = async (req, res) => {
     } = req.query;
 
     const options = {
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: parseInt(current),
+      limit: parseInt(pageSize),
       search,
       categoryId: categoryId ? parseInt(categoryId) : undefined,
       isPublic: isPublic === 'true',
