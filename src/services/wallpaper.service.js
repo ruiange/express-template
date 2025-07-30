@@ -315,15 +315,13 @@ export const getPopularWallpapers = async (limit = 10) => {
  */
 export const getLatestWallpapers = async (limit = 10) => {
   try {
-    const latestWallpapers = await db
+    return await db
       .select()
       .from(wallpapers)
       .where(eq(wallpapers.isPublic, true))
       .orderBy(desc(wallpapers.uploadDate))
       .limit(limit)
       .execute();
-
-    return latestWallpapers;
   } catch (error) {
     console.log(chalk.red('获取最新壁纸错误:', error.message));
     throw error;
