@@ -69,7 +69,7 @@ wallpaperRoute.get('/list', getWallpapersController);
  * @apiGroup 壁纸
  * @apiDescription 获取热门壁纸列表
  *
- * @apiParam {Number} limit 返回数量，默认为10
+ * @apiParam {Number} pageSize 返回数量，默认为10
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {Array} data 热门壁纸列表
@@ -82,7 +82,7 @@ wallpaperRoute.get('/popular', getPopularWallpapersController);
  * @apiGroup 壁纸
  * @apiDescription 获取最新壁纸列表
  *
- * @apiParam {Number} limit 返回数量，默认为10
+ * @apiParam {Number} pageSize 返回数量，默认为10
  *
  * @apiSuccess {Number} code 状态码
  * @apiSuccess {Array} data 最新壁纸列表
@@ -182,7 +182,26 @@ wallpaperRoute.put('/:id', authMiddleware, updateWallpaperController);
  */
 wallpaperRoute.delete('/:id', authMiddleware, deleteWallpaperController);
 
-//批量删除
+/**
+ * @api {post} /wallpaper/batch-delete 批量删除壁纸
+ * @apiName BatchDeleteWallpapers
+ * @apiGroup 壁纸
+ * @apiDescription 批量删除多个壁纸
+ *
+ * @apiParam {Array} ids 壁纸ID数组
+ *
+ * @apiSuccess {Number} code 状态码
+ * @apiSuccess {String} message 成功消息
+ *
+ * @apiError {Number} code 错误码
+ * @apiError {String} message 错误信息
+ * @apiErrorExample {json} 参数错误:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "code": 4000,
+ *       "message": "无效的壁纸ID列表"
+ *     }
+ */
 wallpaperRoute.post('/batch-delete', authMiddleware, deleteWallpapersController);
 
 /**

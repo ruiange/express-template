@@ -368,8 +368,8 @@ export const downloadWallpaperController = async (req, res) => {
  */
 export const getPopularWallpapersController = async (req, res) => {
   try {
-    const { limit = 10 } = req.query;
-    const limitNum = parseInt(limit);
+    const { pageSize = 10 } = req.query;
+    const limitNum = parseInt(pageSize);
 
     const popularWallpapers = await getPopularWallpapers(limitNum);
 
@@ -394,8 +394,8 @@ export const getPopularWallpapersController = async (req, res) => {
  */
 export const getLatestWallpapersController = async (req, res) => {
   try {
-    const { limit = 10 } = req.query;
-    const limitNum = parseInt(limit);
+    const { pageSize = 10 } = req.query;
+    const limitNum = parseInt(pageSize);
 
     const latestWallpapers = await getLatestWallpapers(limitNum);
 

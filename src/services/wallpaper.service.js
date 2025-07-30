@@ -158,9 +158,9 @@ export const getAllWallpapers = async (options = {}) => {
 };
 
 /**
- * 更加ids批量查询数据
- * @param {Array} ids - ids
- * @returns {Promise<Array>}
+ * 根据IDs批量查询壁纸数据
+ * @param {Array} ids - 壁纸ID数组
+ * @returns {Promise<Array>} - 壁纸对象数组
  */
 export const getWallpapersByIds =async (ids) => {
   return db.select().from(wallpapers).where(inArray(wallpapers.id, ids));
@@ -246,6 +246,8 @@ export const deleteWallpaper = async (id) => {
 
 /**
  * 批量删除壁纸
+ * @param {Array} ids - 壁纸ID数组
+ * @returns {Promise<Object>} - 删除结果对象，包含成功状态、删除数量和删除的ID列表
  */
 export const batchDeleteWallpaper = async (ids) => {
   try {

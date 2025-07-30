@@ -798,6 +798,82 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/wallpaper/batch-delete",
+    "title": "批量删除壁纸",
+    "name": "BatchDeleteWallpapers",
+    "group": "壁纸",
+    "description": "<p>批量删除多个壁纸</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "ids",
+            "description": "<p>壁纸ID数组</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功消息</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误码</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "参数错误:",
+          "content": "HTTP/1.1 400 Bad Request\n{\n  \"code\": 4000,\n  \"message\": \"无效的壁纸ID列表\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/wallpaper.route.js",
+    "groupTitle": "壁纸",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/wallpaper/batch-delete"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/wallpaper",
     "title": "创建壁纸",
     "name": "CreateWallpaper",
@@ -1220,7 +1296,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "limit",
+            "field": "pageSize",
             "description": "<p>返回数量，默认为10</p>"
           }
         ]
@@ -1269,7 +1345,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "limit",
+            "field": "pageSize",
             "description": "<p>返回数量，默认为10</p>"
           }
         ]
@@ -1367,14 +1443,14 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "page",
-            "description": "<p>页码，默认为1</p>"
+            "field": "current",
+            "description": "<p>当前页码，默认为1</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "limit",
+            "field": "pageSize",
             "description": "<p>每页数量，默认为10</p>"
           },
           {
