@@ -177,15 +177,15 @@ class FileCleanupController {
   async getAllFiles(req, res) {
     try {
       const {
-        page = 1,
-        limit = 20,
+        current = 1,
+        pageSize = 20,
         status,
         storageProvider
       } = req.query;
 
       const options = {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        current: parseInt(current),
+        pageSize: parseInt(pageSize),
         status,
         storageProvider
       };

@@ -38,14 +38,448 @@ define({ "api": [
     "name": ""
   },
   {
-    "type": "delete",
-    "url": "/api/admin/user/delete",
-    "title": "批量删除用户",
+    "type": "get",
+    "url": "/api/file-cleanup/all",
+    "title": "分页获取所有文件资源数据",
+    "name": "GetAllFiles",
+    "group": "FileCleanup",
+    "description": "<p>分页获取所有文件资源数据，支持状态和存储提供商过滤</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "current",
+            "defaultValue": "1",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "20",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "status",
+            "description": "<p>文件状态过滤（pending/active/unused/deleted）</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "storageProvider",
+            "description": "<p>存储提供商过滤</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>文件资源列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "pagination",
+            "description": "<p>分页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.current",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.pageSize",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.totalCount",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.totalPages",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "pagination.hasNext",
+            "description": "<p>是否有下一页</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "pagination.hasPrev",
+            "description": "<p>是否有上一页</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
-    "filename": "src/routes/admin/admin.user.route.js",
-    "group": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\routes\\admin\\admin.user.route.js",
-    "groupTitle": "C:\\Users\\bombi\\WebstormProjects\\express-template\\src\\routes\\admin\\admin.user.route.js",
-    "name": "DeleteApiAdminUserDelete"
+    "filename": "src/routes/modules/fileCleanup.route.js",
+    "groupTitle": "FileCleanup"
+  },
+  {
+    "type": "get",
+    "url": "/api/file-cleanup/list",
+    "title": "获取待清理文件列表",
+    "name": "GetCleanupList",
+    "group": "FileCleanup",
+    "description": "<p>获取待清理的文件列表</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "limit",
+            "defaultValue": "50",
+            "description": "<p>限制返回数量</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>响应数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data.files",
+            "description": "<p>文件列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.count",
+            "description": "<p>文件数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileCleanup.route.js",
+    "groupTitle": "FileCleanup"
+  },
+  {
+    "type": "get",
+    "url": "/api/file-cleanup/stats",
+    "title": "获取文件资源统计信息",
+    "name": "GetFileStats",
+    "group": "FileCleanup",
+    "description": "<p>获取文件资源的统计信息，包括各种状态的文件数量</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>统计数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.total",
+            "description": "<p>文件总数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pending",
+            "description": "<p>待处理文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.active",
+            "description": "<p>活跃文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.unused",
+            "description": "<p>未使用文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.deleted",
+            "description": "<p>已删除文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileCleanup.route.js",
+    "groupTitle": "FileCleanup"
+  },
+  {
+    "type": "post",
+    "url": "/api/file-cleanup/manual",
+    "title": "手动执行文件清理",
+    "name": "ManualCleanup",
+    "group": "FileCleanup",
+    "description": "<p>手动触发文件清理任务</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "batchSize",
+            "defaultValue": "50",
+            "description": "<p>批量清理数量</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"batchSize\": 50\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>清理结果</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.total",
+            "description": "<p>总处理文件数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.success",
+            "description": "<p>成功清理数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.failed",
+            "description": "<p>清理失败数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileCleanup.route.js",
+    "groupTitle": "FileCleanup"
+  },
+  {
+    "type": "post",
+    "url": "/api/file-cleanup/mark-unused",
+    "title": "标记文件为未使用",
+    "name": "MarkFileAsUnused",
+    "group": "FileCleanup",
+    "description": "<p>将文件标记为未使用状态</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fileUrl",
+            "description": "<p>文件URL</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"fileUrl\": \"https://example.com/files/image.jpg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileCleanup.route.js",
+    "groupTitle": "FileCleanup"
+  },
+  {
+    "type": "post",
+    "url": "/api/file-cleanup/mark-used",
+    "title": "标记文件为已使用",
+    "name": "MarkFileAsUsed",
+    "group": "FileCleanup",
+    "description": "<p>将文件标记为已使用状态</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fileUrl",
+            "description": "<p>文件URL</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"fileUrl\": \"https://example.com/files/image.jpg\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>请求是否成功</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/fileCleanup.route.js",
+    "groupTitle": "FileCleanup"
   },
   {
     "type": "post",
@@ -223,326 +657,6 @@ define({ "api": [
     },
     "filename": "src/routes/modules/nineYin.route.js",
     "groupTitle": "九阴"
-  },
-  {
-    "type": "post",
-    "url": "/api/admin/user/login-qrcode/confirm",
-    "title": "确认扫码登录",
-    "name": "ConfirmQrcodeLogin",
-    "group": "后台管理",
-    "body": [
-      {
-        "group": "Body",
-        "type": "String",
-        "optional": false,
-        "field": "scene",
-        "description": "<p>二维码场景值</p>"
-      },
-      {
-        "group": "Body",
-        "type": "Object",
-        "optional": false,
-        "field": "adminInfo",
-        "description": "<p>管理员信息</p>"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "src/routes/admin/admin.user.route.js",
-    "groupTitle": "后台管理"
-  },
-  {
-    "type": "get",
-    "url": "/api/admin/user/users",
-    "title": "获取用户列表",
-    "name": "GetUserList",
-    "group": "后台管理",
-    "version": "1.0.0",
-    "description": "<p>管理员获取用户列表，支持分页和搜索功能</p>",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "Authorization",
-            "description": "<p>Bearer token，需要管理员权限</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "page",
-            "defaultValue": "1",
-            "description": "<p>页码，从1开始</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "limit",
-            "defaultValue": "10",
-            "description": "<p>每页数量，最大100</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "search",
-            "description": "<p>搜索关键词，支持用户名、昵称、邮箱模糊搜索</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "code",
-            "description": "<p>状态码，2000表示成功</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data",
-            "description": "<p>响应数据</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Array",
-            "optional": false,
-            "field": "data.users",
-            "description": "<p>用户列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.users.id",
-            "description": "<p>用户ID</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.username",
-            "description": "<p>用户名</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.email",
-            "description": "<p>邮箱</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.nickname",
-            "description": "<p>昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.avatar",
-            "description": "<p>头像URL</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.role",
-            "description": "<p>用户角色（user/admin）</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.createdAt",
-            "description": "<p>创建时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "data.users.updatedAt",
-            "description": "<p>更新时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.users.createTime",
-            "description": "<p>创建时间戳</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data.pagination",
-            "description": "<p>分页信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.pagination.currentPage",
-            "description": "<p>当前页码</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.pagination.pageSize",
-            "description": "<p>每页数量</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.pagination.total",
-            "description": "<p>总记录数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Number",
-            "optional": false,
-            "field": "data.pagination.totalPages",
-            "description": "<p>总页数</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 2000,\n  \"message\": \"获取用户列表成功\",\n  \"data\": {\n    \"users\": [\n      {\n        \"id\": 1,\n        \"username\": \"testuser\",\n        \"email\": \"test@example.com\",\n        \"nickname\": \"测试用户\",\n        \"avatar\": \"https://example.com/avatar.jpg\",\n        \"role\": \"user\",\n        \"createdAt\": \"2024-01-01T00:00:00.000Z\",\n        \"updatedAt\": \"2024-01-01T00:00:00.000Z\",\n        \"createTime\": 1704067200\n      }\n    ],\n    \"pagination\": {\n      \"currentPage\": 1,\n      \"pageSize\": 10,\n      \"total\": 1,\n      \"totalPages\": 1\n    }\n  }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 401": [
-          {
-            "group": "Error 401",
-            "type": "Object",
-            "optional": false,
-            "field": "Unauthorized",
-            "description": "<p>未授权访问</p>"
-          },
-          {
-            "group": "Error 401",
-            "type": "Number",
-            "optional": false,
-            "field": "code",
-            "description": "<p>错误码，4001</p>"
-          },
-          {
-            "group": "Error 401",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>错误信息</p>"
-          }
-        ],
-        "Error 403": [
-          {
-            "group": "Error 403",
-            "type": "Object",
-            "optional": false,
-            "field": "Forbidden",
-            "description": "<p>权限不足</p>"
-          },
-          {
-            "group": "Error 403",
-            "type": "Number",
-            "optional": false,
-            "field": "code",
-            "description": "<p>错误码，4003</p>"
-          },
-          {
-            "group": "Error 403",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>错误信息</p>"
-          }
-        ],
-        "Error 500": [
-          {
-            "group": "Error 500",
-            "type": "Object",
-            "optional": false,
-            "field": "InternalServerError",
-            "description": "<p>服务器内部错误</p>"
-          },
-          {
-            "group": "Error 500",
-            "type": "Number",
-            "optional": false,
-            "field": "code",
-            "description": "<p>错误码，5000</p>"
-          },
-          {
-            "group": "Error 500",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>错误信息</p>"
-          },
-          {
-            "group": "Error 500",
-            "type": "String",
-            "optional": false,
-            "field": "error",
-            "description": "<p>详细错误信息</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response-401:",
-          "content": "HTTP/1.1 401 Unauthorized\n{\n  \"code\": 4001,\n  \"message\": \"未经身份验证的用户\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response-403:",
-          "content": "HTTP/1.1 403 Forbidden\n{\n  \"code\": 4003,\n  \"message\": \"权限不足，需要管理员权限\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response-500:",
-          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"code\": 5000,\n  \"message\": \"服务器内部错误\",\n  \"error\": \"Database connection failed\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "src/routes/admin/admin.user.route.js",
-    "groupTitle": "后台管理"
   },
   {
     "type": "put",

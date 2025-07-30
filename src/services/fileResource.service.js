@@ -233,8 +233,8 @@ export const getFileResourceStats = async () => {
 /**
  * 分页获取所有文件资源数据
  * @param {Object} options - 查询选项
- * @param {number} options.page - 页码，从1开始
- * @param {number} options.limit - 每页数量，默认20
+ * @param {number} options.current - 当前页码，从1开始
+ * @param {number} options.pageSize - 每页数量，默认20
  * @param {string} options.status - 文件状态过滤，可选
  * @param {string} options.storageProvider - 存储提供商过滤，可选
  * @returns {Promise<Object>} 分页数据
@@ -242,13 +242,13 @@ export const getFileResourceStats = async () => {
 export const getAllFileResources = async (options = {}) => {
   try {
     const {
-      page = 1,
-      limit = 20,
+      current = 1,
+      pageSize = 20,
       status,
       storageProvider
     } = options;
 
-    const offset = (page - 1) * limit;
+    const offset = (current - 1) * pageSize;
     
     // 构建查询条件
     const conditions = [];
@@ -273,20 +273,20 @@ export const getAllFileResources = async (options = {}) => {
       .from(fileResourcesTable)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(fileResourcesTable.createdAt)
-      .limit(limit)
+      .limit(pageSize)
       .offset(offset);
 
-    const totalPages = Math.ceil(totalCount / limit);
+    const totalPages = Math.ceil(totalCount / pageSize);
 
     return {
       data: files,
       pagination: {
-        page,
-        limit,
+        current,
+        pageSize,
         totalCount,
         totalPages,
-        hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasNext: current < totalPages,
+        hasPrev: current > 1
       }
     };
   } catch (error) {
