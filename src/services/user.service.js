@@ -175,6 +175,23 @@ export const getAllUsers = async (options = {}) => {
 };
 
 /**
+ * 获取用户总数
+ */
+export const getUserCount = async () => {
+  return await db.select({ count: sql`count(*)` }).from(userTable).execute();
+}
+/**
+ * 获取时间段用户数
+ */
+export const getUserCountByTime = async (startTime, endTime) => {
+  return await db
+    .select({ count: sql`count(*)` })
+    .from(userTable)
+    .where(sql`${userTable.createdAt} >= ${startTime} AND ${userTable.createdAt} <= ${endTime}`)
+    .execute();
+}
+
+/**
  * 更新用户信息
  * @param {number} id - 用户ID
  * @param {Object} userData - 需要更新的用户数据
