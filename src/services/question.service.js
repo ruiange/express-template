@@ -1,7 +1,7 @@
 // question.service.js
 
 import { questionTable } from '../db/schemas/question.schema.js';
-import { eq, asc, desc, like, or, sql } from 'drizzle-orm';
+import { eq, asc, desc, like, or, sql, inArray } from 'drizzle-orm';
 import { db } from '../config/db.js';
 
 /**
@@ -193,10 +193,49 @@ export const deleteQuestion = async (id) => {
   return true;
 };
 
+/**
+ * 批量删除题目
+ * @param {number[]} ids - 题目ID数组
+ * @returns {Promise<Object>} - 删除结果对象
+ */
+export const batchDeleteQuestions = async (ids) => {
+  try {
+    // 检查哪些题目存在
+    const existingQuestions = await db
+      .select({ id: questionTable.id })
+      .from(questionTable)
+      .where(inArray(questionTable.id, ids))
+      .execute();
+
+    const existingIds = existingQuestions.map(q => q.id);
+    const failedIds = ids.filter(id => !existingIds.includes(id));
+
+    let deletedCount = 0;
+    if (existingIds.length > 0) {
+      // 批量删除存在的题目
+      const deleteResult = await db
+        .delete(questionTable)
+        .where(inArray(questionTable.id, existingIds))
+        .execute();
+      
+      deletedCount = existingIds.length;
+    }
+
+    return {
+      success: true,
+      deletedCount,
+      failedIds
+    };
+  } catch (error) {
+    throw new Error(`批量删除失败: ${error.message}`);
+  }
+};
+
 export default {
   getQuestionList,
   getQuestionById,
   createQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  batchDeleteQuestions
 };

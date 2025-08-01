@@ -67,12 +67,12 @@ questionRoute.get('/:id', QuestionController.getQuestionDetail);
  * @apiHeader {String} Authorization Bearer token，需要管理员权限
  * @apiHeader {String} Content-Type application/json
  * 
- * @apiParam {String} title 题目标题
- * @apiParam {String} content 题目内容
- * @apiParam {String} answer 题目答案
- * @apiParam {Number} [difficulty=3] 难度级别
- * @apiParam {String} [category] 题目分类
- * @apiParam {String} [tags] 题目标签
+ * @apiBody {String} title 题目标题
+ * @apiBody {String} content 题目内容
+ * @apiBody {String} answer 题目答案
+ * @apiBody {Number} [difficulty=3] 难度级别
+ * @apiBody {String} [category] 题目分类
+ * @apiBody {String} [tags] 题目标签
  * 
  * @apiSuccess {Object} question 创建的题目
  * @apiSuccess {Number} question.id 题目ID
@@ -91,7 +91,7 @@ questionRoute.get('/:id', QuestionController.getQuestionDetail);
 questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.createQuestion);
 
 /**
- * @api {put} /question/:id 更新题目
+ * @api {patch} /question/:id 更新题目
  * @apiDescription 更新现有题目的信息
  * @apiName UpdateQuestion
  * @apiGroup 题库
@@ -100,12 +100,12 @@ questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.
  * @apiHeader {String} Content-Type application/json
  * 
  * @apiParam {Number} id 题目ID
- * @apiParam {String} [title] 题目标题
- * @apiParam {String} [content] 题目内容
- * @apiParam {String} [answer] 题目答案
- * @apiParam {Number} [difficulty] 难度级别
- * @apiParam {String} [category] 题目分类
- * @apiParam {String} [tags] 题目标签
+ * @apiBody {String} [title] 题目标题
+ * @apiBody {String} [content] 题目内容
+ * @apiBody {String} [answer] 题目答案
+ * @apiBody {Number} [difficulty] 难度级别
+ * @apiBody {String} [category] 题目分类
+ * @apiBody {String} [tags] 题目标签
  * 
  * @apiSuccess {Object} question 更新后的题目
  * @apiSuccess {Number} question.id 题目ID
@@ -122,6 +122,26 @@ questionRoute.post('/create',authMiddleware,adminMiddleware, QuestionController.
  * @apiError {Number} code 错误代码
  */
 questionRoute.patch('/:id',authMiddleware,adminMiddleware, QuestionController.updateQuestion);
+
+/**
+ * @api {post} /question/batch-delete 批量删除题目
+ * @apiDescription 批量删除多个题目
+ * @apiName BatchDeleteQuestions
+ * @apiGroup 题库
+ * @apiVersion 1.0.0
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
+ * @apiHeader {String} Content-Type application/json
+ * 
+ * @apiBody {Number[]} ids 要删除的题目ID数组
+ * 
+ * @apiSuccess {Boolean} success 删除成功
+ * @apiSuccess {Number} deletedCount 成功删除的题目数量
+ * @apiSuccess {Number[]} failedIds 删除失败的题目ID数组
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.post('/batch-delete',authMiddleware,adminMiddleware, QuestionController.batchDeleteQuestions);
 
 /**
  * @api {delete} /question/:id 删除题目

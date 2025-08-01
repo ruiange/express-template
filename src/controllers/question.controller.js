@@ -3,6 +3,21 @@ import questionService from '../services/question.service.js';
 import { marked } from 'marked';
 
 class QuestionController {
+  /**
+   * 获取题目列表
+   * @param {Object} req - 请求对象
+   * @param {Object} req.query - 查询参数
+   * @param {number} req.query.current - 当前页码，默认为1
+   * @param {number} req.query.pageSize - 每页数量，默认为10
+   * @param {string} req.query.category - 题目分类
+   * @param {string} req.query.tags - 题目标签
+   * @param {number} req.query.difficulty - 题目难度
+   * @param {string} req.query.keyword - 搜索关键词
+   * @param {string} req.query.sortBy - 排序字段，默认为createdAt
+   * @param {string} req.query.sortOrder - 排序方式，默认为desc
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回题目列表数据
+   */
   static async getQuestionList(req, res) {
     try {
       const options = {
@@ -23,6 +38,14 @@ class QuestionController {
     }
   }
 
+  /**
+   * 获取题目详情
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.id - 题目ID
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回题目详情数据，答案会被转换为HTML格式
+   */
   static async getQuestionDetail(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -32,9 +55,9 @@ class QuestionController {
 
       const question = await questionService.getQuestionById(id);
       const { createdAt, updatedAt, ...questionDetail } = question;
-      console.log(questionDetail.answer)
+      console.log(questionDetail.answer);
       const html = marked.parse(questionDetail.answer);
-      console.error(html)
+      console.error(html);
       questionDetail.answer = html;
       res.success(questionDetail);
     } catch (error) {
@@ -46,6 +69,19 @@ class QuestionController {
     }
   }
 
+  /**
+   * 创建新题目
+   * @param {Object} req - 请求对象
+   * @param {Object} req.body - 请求体
+   * @param {string} req.body.title - 题目标题（必填）
+   * @param {string} req.body.content - 题目内容
+   * @param {string} req.body.answer - 题目答案
+   * @param {number} req.body.difficulty - 题目难度
+   * @param {string} req.body.category - 题目分类
+   * @param {string} req.body.tags - 题目标签
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回创建的题目数据
+   */
   static async createQuestion(req, res) {
     try {
       const { title } = req.body;
@@ -61,6 +97,21 @@ class QuestionController {
     }
   }
 
+  /**
+   * 更新题目信息
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.id - 题目ID
+   * @param {Object} req.body - 请求体
+   * @param {string} req.body.title - 题目标题
+   * @param {string} req.body.content - 题目内容
+   * @param {string} req.body.answer - 题目答案
+   * @param {number} req.body.difficulty - 题目难度
+   * @param {string} req.body.category - 题目分类
+   * @param {string} req.body.tags - 题目标签
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回更新后的题目数据
+   */
   static async updateQuestion(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -75,10 +126,9 @@ class QuestionController {
         return res.error('至少需要提供一个更新字段');
       }
 
-      const questionData = req.body
+      const questionData = req.body;
 
-
-      const updatedQuestion = await questionService.updateQuestion(id,questionData);
+      const updatedQuestion = await questionService.updateQuestion(id, questionData);
       res.success(updatedQuestion, '题目更新成功');
     } catch (error) {
       if (error.message === '题目不存在') {
@@ -89,6 +139,14 @@ class QuestionController {
     }
   }
 
+  /**
+   * 删除单个题目
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.id - 题目ID
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回删除操作结果
+   */
   static async deleteQuestion(req, res) {
     try {
       const id = parseInt(req.params.id);
@@ -104,6 +162,33 @@ class QuestionController {
       } else {
         res.error(error.message);
       }
+    }
+  }
+
+  /**
+   * 批量删除题目
+   * @param {Object} req - 请求对象
+   * @param {Object} res - 响应对象
+   */
+  static async batchDeleteQuestions(req, res) {
+    try {
+      const { ids } = req.body;
+      
+      // 验证参数
+      if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return res.error('请提供有效的题目ID数组');
+      }
+
+      // 验证所有ID都是数字
+      const validIds = ids.filter(id => Number.isInteger(id) && id > 0);
+      if (validIds.length === 0) {
+        return res.error('请提供有效的题目ID');
+      }
+
+      const result = await questionService.batchDeleteQuestions(validIds);
+      res.success(result, '批量删除操作完成');
+    } catch (error) {
+      res.error(error.message);
     }
   }
 }
