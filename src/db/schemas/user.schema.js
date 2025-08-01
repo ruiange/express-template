@@ -1,5 +1,5 @@
 import { pgTable, varchar, integer, timestamp } from 'drizzle-orm/pg-core';
-
+import 'dotenv/config';
 /**
  * id: 主键，自增整数。
  * username: 用户名，唯一。
@@ -16,6 +16,7 @@ import { pgTable, varchar, integer, timestamp } from 'drizzle-orm/pg-core';
  * unionid: 微信开放平台唯一标识，唯一且可为空。
  * bio: 个人简介，可为空，最大长度为 500 字符。
  * signature: 个性签名，可为空，最大长度为 250 字符。
+ * miniAppid: 小程序appid,
  * 你可以根据需求进一步调整字段长度、约束和默认值。
  */
 export const userTable = pgTable('users', {
@@ -36,4 +37,5 @@ export const userTable = pgTable('users', {
   unionid: varchar('unionid', { length: 255 }).unique(),
   bio: varchar('bio', { length: 500 }), // 新增个人简介字段
   signature: varchar('signature', { length: 250 }), // 新增个性签名字段
+  miniAppid: varchar('appid', { length: 255 }).default(process.env.MINI_PROGRAM_APPID),
 });
