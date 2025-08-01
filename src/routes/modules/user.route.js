@@ -3,6 +3,7 @@ import {
   checkQrcodeStatus,
   confirmQrcodeLogin,
   generateLoginQrcode, qrCodeScanning,
+  getUserRole,
   register,
   updateProfile,
   viewProfile,
@@ -78,5 +79,49 @@ userRoute.post('/login-qrcode/scanning', qrCodeScanning);
  * @apiParam {String} scene 二维码场景值
  */
 userRoute.get('/login-qrcode/status', checkQrcodeStatus);
+
+/**
+ * @api {get} /user/role 查询用户角色
+ * @apiName GetUserRole
+ * @apiGroup 用户
+ * @apiDescription 查询当前登录用户的角色信息
+ *
+ * @apiHeader {String} Authorization Bearer token
+ *
+ * @apiSuccess {Number} code 状态码
+ * @apiSuccess {Object} data 返回数据
+ * @apiSuccess {String} data.role 用户角色
+ * @apiSuccess {String} data.userId 用户ID
+ * @apiSuccess {String} message 成功信息
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "code": 2000,
+ *       "data": {
+ *         "role": "admin",
+ *         "userId": "64f1a2b3c4d5e6f7g8h9i0j1"
+ *       },
+ *       "message": "获取用户角色成功"
+ *     }
+ *
+ * @apiError {Number} code 错误状态码
+ * @apiError {String} message 错误信息
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "code": 404,
+ *       "message": "用户不存在"
+ *     }
+ *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "code": 401,
+ *       "message": "未授权访问"
+ *     }
+ */
+userRoute.get('/role', authMiddleware, getUserRole);
 
 export default userRoute;

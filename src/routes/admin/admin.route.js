@@ -5,6 +5,6 @@ import adminUserRoute from './admin.user.route.js';
 const adminRoute = express.Router();
 
 adminRoute.use('/audit', adminAuditRoute);
-adminRoute.use('/user', adminUserRoute);
+adminRoute.use('/users', adminUserRoute);
 
 export default adminRoute;

@@ -174,3 +174,37 @@ export const qrCodeScanning = async (req, res) => {
   await AuthService.updateLoginSession(scene, req.user)
   res.success(true, '更新成功');
 };
+
+/**
+ * 查询用户角色
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+export const getUserRole = async (req, res) => {
+  try {
+    const info = await getUserInfo(req.user);
+    
+    if (!info) {
+      return res.status(404).send({
+        code: 404,
+        message: '用户不存在',
+      });
+    }
+
+    res.send({
+      code: 2000,
+      data: {
+        role: info.role,
+        userId: info.id || info._id,
+      },
+      message: '获取用户角色成功',
+    });
+  } catch (error) {
+    console.log(chalk.red(error.message));
+    res.status(500).send({
+      code: 500,
+      message: `服务器内部错误: ${error.message}`,
+    });
+  }
+};

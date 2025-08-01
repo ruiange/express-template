@@ -65,7 +65,7 @@ const adminUserRoute = express.Router();
  *       "message": "未授权访问"
  *     }
  */
-adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
+adminUserRoute.get('/list', authMiddleware, adminMiddleware, getUserList);
 
 /**
  * @api {put} /admin/users/:id 更新用户信息
@@ -113,10 +113,10 @@ adminUserRoute.get('/users', authMiddleware, adminMiddleware, getUserList);
  *       "message": "用户不存在"
  *     }
  */
-adminUserRoute.put('/users/:id', authMiddleware, adminMiddleware, updateUserController);
+adminUserRoute.put('/:id', authMiddleware, adminMiddleware, updateUserController);
 
 /**
- * @api {delete} /admin/delete 批量删除用户
+ * @api {delete} /admin/users/delete 批量删除用户
  * @apiName DeleteUsers
  * @apiGroup 用户管理
  * @apiDescription 管理员批量删除用户
@@ -155,7 +155,7 @@ adminUserRoute.put('/users/:id', authMiddleware, adminMiddleware, updateUserCont
 adminUserRoute.delete('/delete', authMiddleware, adminMiddleware, deleteUsers);
 
 /**
- * @api {post} /admin/login-qrcode/confirm 确认二维码登录
+ * @api {post} /admin/users/login-qrcode/confirm 确认二维码登录
  * @apiName ConfirmQrcodeLogin
  * @apiGroup 用户管理
  * @apiDescription 管理员确认用户的二维码登录请求
