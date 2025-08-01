@@ -1,6 +1,6 @@
 import { db } from '../config/db.js';
 import { fileResourcesTable } from '../db/schema.js';
-import { eq, and, lt, isNull, or, inArray, sql } from 'drizzle-orm';
+import { and, eq, inArray, lt, or, sql } from 'drizzle-orm';
 import { deleteBlobService } from './upload.service.js';
 import chalk from 'chalk';
 
@@ -110,6 +110,71 @@ export const getFilesToCleanup = async (limit = 100) => {
   } catch (error) {
     console.error('[获取待清理文件失败]', error);
     return [];
+  }
+};
+
+/**
+ * 分页获取待清理的文件列表
+ * @param {Object} options - 查询选项
+ * @param {number} options.current - 当前页码，从1开始
+ * @param {number} options.pageSize - 每页数量，默认20
+ * @returns {Promise<Object>} 分页数据
+ */
+export const getFilesToCleanupWithPagination = async (options = {}) => {
+  try {
+    const { current = 1, pageSize = 20 } = options;
+
+    const offset = (current - 1) * pageSize;
+
+    // 构建查询条件
+    const whereCondition = and(
+      eq(fileResourcesTable.canDelete, true),
+      or(
+        eq(fileResourcesTable.status, 'unused'),
+        and(
+          eq(fileResourcesTable.status, 'pending'),
+          lt(fileResourcesTable.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)) // 24小时前的pending文件
+        )
+      )
+    );
+
+    // 获取总数
+    const totalCountResult = await db
+      .select({ count: sql`count(*)` })
+      .from(fileResourcesTable)
+      .where(whereCondition);
+
+    const totalCount = totalCountResult[0]?.count || 0;
+
+    // 获取分页数据
+    const files = await db
+      .select()
+      .from(fileResourcesTable)
+      .where(whereCondition)
+      .limit(pageSize)
+      .offset(offset)
+      .orderBy(fileResourcesTable.createdAt);
+
+    return {
+      list: files,
+      pagination: {
+        current,
+        pageSize,
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / pageSize),
+      },
+    };
+  } catch (error) {
+    console.error('[获取待清理文件分页列表失败]', error);
+    return {
+      data: [],
+      pagination: {
+        current: 1,
+        pageSize: 20,
+        total: 0,
+        totalPages: 0,
+      },
+    };
   }
 };
 
@@ -241,15 +306,10 @@ export const getFileResourceStats = async () => {
  */
 export const getAllFileResources = async (options = {}) => {
   try {
-    const {
-      current = 1,
-      pageSize = 20,
-      status,
-      storageProvider
-    } = options;
+    const { current = 1, pageSize = 20, status, storageProvider } = options;
 
     const offset = (current - 1) * pageSize;
-    
+
     // 构建查询条件
     const conditions = [];
     if (status) {
@@ -264,7 +324,7 @@ export const getAllFileResources = async (options = {}) => {
       .select({ count: sql`count(*)` })
       .from(fileResourcesTable)
       .where(conditions.length > 0 ? and(...conditions) : undefined);
-    
+
     const totalCount = totalCountResult[0]?.count || 0;
 
     // 获取分页数据
@@ -279,15 +339,13 @@ export const getAllFileResources = async (options = {}) => {
     const totalPages = Math.ceil(totalCount / pageSize);
 
     return {
-      data: files,
+      list: files,
       pagination: {
-        current,
-        pageSize,
-        totalCount,
-        totalPages,
-        hasNext: current < totalPages,
-        hasPrev: current > 1
-      }
+        current: current,
+        pageSize: pageSize,
+        total: totalCount,
+        totalPages: totalPages,
+      },
     };
   } catch (error) {
     console.error('[分页获取文件资源失败]', error);

@@ -24,15 +24,20 @@ fileResourcesRoute.get('/stats', (req, res) => fileResourcesController.getStats(
  * @api {get} /file-cleanup/list 获取待清理文件列表
  * @apiName GetCleanupList
  * @apiGroup 资源管理
- * @apiDescription 获取待清理的文件列表
+ * @apiDescription 分页获取待清理的文件列表
  * 
- * @apiParam {Number} [limit=50] 限制返回数量
+ * @apiParam {Number} [current=1] 当前页码
+ * @apiParam {Number} [pageSize=20] 每页数量
  * 
- * @apiSuccess {Boolean} success 请求是否成功
- * @apiSuccess {Object} data 响应数据
- * @apiSuccess {Object[]} data.files 文件列表
- * @apiSuccess {Number} data.count 文件数量
+ * @apiSuccess {Number} code 响应状态码
  * @apiSuccess {String} message 响应消息
+ * @apiSuccess {Object} data 响应数据
+ * @apiSuccess {Object[]} data.list 文件列表
+ * @apiSuccess {Object} data.pagination 分页信息
+ * @apiSuccess {Number} data.pagination.current 当前页码
+ * @apiSuccess {Number} data.pagination.pageSize 每页数量
+ * @apiSuccess {Number} data.pagination.total 总记录数
+ * @apiSuccess {Number} data.pagination.totalPages 总页数
  */
 fileResourcesRoute.get('/list', (req, res) => fileResourcesController.getCleanupList(req, res));
 

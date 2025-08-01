@@ -1,7 +1,8 @@
 import {
   batchCleanupFiles,
   getFileResourceStats,
-  getFilesToCleanup, 
+  getFilesToCleanup,
+  getFilesToCleanupWithPagination,
   markFileStatus,
   getAllFileResources,
 } from '../services/fileResources.service.js';
@@ -20,18 +21,18 @@ class FileResourcesController {
   async getStats(req, res) {
     try {
       const stats = await getFileResourceStats();
-      
+
       res.json({
         success: true,
         data: stats,
-        message: '获取文件统计成功'
+        message: '获取文件统计成功',
       });
     } catch (error) {
       console.error('[获取文件统计失败]', error);
       res.status(500).json({
         success: false,
         message: '获取文件统计失败',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -43,23 +44,22 @@ class FileResourcesController {
    */
   async getCleanupList(req, res) {
     try {
-      const { limit = 50 } = req.query;
-      const files = await getFilesToCleanup(parseInt(limit));
-      
-      res.json({
-        success: true,
-        data: {
-          files,
-          count: files.length
-        },
-        message: '获取待清理文件列表成功'
-      });
+      const { current = 1, pageSize = 20 } = req.query;
+
+      const options = {
+        current: parseInt(current),
+        pageSize: parseInt(pageSize),
+      };
+
+      const result = await getFilesToCleanupWithPagination(options);
+
+      res.success(result, '获取待清理文件列表');
     } catch (error) {
       console.error('[获取待清理文件列表失败]', error);
       res.status(500).json({
-        success: false,
+        code: 5000,
         message: '获取待清理文件列表失败',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -72,21 +72,21 @@ class FileResourcesController {
   async manualCleanup(req, res) {
     try {
       const { batchSize = 50 } = req.body;
-      
+
       console.log(chalk.blue('[手动文件清理] 开始执行'));
       const result = await batchCleanupFiles(parseInt(batchSize));
-      
+
       res.json({
         success: true,
         data: result,
-        message: `文件清理完成，总计: ${result.total}, 成功: ${result.success}, 失败: ${result.failed}`
+        message: `文件清理完成，总计: ${result.total}, 成功: ${result.success}, 失败: ${result.failed}`,
       });
     } catch (error) {
       console.error('[手动文件清理失败]', error);
       res.status(500).json({
         success: false,
         message: '手动文件清理失败',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -99,25 +99,25 @@ class FileResourcesController {
   async markAsUsed(req, res) {
     try {
       const { fileUrl } = req.body;
-      
+
       if (!fileUrl) {
         return res.status(400).json({
           success: false,
-          message: '缺少必要参数: fileUrl'
+          message: '缺少必要参数: fileUrl',
         });
       }
-      
-      const success = await markFileStatus(fileUrl,'active');
-      
+
+      const success = await markFileStatus(fileUrl, 'active');
+
       if (success) {
         res.json({
           success: true,
-          message: '文件标记为已使用成功'
+          message: '文件标记为已使用成功',
         });
       } else {
         res.status(500).json({
           success: false,
-          message: '文件标记为已使用失败'
+          message: '文件标记为已使用失败',
         });
       }
     } catch (error) {
@@ -125,7 +125,7 @@ class FileResourcesController {
       res.status(500).json({
         success: false,
         message: '标记文件为已使用失败',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -138,25 +138,25 @@ class FileResourcesController {
   async markAsUnused(req, res) {
     try {
       const { fileUrl } = req.body;
-      
+
       if (!fileUrl) {
         return res.status(400).json({
           success: false,
-          message: '缺少必要参数: fileUrl'
+          message: '缺少必要参数: fileUrl',
         });
       }
-      
-      const success = await markFileStatus(fileUrl,'unused');
-      
+
+      const success = await markFileStatus(fileUrl, 'unused');
+
       if (success) {
         res.json({
           success: true,
-          message: '文件标记为未使用成功'
+          message: '文件标记为未使用成功',
         });
       } else {
         res.status(500).json({
           success: false,
-          message: '文件标记为未使用失败'
+          message: '文件标记为未使用失败',
         });
       }
     } catch (error) {
@@ -164,7 +164,7 @@ class FileResourcesController {
       res.status(500).json({
         success: false,
         message: '标记文件为未使用失败',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -176,34 +176,24 @@ class FileResourcesController {
    */
   async getAllFiles(req, res) {
     try {
-      const {
-        current = 1,
-        pageSize = 20,
-        status,
-        storageProvider
-      } = req.query;
+      const { current = 1, pageSize = 20, status, storageProvider } = req.query;
 
       const options = {
         current: parseInt(current),
         pageSize: parseInt(pageSize),
         status,
-        storageProvider
+        storageProvider,
       };
 
       const result = await getAllFileResources(options);
-      
-      res.json({
-        success: true,
-        data: result.data,
-        pagination: result.pagination,
-        message: '获取文件资源列表成功'
-      });
+
+      res.success(result, '获取文件资源列表');
     } catch (error) {
       console.error('[获取文件资源列表失败]', error);
       res.status(500).json({
         success: false,
         message: '获取文件资源列表失败',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -216,8 +206,12 @@ class FileResourcesController {
     try {
       console.log(chalk.blue('[定时文件清理] 开始执行'));
       const result = await batchCleanupFiles(100); // 每次清理100个文件
-      
-      console.log(chalk.green(`[定时文件清理] 完成，总计: ${result.total}, 成功: ${result.success}, 失败: ${result.failed}`));
+
+      console.log(
+        chalk.green(
+          `[定时文件清理] 完成，总计: ${result.total}, 成功: ${result.success}, 失败: ${result.failed}`
+        )
+      );
       return result;
     } catch (error) {
       console.error('[定时文件清理失败]', error);
