@@ -4,8 +4,23 @@ import { db } from '../config/db.js';
 import { eq } from 'drizzle-orm';
 
 export const douyinService = async (str, minimal = false) => {
-  str = encodeURIComponent(str);
-  const douyinUrl = `${process.env.DY_URL}/api/hybrid/video_data?url=${str}&minimal=${minimal}`;
+  const urlRegex = /https?:\/\/[^\s]+/g;
+  const urls = str.match(urlRegex);
+
+  // 输出提取的网址
+  if (urls) {
+    console.log('提取到的网址:', urls);
+  } else {
+    console.log('未找到网址');
+    return {
+      code: 500,
+      message: '未找到网址',
+    };
+  }
+
+
+  const url = encodeURIComponent(urls[0]);
+  const douyinUrl = `${process.env.DY_URL}/api/hybrid/video_data?url=${url}&minimal=${minimal}`;
   const { data } = await axios({
     method: 'get',
     url: douyinUrl,

@@ -7,12 +7,14 @@ import {
 
 export const analysisVideo = async (req, res) => {
   const { url } = req.body || {};
+  console.log(url);
   if (!url) {
-    return res.send({
+    return res.error({
       code: 4000,
-      msg: 'url is required',
+      msg: '参数错误',
     });
   }
+
   const data = await douyinService(url, true);
   res.send({
     code: 2000,
