@@ -11,6 +11,7 @@ const mainRouter = express.Router();
 
 mainRouter.use(responseMiddleware);
 
+
 mainRouter.use('/api', apiRouter);
 mainRouter.use('/apidoc', express.static(path.join(__dirname, '../public/apidoc')));
 

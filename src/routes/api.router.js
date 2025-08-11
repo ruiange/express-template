@@ -40,4 +40,5 @@ apiRouter.use('/file-cleanup', fileResourcesRoute);
 // 后台首页
 apiRouter.use('/dashboard', dashboardRoute)
 
+apiRouter.use('/health', healthRouter);
 export default apiRouter;

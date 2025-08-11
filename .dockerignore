@@ -1,0 +1,70 @@
+# 依赖目录
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 环境文件
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 日志文件
+logs
+*.log
+
+# 运行时数据
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 覆盖率目录
+coverage
+.nyc_output
+
+# 构建输出
+build
+dist
+
+# 临时文件
+.tmp
+.temp
+
+# 文档
+README.md
+*.md
+docs
+
+# 测试文件
+*.test.js
+*.spec.js
+test
+
+# Docker文件
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# 数据库迁移文件（因为使用外链数据库）
+drizzle
+
+# 上传文件目录
+uploads

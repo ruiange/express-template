@@ -360,6 +360,90 @@ GET /api/admin/user/users?page=1&limit=10&search=test
 }
 ```
 
+## Docker 部署
+
+项目已配置 Docker 支持，可以轻松地在任何支持 Docker 的环境中部署和运行。
+
+### Docker 配置文件
+
+- `Dockerfile` - Docker 镜像构建配置
+- `docker-compose.yml` - Docker Compose 服务编排配置
+- `.dockerignore` - Docker 构建忽略文件
+
+### 快速部署
+
+#### 使用 Docker Compose（推荐）
+
+```bash
+# 构建并启动服务
+docker-compose up -d --build
+
+# 查看服务状态
+docker-compose ps
+
+# 查看日志
+docker-compose logs -f
+
+# 停止服务
+docker-compose down
+```
+
+#### 使用 Docker 命令
+
+```bash
+# 构建镜像
+docker build -t express-template .
+
+# 运行容器
+docker run -d \
+  --name express-app \
+  -p 3000:3000 \
+  --env-file .env \
+  express-template
+
+# 查看容器状态
+docker ps
+
+# 查看日志
+docker logs -f express-app
+
+# 停止容器
+docker stop express-app
+```
+
+### 环境配置
+
+确保 `.env` 文件包含所有必要的环境变量：
+
+- `DATABASE_URL` - PostgreSQL 数据库连接字符串
+- `REDIS_URL` - Redis 连接字符串
+- `JWT_SECRET` - JWT 签名密钥
+- 其他必要的配置项
+
+### 健康检查
+
+项目包含健康检查端点 `/api/health`，Docker 会自动监控服务状态：
+
+```bash
+# 手动检查服务健康状态
+curl http://localhost:3000/api/health
+```
+
+### 生产环境部署注意事项
+
+1. **环境变量安全**：确保生产环境的 `.env` 文件包含正确的配置
+2. **数据库连接**：使用外部数据库服务（如 Neon PostgreSQL）
+3. **Redis 连接**：使用外部 Redis 服务
+4. **日志管理**：生产环境建议配置日志收集和监控
+5. **反向代理**：建议在生产环境中使用 Nginx 等反向代理
+
+### Docker 镜像优化
+
+- 使用 Alpine Linux 基础镜像减小镜像体积
+- 多阶段构建优化构建过程
+- 非 root 用户运行提高安全性
+- `.dockerignore` 文件减少构建上下文
+
 ## 许可证
 
 [ISC](LICENSE)
