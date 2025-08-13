@@ -11,6 +11,7 @@ import adminRoute from './admin/admin.route.js';
 import questionRoute from './modules/question.route.js';
 import fileResourcesRoute from './modules/fileResources.route.js';
 import dashboardRoute from './modules/dashboard.route.js';
+import healthRouter from './modules/health.router.jsouter.js';
 
 // 创建主路由实例
 const apiRouter = express.Router();
@@ -39,6 +40,6 @@ apiRouter.use('/question', questionRoute);
 apiRouter.use('/file-cleanup', fileResourcesRoute);
 // 后台首页
 apiRouter.use('/dashboard', dashboardRoute)
-
+// 健康检查路由
 apiRouter.use('/health', healthRouter);
 export default apiRouter;

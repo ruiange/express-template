@@ -1,50 +1,48 @@
 import express from 'express';
 
+/**
+ * 健康检查路由
+ * 用于Docker健康检查和服务状态监控
+ */
 const healthRouter = express.Router();
 
 /**
  * @api {get} /api/health 健康检查
- * @apiName HealthCheck
- * @apiGroup System
- * @apiDescription 检查服务是否正常运行
+ * @apiName GetHealth
+ * @apiGroup Health
+ * @apiDescription 获取服务健康状态
  * 
- * @apiSuccess {Number} code 状态码
- * @apiSuccess {String} message 响应消息
- * @apiSuccess {Object} data 响应数据
- * @apiSuccess {String} data.status 服务状态
- * @apiSuccess {String} data.timestamp 检查时间
- * @apiSuccess {String} data.uptime 运行时间
- * @apiSuccess {String} data.environment 运行环境
+ * @apiSuccess {String} status 服务状态
+ * @apiSuccess {String} timestamp 当前时间戳
+ * @apiSuccess {Number} uptime 服务运行时间（秒）
+ * @apiSuccess {String} environment 运行环境
  * 
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "code": 2000,
- *       "message": "服务正常",
- *       "data": {
- *         "status": "healthy",
- *         "timestamp": "2023-12-01T10:00:00.000Z",
- *         "uptime": "1h 30m 45s",
- *         "environment": "production"
- *       }
+ *       "status": "ok",
+ *       "timestamp": "2024-01-01T00:00:00.000Z",
+ *       "uptime": 123.456,
+ *       "environment": "development"
  *     }
  */
 healthRouter.get('/', (req, res) => {
-  const uptime = process.uptime();
-  const hours = Math.floor(uptime / 3600);
-  const minutes = Math.floor((uptime % 3600) / 60);
-  const seconds = Math.floor(uptime % 60);
-  
-  res.json({
-    code: 2000,
-    message: '服务正常',
-    data: {
-      status: 'healthy',
+  try {
+    const healthStatus = {
+      status: 'ok',
       timestamp: new Date().toISOString(),
-      uptime: `${hours}h ${minutes}m ${seconds}s`,
+      uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'development'
-    }
-  });
+    };
+    
+    res.status(200).json(healthStatus);
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      timestamp: new Date().toISOString(),
+      error: error.message
+    });
+  }
 });
 
 export default healthRouter;
