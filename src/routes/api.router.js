@@ -11,7 +11,7 @@ import adminRoute from './admin/admin.route.js';
 import questionRoute from './modules/question.route.js';
 import fileResourcesRoute from './modules/fileResources.route.js';
 import dashboardRoute from './modules/dashboard.route.js';
-import healthRouter from './modules/health.router.jsouter.js';
+import healthRouter from './modules/health.route.js';
 
 // 创建主路由实例
 const apiRouter = express.Router();

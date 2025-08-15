@@ -4,7 +4,7 @@ import express from 'express';
  * 健康检查路由
  * 用于Docker健康检查和服务状态监控
  */
-const healthRouter = express.Router();
+const healthRoute = express.Router();
 
 /**
  * @api {get} /api/health 健康检查
@@ -26,7 +26,7 @@ const healthRouter = express.Router();
  *       "environment": "development"
  *     }
  */
-healthRouter.get('/', (req, res) => {
+healthRoute.get('/', (req, res) => {
   try {
     const healthStatus = {
       status: 'ok',
@@ -45,4 +45,4 @@ healthRouter.get('/', (req, res) => {
   }
 });
 
-export default healthRouter;
+export default healthRoute;
