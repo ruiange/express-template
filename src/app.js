@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import { requestLogMiddleware } from './middlewares/requestLog.middleware.js';
 import loggerMiddleware from './middlewares/logger.middleware.js';
 import { initFileCleanup, shutdownFileCleanup } from './init/fileCleanupInit.js';
+import connectDatabase from './config/db.js';
 
 /** @type {Express} */
 const app = express();
@@ -19,6 +20,10 @@ const __dirname = path.dirname(__filename);
 /* 配置EJS模板引擎 */
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views/pages'));
+
+connectDatabase().then(()=>{
+
+})
 
 /**
  * 配置静态文件中间件

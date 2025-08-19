@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { douyinTable } from '../db/schema.js';
-import { db } from '../config/db.js';
-import { eq } from 'drizzle-orm';
+import Douyin from '../models/douyin.model.js';
 
 export const douyinService = async (str, minimal = false) => {
   const urlRegex = /https?:\/\/[^\s]+/g;
@@ -18,7 +16,6 @@ export const douyinService = async (str, minimal = false) => {
     };
   }
 
-
   const url = encodeURIComponent(urls[0]);
   const douyinUrl = `${process.env.DY_URL}/api/hybrid/video_data?url=${url}&minimal=${minimal}`;
   const { data } = await axios({
@@ -30,31 +27,28 @@ export const douyinService = async (str, minimal = false) => {
 
 export const saveVideoData = async (jsonData) => {
   try {
-    const params = {
+    const douyin = new Douyin({
       jsonData: jsonData,
-    };
-    const result = await db.insert(douyinTable).values(params).returning({ id: douyinTable.id });
-    return result[0]?.id;
+    });
+    const result = await douyin.save();
+    return result._id;
   } catch (e) {
     return null;
   }
 };
 
 export const getVideoData = async (id) => {
-  const rows = await db
-    .select() // 默认选中所有字段；也可以 `.select({ jsonData: douyinTable.jsonData })`
-    .from(douyinTable)
-    .where(eq(douyinTable.id, id))
-    .limit(1); // 可选：只取第一条，避免拿多行
-
-  return rows[0]; // 没查到就是 undefined
+  try {
+    const result = await Douyin.findById(id);
+    return result;
+  } catch (e) {
+    return null;
+  }
 };
 
 export const getDouyinDataListService = async (page) => {
-  return db
-    .select() // 默认选中所有字段；也可以 `.select({ jsonData: douyinTable.jsonData })`
-    .from(douyinTable)
-    .where()
+  return Douyin.find()
     .limit(10)
-    .offset(page * 10);
+    .skip(page * 10)
+    .sort({ createdAt: -1 });
 };

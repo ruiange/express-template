@@ -1,8 +1,6 @@
 // user.service.js
 
-import { userTable } from '../db/schemas/user.schema.js';
-import { eq, asc, like, or, sql, inArray } from 'drizzle-orm';
-import { db } from '../config/db.js';
+import User from '../models/user.model.js';
 import chalk from 'chalk';
 
 /**
@@ -13,25 +11,18 @@ import chalk from 'chalk';
  */
 export const registerUser = async (username, password) => {
   // 检查用户是否已存在
-  const existingUser = await db
-    .select()
-    .from(userTable)
-    .where(eq(userTable.username, username))
-    .execute();
-  if (existingUser.length > 0) {
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
     throw new Error('用户名或邮箱已被使用');
   }
 
   // 创建新用户
-  const user = await db
-    .insert(userTable)
-    .values({
-      username,
-      password, // 注意：实际应用中需要对密码进行加密
-    })
-    .returning()
-    .execute();
-  return user[0];
+  const user = new User({
+    username,
+    password, // 注意：实际应用中需要对密码进行加密
+  });
+  await user.save();
+  return user;
 };
 
 /**
@@ -41,7 +32,8 @@ export const registerUser = async (username, password) => {
  */
 export const createUser = async (userData) => {
   try {
-    const [newUser] = await db.insert(userTable).values(userData).returning().execute();
+    const newUser = new User(userData);
+    await newUser.save();
     return newUser;
   } catch (error) {
     throw error;
@@ -50,36 +42,35 @@ export const createUser = async (userData) => {
 
 /**
  * 根据ID获取用户
- * @param {number} id - 用户ID
- * @returns {Promise<Object>} - 用户对象
+ * @param id
+ * @returns
+ * @doc sss
  */
 export const getUserById = async (id) => {
   try {
-    const user = await db.select().from(userTable).where(eq(userTable.id, id)).execute();
-    if (!user[0]) {
-      return null;
+    const userData = await User.findById(id);
+    if (!userData) {
+      console.log('❌ 查询失败，未找到用户。可能原因：ID 不正确，或者数据已被删除');
+    } else {
+      console.log('✅ 查询成功！用户数据:', userData);
     }
-    const { createdAt, updatedAt, password, ...rest } = user[0];
-    return rest;
+    return userData;
   } catch (error) {
+    console.log(chalk.red(error.message));
     throw error;
   }
 };
 
 /**
  * 根据openid获取用户
- * @param {string} openid - 微信开放平台唯一标识
- * @param {Object} projection - 需要返回的字段（可选）
- * @returns {Promise<Object>} - 用户对象
+ * @param openid
+ * @param projection
+ * @returns
+ * @doc
  */
-export const getUserByOpenid = async (openid) => {
+export const getUserByOpenid = async (openid, projection = { __v: 0 }) => {
   try {
-    const user = await db.select().from(userTable).where(eq(userTable.openid, openid)).execute();
-    if (!user[0]) {
-      return null;
-    }
-    const { createdAt, updatedAt, password, ...rest } = user[0];
-    return rest;
+    return await User.findOne({ openid }, projection);
   } catch (error) {
     throw error;
   }
@@ -96,62 +87,49 @@ export const getUserByOpenid = async (openid) => {
 export const getAllUsers = async (options = {}) => {
   try {
     const { page = 1, limit = 10, search = '', role, membership } = options;
-    const offset = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
-    console.log(
-      chalk.yellow('getAllUsers 参数:', { page, limit, search, role, membership, offset })
-    );
-
-    let query = db.select().from(userTable);
+    console.log(chalk.yellow('getAllUsers 参数:', { page, limit, search, role, membership, skip }));
 
     // 构建查询条件
-    const conditions = [];
+    const query = {};
 
     // 如果有搜索关键词，添加搜索条件
     if (search) {
-      conditions.push(
-        or(
-          like(userTable.username, `%${search}%`),
-          like(userTable.nickname, `%${search}%`),
-          like(userTable.email, `%${search}%`)
-        )
-      );
+      query.$or = [
+        { username: { $regex: search, $options: 'i' } },
+        { nickname: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+      ];
     }
 
     // 添加角色筛选条件
     if (role) {
-      conditions.push(eq(userTable.role, role));
+      query.role = role;
     }
 
     // 添加会员等级筛选条件
     if (membership !== undefined && membership !== '') {
-      conditions.push(eq(userTable.membership, parseInt(membership)));
-    }
-
-    // 应用所有条件
-    if (conditions.length > 0) {
-      query = query.where(...conditions);
-    }
-
-    // 构建计数查询条件
-    let countQuery = db.select({ count: sql`count(*)` }).from(userTable);
-    if (conditions.length > 0) {
-      countQuery = countQuery.where(...conditions);
+      query.membership = parseInt(membership);
     }
 
     console.log(chalk.yellow('执行计数查询...'));
-    const [{ count }] = await countQuery.execute();
-    console.log(chalk.yellow('总记录数:', count));
+    const total = await User.countDocuments(query);
+    console.log(chalk.yellow('总记录数:', total));
 
     // 获取分页数据
     console.log(chalk.yellow('执行分页查询...'));
-    const users = await query.orderBy(asc(userTable.id)).limit(limit).offset(offset).execute();
+    const users = await User.find(query)
+      .sort({ _id: 1 })
+      .limit(limit)
+      .skip(skip)
+      .select('-password');
 
     console.log(chalk.yellow('查询到的用户数量:', users.length));
     if (users.length > 0) {
       console.log(
         chalk.yellow('第一个用户示例:', {
-          id: users[0].id,
+          id: users[0]._id,
           username: users[0].username,
           email: users[0].email,
         })
@@ -163,8 +141,8 @@ export const getAllUsers = async (options = {}) => {
       pagination: {
         current: page,
         pageSize: limit,
-        total: parseInt(count),
-        totalPages: Math.ceil(parseInt(count) / limit),
+        total: total,
+        totalPages: Math.ceil(total / limit),
       },
     };
   } catch (error) {
@@ -178,34 +156,36 @@ export const getAllUsers = async (options = {}) => {
  * 获取用户总数
  */
 export const getUserCount = async () => {
-  return await db.select({ count: sql`count(*)` }).from(userTable).execute();
-}
+  const count = await User.countDocuments();
+  return [{ count }];
+};
+
 /**
  * 获取时间段用户数
  */
 export const getUserCountByTime = async (startTime, endTime) => {
-  return await db
-    .select({ count: sql`count(*)` })
-    .from(userTable)
-    .where(sql`${userTable.createdAt} >= ${startTime} AND ${userTable.createdAt} <= ${endTime}`)
-    .execute();
-}
+  const count = await User.countDocuments({
+    createdAt: {
+      $gte: new Date(startTime),
+      $lte: new Date(endTime),
+    },
+  });
+  return [{ count }];
+};
 
 /**
  * 更新用户信息
- * @param {number} id - 用户ID
+ * @param {string} id - 用户ID
  * @param {Object} userData - 需要更新的用户数据
  * @returns {Promise<Object>} - 更新后的用户对象
  */
 export const updateUser = async (id, userData) => {
   try {
-    const updatedUser = await db
-      .update(userTable)
-      .set(userData)
-      .where(eq(userTable.id, id))
-      .returning()
-      .execute();
-    return updatedUser[0];
+    const updatedUser = await User.findByIdAndUpdate(id, userData, {
+      new: true,
+      runValidators: true,
+    });
+    return updatedUser;
   } catch (error) {
     throw error;
   }
@@ -213,25 +193,26 @@ export const updateUser = async (id, userData) => {
 
 /**
  * 删除用户
- * @param {number} id - 用户ID
+ * @param {string} id - 用户ID
  * @returns {Promise<void>}
  */
 export const deleteUser = async (id) => {
   try {
-    const result = await db.delete(userTable).where(eq(userTable.id, id)).execute();
+    const result = await User.findByIdAndDelete(id);
     console.log(result, '删除用户成功');
     return result;
   } catch (error) {
     throw error;
   }
 };
+
 /**
  * 根据id批量删除用户
  */
 export const deleteUserByIds = async (ids) => {
   try {
-    const { rowCount } = await db.delete(userTable).where(inArray(userTable.id, ids)).execute();
-    return rowCount;
+    const result = await User.deleteMany({ _id: { $in: ids } });
+    return result.deletedCount;
   } catch (error) {
     throw error;
   }

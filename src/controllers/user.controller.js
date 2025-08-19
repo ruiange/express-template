@@ -2,7 +2,6 @@ import { dateDiff } from '../utils/index.js';
 import chalk from 'chalk';
 import dayjs from 'dayjs';
 import { getUserInfo, registerUser, updateUser } from '../services/user.service.js';
-import getUnlimitedQRCode from '../utils/wechat/getUnlimitedQRCode.util.js';
 import AuthService from '../services/auth.service.js';
 import { generateToken } from '../utils/jwt.util.js';
 import { deleteBlobService } from '../services/upload.service.js';
@@ -32,12 +31,10 @@ export const viewProfile = async (req, res) => {
   try {
     const info = await getUserInfo(req.user);
 
-    let days = dateDiff(info.create_time, dayjs());
+    info.days = dateDiff(info.createTime, dayjs());
 
-    const userInfo = {
-      ...info,
-      days,
-    };
+    const userInfo = info;
+    console.log(userInfo);
 
     res.send({
       code: 2000,
@@ -77,7 +74,7 @@ export const updateProfile = async (req, res) => {
       signature,
     };
     if (info.avatar && info.avatar !== avatar) {
-      console.log(chalk.red('删除旧头像'))
+      console.log(chalk.red('删除旧头像'));
       await deleteBlobService(info.avatar);
     }
 
@@ -171,7 +168,7 @@ export const qrCodeScanning = async (req, res) => {
       message: '参数不完整',
     });
   }
-  await AuthService.updateLoginSession(scene, req.user)
+  await AuthService.updateLoginSession(scene, req.user);
   res.success(true, '更新成功');
 };
 
@@ -184,7 +181,7 @@ export const qrCodeScanning = async (req, res) => {
 export const getUserRole = async (req, res) => {
   try {
     const info = await getUserInfo(req.user);
-    
+
     if (!info) {
       return res.status(404).send({
         code: 404,

@@ -1,11 +1,11 @@
 // images.service.js
-import { db } from '../config/db.js';
-import { imagesTable } from '../db/schemas/images.schema.js';
+import Images from '../models/images.model.js';
 
 export const addImageService = async (url, name) => {
   try {
-    const [newUser] = await db.insert(imagesTable).values({ url, name }).returning().execute();
-    return newUser;
+    const newImage = new Images({ url, name });
+    await newImage.save();
+    return newImage;
   } catch (error) {
     throw error;
   }

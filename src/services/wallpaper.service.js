@@ -1,8 +1,6 @@
 // wallpaper.service.js
 
-import { categories, wallpapers } from '../db/schemas/wallpaper.schema.js';
-import { and, asc, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
-import { db } from '../config/db.js';
+import { Category, Wallpaper } from '../models/wallpaper.model.js';
 import chalk from 'chalk';
 
 /**
@@ -12,7 +10,8 @@ import chalk from 'chalk';
  */
 export const createWallpaper = async (wallpaperData) => {
   try {
-    const [newWallpaper] = await db.insert(wallpapers).values(wallpaperData).returning().execute();
+    const newWallpaper = new Wallpaper(wallpaperData);
+    await newWallpaper.save();
     return newWallpaper;
   } catch (error) {
     console.log(chalk.red('创建壁纸错误:', error.message));
@@ -22,25 +21,23 @@ export const createWallpaper = async (wallpaperData) => {
 
 /**
  * 根据ID获取壁纸
- * @param {number} id - 壁纸ID
+ * @param {string} id - 壁纸ID
  * @returns {Promise<Object>} - 壁纸对象
  */
 export const getWallpaperById = async (id) => {
   try {
-    const wallpaper = await db.select().from(wallpapers).where(eq(wallpapers.id, id)).execute();
+    const wallpaper = await Wallpaper.findById(id);
 
-    if (!wallpaper[0]) {
+    if (!wallpaper) {
       return null;
     }
 
     // 增加浏览次数
-    await db
-      .update(wallpapers)
-      .set({ viewCount: sql`${wallpapers.viewCount} + 1` })
-      .where(eq(wallpapers.id, id))
-      .execute();
+    await Wallpaper.findByIdAndUpdate(id, {
+      $inc: { viewCount: 1 }
+    });
 
-    return wallpaper[0];
+    return wallpaper;
   } catch (error) {
     console.log(chalk.red('获取壁纸错误:', error.message));
     throw error;
@@ -53,7 +50,7 @@ export const getWallpaperById = async (id) => {
  * @param {number} options.page - 页码，默认为1（内部使用，对应前端的current参数）
  * @param {number} options.limit - 每页数量，默认为10（内部使用，对应前端的pageSize参数）
  * @param {string} options.search - 搜索关键词
- * @param {number} options.categoryId - 分类ID
+ * @param {string} options.categoryId - 分类ID
  * @param {boolean} options.isPublic - 是否公开
  * @param {string} options.sortBy - 排序字段 (uploadDate, viewCount, downloadCount)
  * @param {string} options.sortOrder - 排序方向 (asc, desc)
@@ -71,7 +68,7 @@ export const getAllWallpapers = async (options = {}) => {
       sortOrder = 'desc',
     } = options;
 
-    const offset = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
     console.log(
       chalk.yellow('getAllWallpapers 参数:', {
@@ -85,60 +82,51 @@ export const getAllWallpapers = async (options = {}) => {
       })
     );
 
-    let query = db.select().from(wallpapers);
-    let whereConditions = [];
+    // 构建查询条件
+    const query = {};
 
     // 添加搜索条件
     if (search) {
-      whereConditions.push(
-        or(like(wallpapers.title, `%${search}%`), like(wallpapers.description, `%${search}%`))
-      );
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
 
     // 添加分类筛选
     if (categoryId) {
-      whereConditions.push(eq(wallpapers.categoryId, categoryId));
+      query.categoryId = categoryId;
     }
 
     // 添加公开状态筛选
     if (isPublic !== undefined) {
-      whereConditions.push(eq(wallpapers.isPublic, isPublic));
-    }
-
-    // 应用所有条件
-    if (whereConditions.length > 0) {
-      query = query.where(and(...whereConditions));
+      query.isPublic = isPublic;
     }
 
     // 获取总数
-    let countQuery = db.select({ count: sql`count(*)` }).from(wallpapers);
-    if (whereConditions.length > 0) {
-      countQuery = countQuery.where(and(...whereConditions));
-    }
+    const total = await Wallpaper.countDocuments(query);
+    console.log(chalk.yellow('总记录数:', total));
 
-    const [{ count }] = await countQuery.execute();
-    console.log(chalk.yellow('总记录数:', count));
-
-    // 排序
-    let orderByClause;
+    // 构建排序条件
+    const sort = {};
     switch (sortBy) {
       case 'viewCount':
-        orderByClause =
-          sortOrder === 'asc' ? asc(wallpapers.viewCount) : desc(wallpapers.viewCount);
+        sort.viewCount = sortOrder === 'asc' ? 1 : -1;
         break;
       case 'downloadCount':
-        orderByClause =
-          sortOrder === 'asc' ? asc(wallpapers.downloadCount) : desc(wallpapers.downloadCount);
+        sort.downloadCount = sortOrder === 'asc' ? 1 : -1;
         break;
       case 'uploadDate':
       default:
-        orderByClause =
-          sortOrder === 'asc' ? asc(wallpapers.uploadDate) : desc(wallpapers.uploadDate);
+        sort.uploadDate = sortOrder === 'asc' ? 1 : -1;
         break;
     }
 
     // 获取分页数据
-    const wallpaperList = await query.orderBy(orderByClause).limit(limit).offset(offset).execute();
+    const wallpaperList = await Wallpaper.find(query)
+      .sort(sort)
+      .limit(limit)
+      .skip(skip);
 
     console.log(chalk.yellow('查询到的壁纸数量:', wallpaperList.length));
 
@@ -147,8 +135,8 @@ export const getAllWallpapers = async (options = {}) => {
       pagination: {
         currentPage: page,
         pageSize: limit,
-        total: parseInt(count),
-        totalPages: Math.ceil(parseInt(count) / limit),
+        total: total,
+        totalPages: Math.ceil(total / limit),
       },
     };
   } catch (error) {
@@ -162,25 +150,24 @@ export const getAllWallpapers = async (options = {}) => {
  * @param {Array} ids - 壁纸ID数组
  * @returns {Promise<Array>} - 壁纸对象数组
  */
-export const getWallpapersByIds =async (ids) => {
-  return db.select().from(wallpapers).where(inArray(wallpapers.id, ids));
+export const getWallpapersByIds = async (ids) => {
+  return Wallpaper.find({ _id: { $in: ids } });
 };
 
 /**
  * 更新壁纸信息
- * @param {number} id - 壁纸ID
+ * @param {string} id - 壁纸ID
  * @param {Object} wallpaperData - 需要更新的壁纸数据
  * @returns {Promise<Object>} - 更新后的壁纸对象
  */
 export const updateWallpaper = async (id, wallpaperData) => {
   try {
-    const updatedWallpaper = await db
-      .update(wallpapers)
-      .set(wallpaperData)
-      .where(eq(wallpapers.id, id))
-      .returning()
-      .execute();
-    return updatedWallpaper[0];
+    const updatedWallpaper = await Wallpaper.findByIdAndUpdate(
+      id,
+      wallpaperData,
+      { new: true, runValidators: true }
+    );
+    return updatedWallpaper;
   } catch (error) {
     console.log(chalk.red('更新壁纸错误:', error.message));
     throw error;
@@ -200,28 +187,19 @@ export const getDailyWallpaper = async (date) => {
     const dateNumber = parseInt(targetDate.replace(/-/g, ''));
     
     // 获取所有公开的壁纸总数
-    const [{ count }] = await db
-      .select({ count: sql`count(*)` })
-      .from(wallpapers)
-      .where(eq(wallpapers.isPublic, true))
-      .execute();
+    const count = await Wallpaper.countDocuments({ isPublic: true });
     
     if (count === 0) {
       return null;
     }
     
     // 基于日期计算偏移量
-    const offset = dateNumber % parseInt(count);
+    const skip = dateNumber % count;
     
     // 获取该偏移量对应的壁纸
-    const [dailyWallpaper] = await db
-      .select()
-      .from(wallpapers)
-      .where(eq(wallpapers.isPublic, true))
-      .orderBy(asc(wallpapers.id))
-      .limit(1)
-      .offset(offset)
-      .execute();
+    const dailyWallpaper = await Wallpaper.findOne({ isPublic: true })
+      .sort({ _id: 1 })
+      .skip(skip);
     
     return dailyWallpaper || null;
   } catch (error) {
@@ -232,12 +210,12 @@ export const getDailyWallpaper = async (date) => {
 
 /**
  * 删除壁纸
- * @param {number} id - 壁纸ID
+ * @param {string} id - 壁纸ID
  * @returns {Promise<void>}
  */
 export const deleteWallpaper = async (id) => {
   try {
-    await db.delete(wallpapers).where(eq(wallpapers.id, id)).execute();
+    await Wallpaper.findByIdAndDelete(id);
   } catch (error) {
     console.log(chalk.red('删除壁纸错误:', error.message));
     throw error;
@@ -251,16 +229,13 @@ export const deleteWallpaper = async (id) => {
  */
 export const batchDeleteWallpaper = async (ids) => {
   try {
-    // 使用inArray方法批量删除壁纸
-    const result = await db
-      .delete(wallpapers)
-      .where(inArray(wallpapers.id, ids))
-      .returning({ id: wallpapers.id })
-      .execute();
+    // 使用 deleteMany 方法批量删除壁纸
+    const result = await Wallpaper.deleteMany({ _id: { $in: ids } });
+    
     return {
       success: true,
-      deletedCount: result.length,
-      deletedIds: result.map((item) => item.id),
+      deletedCount: result.deletedCount,
+      deletedIds: ids, // MongoDB deleteMany 不返回删除的文档，所以返回原始 ids
     };
   } catch (error) {
     console.log(chalk.red('批量删除壁纸错误:', error.message));
@@ -270,16 +245,14 @@ export const batchDeleteWallpaper = async (ids) => {
 
 /**
  * 增加下载次数
- * @param {number} id - 壁纸ID
+ * @param {string} id - 壁纸ID
  * @returns {Promise<void>}
  */
 export const incrementDownloadCount = async (id) => {
   try {
-    await db
-      .update(wallpapers)
-      .set({ downloadCount: sql`${wallpapers.downloadCount} + 1` })
-      .where(eq(wallpapers.id, id))
-      .execute();
+    await Wallpaper.findByIdAndUpdate(id, {
+      $inc: { downloadCount: 1 }
+    });
   } catch (error) {
     console.log(chalk.red('增加下载次数错误:', error.message));
     throw error;
@@ -293,13 +266,9 @@ export const incrementDownloadCount = async (id) => {
  */
 export const getPopularWallpapers = async (limit = 10) => {
   try {
-    return await db
-      .select()
-      .from(wallpapers)
-      .where(eq(wallpapers.isPublic, true))
-      .orderBy(desc(wallpapers.viewCount))
-      .limit(limit)
-      .execute();
+    return await Wallpaper.find({ isPublic: true })
+      .sort({ viewCount: -1 })
+      .limit(limit);
   } catch (error) {
     console.log(chalk.red('获取热门壁纸错误:', error.message));
     throw error;
@@ -313,13 +282,9 @@ export const getPopularWallpapers = async (limit = 10) => {
  */
 export const getLatestWallpapers = async (limit = 10) => {
   try {
-    return await db
-      .select()
-      .from(wallpapers)
-      .where(eq(wallpapers.isPublic, true))
-      .orderBy(desc(wallpapers.uploadDate))
-      .limit(limit)
-      .execute();
+    return await Wallpaper.find({ isPublic: true })
+      .sort({ uploadDate: -1 })
+      .limit(limit);
   } catch (error) {
     console.log(chalk.red('获取最新壁纸错误:', error.message));
     throw error;
@@ -335,7 +300,8 @@ export const getLatestWallpapers = async (limit = 10) => {
  */
 export const createCategory = async (categoryData) => {
   try {
-    const [newCategory] = await db.insert(categories).values(categoryData).returning().execute();
+    const newCategory = new Category(categoryData);
+    await newCategory.save();
     return newCategory;
   } catch (error) {
     console.log(chalk.red('创建分类错误:', error.message));
@@ -349,8 +315,7 @@ export const createCategory = async (categoryData) => {
  */
 export const getAllCategories = async () => {
   try {
-    const categoryList = await db.select().from(categories).orderBy(asc(categories.id)).execute();
-
+    const categoryList = await Category.find().sort({ _id: 1 });
     return categoryList;
   } catch (error) {
     console.log(chalk.red('获取分类列表错误:', error.message));
@@ -360,14 +325,13 @@ export const getAllCategories = async () => {
 
 /**
  * 根据ID获取分类
- * @param {number} id - 分类ID
+ * @param {string} id - 分类ID
  * @returns {Promise<Object>} - 分类对象
  */
 export const getCategoryById = async (id) => {
   try {
-    const category = await db.select().from(categories).where(eq(categories.id, id)).execute();
-
-    return category[0] || null;
+    const category = await Category.findById(id);
+    return category || null;
   } catch (error) {
     console.log(chalk.red('获取分类错误:', error.message));
     throw error;
@@ -376,19 +340,18 @@ export const getCategoryById = async (id) => {
 
 /**
  * 更新分类
- * @param {number} id - 分类ID
+ * @param {string} id - 分类ID
  * @param {Object} categoryData - 需要更新的分类数据
  * @returns {Promise<Object>} - 更新后的分类对象
  */
 export const updateCategory = async (id, categoryData) => {
   try {
-    const updatedCategory = await db
-      .update(categories)
-      .set(categoryData)
-      .where(eq(categories.id, id))
-      .returning()
-      .execute();
-    return updatedCategory[0];
+    const updatedCategory = await Category.findByIdAndUpdate(
+      id,
+      categoryData,
+      { new: true, runValidators: true }
+    );
+    return updatedCategory;
   } catch (error) {
     console.log(chalk.red('更新分类错误:', error.message));
     throw error;
@@ -397,23 +360,19 @@ export const updateCategory = async (id, categoryData) => {
 
 /**
  * 删除分类
- * @param {number} id - 分类ID
+ * @param {string} id - 分类ID
  * @returns {Promise<void>}
  */
 export const deleteCategory = async (id) => {
   try {
     // 检查是否有壁纸使用此分类
-    const wallpapersInCategory = await db
-      .select()
-      .from(wallpapers)
-      .where(eq(wallpapers.categoryId, id))
-      .execute();
+    const wallpapersInCategory = await Wallpaper.find({ categoryId: id });
 
     if (wallpapersInCategory.length > 0) {
       throw new Error('该分类下还有壁纸，无法删除');
     }
 
-    await db.delete(categories).where(eq(categories.id, id)).execute();
+    await Category.findByIdAndDelete(id);
   } catch (error) {
     console.log(chalk.red('删除分类错误:', error.message));
     throw error;

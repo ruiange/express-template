@@ -1,6 +1,4 @@
-import { db } from '../config/db.js';
-import { fileResourcesTable } from '../db/schema.js';
-import { and, eq, inArray, lt, or, sql } from 'drizzle-orm';
+import FileResources from '../models/fileResources.model.js';
 import { deleteBlobService } from './upload.service.js';
 import chalk from 'chalk';
 
@@ -18,21 +16,19 @@ import chalk from 'chalk';
  */
 export const recordFileResource = async (fileInfo) => {
   try {
-    const [fileResource] = await db
-      .insert(fileResourcesTable)
-      .values({
-        fileName: fileInfo.fileName,
-        fileUrl: fileInfo.fileUrl,
-        fileKey: fileInfo.fileKey,
-        fileSize: fileInfo.fileSize,
-        mimeType: fileInfo.mimeType,
-        storageProvider: fileInfo.storageProvider,
-        storagePath: fileInfo.storagePath,
-        status: 'pending',
-      })
-      .returning();
+    const fileResource = new FileResources({
+      fileName: fileInfo.fileName,
+      fileUrl: fileInfo.fileUrl,
+      fileKey: fileInfo.fileKey,
+      fileSize: fileInfo.fileSize,
+      mimeType: fileInfo.mimeType,
+      storageProvider: fileInfo.storageProvider,
+      storagePath: fileInfo.storagePath,
+      status: 'pending',
+    });
 
-    console.log(chalk.blue(`[文件资源记录] ${fileInfo.fileName} - ${fileResource.id}`));
+    await fileResource.save();
+    console.log(chalk.blue(`[文件资源记录] ${fileInfo.fileName} - ${fileResource._id}`));
     return fileResource;
   } catch (error) {
     console.error('[文件资源记录失败]', error);
@@ -49,13 +45,13 @@ export const recordFileResource = async (fileInfo) => {
 export const markFileStatus = async (fileUrl, status) => {
   try {
     // 更新文件状态
-    await db
-      .update(fileResourcesTable)
-      .set({
+    await FileResources.updateMany(
+      { fileUrl },
+      {
         status,
         updatedAt: new Date(),
-      })
-      .where(eq(fileResourcesTable.fileUrl, fileUrl));
+      }
+    );
 
     const color = status === 'active' ? chalk.green : chalk.yellow;
     console.log(color(`[文件标记为${status === 'active' ? '已使用' : '未使用'}] ${fileUrl}`));
@@ -73,13 +69,13 @@ export const markFileStatus = async (fileUrl, status) => {
  * @returns {Promise<boolean>} 是否成功
  */
 export const batchUpdateFileStatus = async (pathList, status) => {
-  return db
-    .update(fileResourcesTable)
-    .set({
+  return FileResources.updateMany(
+    { fileUrl: { $in: pathList } },
+    {
       status: status,
       updatedAt: new Date(),
-    })
-    .where(inArray(fileResourcesTable.fileUrl, pathList));
+    }
+  );
 };
 
 /**
@@ -89,22 +85,16 @@ export const batchUpdateFileStatus = async (pathList, status) => {
  */
 export const getFilesToCleanup = async (limit = 100) => {
   try {
-    const files = await db
-      .select()
-      .from(fileResourcesTable)
-      .where(
-        and(
-          eq(fileResourcesTable.canDelete, true),
-          or(
-            eq(fileResourcesTable.status, 'unused'),
-            and(
-              eq(fileResourcesTable.status, 'pending'),
-              lt(fileResourcesTable.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)) // 24小时前的pending文件
-            )
-          )
-        )
-      )
-      .limit(limit);
+    const files = await FileResources.find({
+      canDelete: true,
+      $or: [
+        { status: 'unused' },
+        {
+          status: 'pending',
+          createdAt: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } // 24小时前的pending文件
+        }
+      ]
+    }).limit(limit);
 
     return files;
   } catch (error) {
@@ -124,36 +114,28 @@ export const getFilesToCleanupWithPagination = async (options = {}) => {
   try {
     const { current = 1, pageSize = 20 } = options;
 
-    const offset = (current - 1) * pageSize;
+    const skip = (current - 1) * pageSize;
 
     // 构建查询条件
-    const whereCondition = and(
-      eq(fileResourcesTable.canDelete, true),
-      or(
-        eq(fileResourcesTable.status, 'unused'),
-        and(
-          eq(fileResourcesTable.status, 'pending'),
-          lt(fileResourcesTable.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)) // 24小时前的pending文件
-        )
-      )
-    );
+    const query = {
+      canDelete: true,
+      $or: [
+        { status: 'unused' },
+        {
+          status: 'pending',
+          createdAt: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } // 24小时前的pending文件
+        }
+      ]
+    };
 
-    // 获取总数
-    const totalCountResult = await db
-      .select({ count: sql`count(*)` })
-      .from(fileResourcesTable)
-      .where(whereCondition);
-
-    const totalCount = totalCountResult[0]?.count || 0;
-
-    // 获取分页数据
-    const files = await db
-      .select()
-      .from(fileResourcesTable)
-      .where(whereCondition)
-      .limit(pageSize)
-      .offset(offset)
-      .orderBy(fileResourcesTable.createdAt);
+    // 获取总数和分页数据
+    const [totalCount, files] = await Promise.all([
+      FileResources.countDocuments(query),
+      FileResources.find(query)
+        .sort({ createdAt: 1 })
+        .limit(pageSize)
+        .skip(skip)
+    ]);
 
     return {
       list: files,
@@ -167,7 +149,7 @@ export const getFilesToCleanupWithPagination = async (options = {}) => {
   } catch (error) {
     console.error('[获取待清理文件分页列表失败]', error);
     return {
-      data: [],
+      list: [],
       pagination: {
         current: 1,
         pageSize: 20,
@@ -190,13 +172,13 @@ export const cleanupSingleFile = async (fileResource) => {
 
     if (deleteSuccess) {
       // 更新数据库状态
-      await db
-        .update(fileResourcesTable)
-        .set({
+      await FileResources.findByIdAndUpdate(
+        fileResource._id,
+        {
           status: 'deleted',
           updatedAt: new Date(),
-        })
-        .where(eq(fileResourcesTable.id, fileResource.id));
+        }
+      );
 
       console.log(chalk.red(`[文件已清理] ${fileResource.fileName} - ${fileResource.fileUrl}`));
       return true;
@@ -267,13 +249,14 @@ export const batchCleanupFiles = async (batchSize = 50) => {
  */
 export const getFileResourceStats = async () => {
   try {
-    const stats = await db
-      .select({
-        status: fileResourcesTable.status,
-        count: sql`count(*)`,
-      })
-      .from(fileResourcesTable)
-      .groupBy(fileResourcesTable.status);
+    const stats = await FileResources.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
 
     const result = {
       total: 0,
@@ -284,7 +267,7 @@ export const getFileResourceStats = async () => {
     };
 
     stats.forEach((stat) => {
-      result[stat.status] = stat.count;
+      result[stat._id] = stat.count;
       result.total += stat.count;
     });
 
@@ -308,33 +291,25 @@ export const getAllFileResources = async (options = {}) => {
   try {
     const { current = 1, pageSize = 20, status, storageProvider } = options;
 
-    const offset = (current - 1) * pageSize;
+    const skip = (current - 1) * pageSize;
 
     // 构建查询条件
-    const conditions = [];
+    const query = {};
     if (status) {
-      conditions.push(eq(fileResourcesTable.status, status));
+      query.status = status;
     }
     if (storageProvider) {
-      conditions.push(eq(fileResourcesTable.storageProvider, storageProvider));
+      query.storageProvider = storageProvider;
     }
 
-    // 获取总数
-    const totalCountResult = await db
-      .select({ count: sql`count(*)` })
-      .from(fileResourcesTable)
-      .where(conditions.length > 0 ? and(...conditions) : undefined);
-
-    const totalCount = totalCountResult[0]?.count || 0;
-
-    // 获取分页数据
-    const files = await db
-      .select()
-      .from(fileResourcesTable)
-      .where(conditions.length > 0 ? and(...conditions) : undefined)
-      .orderBy(fileResourcesTable.createdAt)
-      .limit(pageSize)
-      .offset(offset);
+    // 获取总数和分页数据
+    const [totalCount, files] = await Promise.all([
+      FileResources.countDocuments(query),
+      FileResources.find(query)
+        .sort({ createdAt: 1 })
+        .limit(pageSize)
+        .skip(skip)
+    ]);
 
     const totalPages = Math.ceil(totalCount / pageSize);
 

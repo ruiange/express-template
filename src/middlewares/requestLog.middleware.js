@@ -1,5 +1,4 @@
-import { db } from '../config/db.js';
-import { logsTable } from '../db/schema.js';
+import Logs from '../models/logs.model.js';
 
 /**
  * 请求日志中间件
@@ -26,7 +25,8 @@ export const requestLogMiddleware = async (req, res, next) => {
     };
     try {
       if(process.env.NODE_ENV === 'development'){
-        const result = await db.insert(logsTable).values(params);
+        const log = new Logs(params);
+        await log.save();
       }
     } catch (error) {
       console.error('Error saving request log:', error.message);
@@ -38,6 +38,7 @@ export const requestLogMiddleware = async (req, res, next) => {
 
   next();
 };
+
 const getClientIp = (req) => {
   const forwardedFor = req.headers['x-forwarded-for'];
   if (forwardedFor) {

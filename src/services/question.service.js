@@ -1,8 +1,6 @@
 // question.service.js
 
-import { questionTable } from '../db/schemas/question.schema.js';
-import { eq, asc, desc, like, or, sql, inArray } from 'drizzle-orm';
-import { db } from '../config/db.js';
+import Question from '../models/question.model.js';
 
 /**
  * 获取题库列表
@@ -30,60 +28,45 @@ export const getQuestionList = async (options = {}) => {
   } = options;
 
   // 构建查询条件
-  let query = db.select().from(questionTable);
-  let countQuery = db.select({ count: sql`count(*)` }).from(questionTable);
-
-  // 应用筛选条件
-  const whereConditions = [];
+  const query = {};
 
   if (category) {
-    whereConditions.push(eq(questionTable.category, category));
+    query.category = category;
   }
 
   if (tags) {
-    whereConditions.push(like(questionTable.tags, `%${tags}%`));
+    query.tags = { $regex: tags, $options: 'i' };
   }
 
   if (difficulty) {
-    whereConditions.push(eq(questionTable.difficulty, difficulty));
+    query.difficulty = difficulty;
   }
 
   if (keyword) {
-    whereConditions.push(
-      or(
-        like(questionTable.title, `%${keyword}%`),
-        like(questionTable.content, `%${keyword}%`)
-      )
-    );
+    query.$or = [
+      { title: { $regex: keyword, $options: 'i' } },
+      { desc: { $regex: keyword, $options: 'i' } }
+    ];
   }
 
-  if (whereConditions.length > 0) {
-    query = query.where(whereConditions.reduce((acc, condition) => acc ? sql`${acc} AND ${condition}` : condition));
-    countQuery = countQuery.where(whereConditions.reduce((acc, condition) => acc ? sql`${acc} AND ${condition}` : condition));
-  }
+  // 构建排序条件
+  const sort = {};
+  sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
 
-  // 应用排序
-  const sortColumn = questionTable[sortBy] || questionTable.createdAt;
-  if (sortOrder.toLowerCase() === 'asc') {
-    query = query.orderBy(asc(sortColumn));
-  } else {
-    query = query.orderBy(desc(sortColumn));
-  }
-
-  // 应用分页
-  const offset = (current - 1) * pageSize;
-  query = query.limit(pageSize).offset(offset);
+  // 计算分页
+  const skip = (current - 1) * pageSize;
 
   // 执行查询
-  const [questions, countResult] = await Promise.all([
-    query.execute(),
-    countQuery.execute()
+  const [questions, total] = await Promise.all([
+    Question.find(query)
+      .sort(sort)
+      .limit(pageSize)
+      .skip(skip),
+    Question.countDocuments(query)
   ]);
 
-  const total = Number(countResult[0]?.count || '0');
-
   return {
-    list:questions,
+    list: questions,
     pagination: {
       total,
       current,
@@ -95,21 +78,17 @@ export const getQuestionList = async (options = {}) => {
 
 /**
  * 获取题目详情
- * @param {number} id - 题目ID
+ * @param {string} id - 题目ID
  * @returns {Promise<Object>} - 题目详情
  */
 export const getQuestionById = async (id) => {
-  const question = await db
-    .select()
-    .from(questionTable)
-    .where(eq(questionTable.id, id))
-    .execute();
+  const question = await Question.findById(id);
 
-  if (!question || question.length === 0) {
+  if (!question) {
     throw new Error('题目不存在');
   }
 
-  return question[0];
+  return question;
 };
 
 /**
@@ -119,16 +98,8 @@ export const getQuestionById = async (id) => {
  */
 export const createQuestion = async (questionData) => {
   try {
-    const [newQuestion] = await db
-      .insert(questionTable)
-      .values({
-        ...questionData,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      })
-      .returning()
-      .execute();
-
+    const newQuestion = new Question(questionData);
+    await newQuestion.save();
     return newQuestion;
   } catch (error) {
     throw error;
@@ -137,88 +108,65 @@ export const createQuestion = async (questionData) => {
 
 /**
  * 更新题目
- * @param {number} id - 题目ID
+ * @param {string} id - 题目ID
  * @param {Object} questionData - 更新的题目数据
  * @returns {Promise<Object>} - 更新后的题目对象
  */
 export const updateQuestion = async (id, questionData) => {
   // 检查题目是否存在
-  const existingQuestion = await db
-    .select()
-    .from(questionTable)
-    .where(eq(questionTable.id, id))
-    .execute();
+  const existingQuestion = await Question.findById(id);
 
-  if (!existingQuestion || existingQuestion.length === 0) {
+  if (!existingQuestion) {
     throw new Error('题目不存在');
   }
 
   // 更新题目
-  const [updatedQuestion] = await db
-    .update(questionTable)
-    .set({
-      ...questionData,
-      updatedAt: new Date()
-    })
-    .where(eq(questionTable.id, id))
-    .returning()
-    .execute();
+  const updatedQuestion = await Question.findByIdAndUpdate(
+    id,
+    questionData,
+    { new: true, runValidators: true }
+  );
 
   return updatedQuestion;
 };
 
 /**
  * 删除题目
- * @param {number} id - 题目ID
+ * @param {string} id - 题目ID
  * @returns {Promise<boolean>} - 删除成功返回true
  */
 export const deleteQuestion = async (id) => {
   // 检查题目是否存在
-  const existingQuestion = await db
-    .select()
-    .from(questionTable)
-    .where(eq(questionTable.id, id))
-    .execute();
+  const existingQuestion = await Question.findById(id);
 
-  if (!existingQuestion || existingQuestion.length === 0) {
+  if (!existingQuestion) {
     throw new Error('题目不存在');
   }
 
   // 删除题目
-  await db
-    .delete(questionTable)
-    .where(eq(questionTable.id, id))
-    .execute();
+  await Question.findByIdAndDelete(id);
 
   return true;
 };
 
 /**
  * 批量删除题目
- * @param {number[]} ids - 题目ID数组
+ * @param {string[]} ids - 题目ID数组
  * @returns {Promise<Object>} - 删除结果对象
  */
 export const batchDeleteQuestions = async (ids) => {
   try {
     // 检查哪些题目存在
-    const existingQuestions = await db
-      .select({ id: questionTable.id })
-      .from(questionTable)
-      .where(inArray(questionTable.id, ids))
-      .execute();
-
-    const existingIds = existingQuestions.map(q => q.id);
+    const existingQuestions = await Question.find({ _id: { $in: ids } }).select('_id');
+    
+    const existingIds = existingQuestions.map(q => q._id.toString());
     const failedIds = ids.filter(id => !existingIds.includes(id));
 
     let deletedCount = 0;
     if (existingIds.length > 0) {
       // 批量删除存在的题目
-      const deleteResult = await db
-        .delete(questionTable)
-        .where(inArray(questionTable.id, existingIds))
-        .execute();
-      
-      deletedCount = existingIds.length;
+      const deleteResult = await Question.deleteMany({ _id: { $in: existingIds } });
+      deletedCount = deleteResult.deletedCount;
     }
 
     return {

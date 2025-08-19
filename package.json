@@ -8,10 +8,7 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "生成文档": "apidoc -i src/routes/ -o src/public/apidoc/",
-    "generate": "npx drizzle-kit generate",
-    "migrate": "npx drizzle-kit migrate",
-    "push": "npx drizzle-kit push",
-    "database-push": "npm run generate && npm run migrate && npm run push",
+
     "upload": "node build/upload.js",
     "创建模块": "node scripts/createMmodule.script.js"
   },
@@ -24,10 +21,10 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.844.0",
-    "@neondatabase/serverless": "^1.0.0",
+
     "@redis/client": "^5.6.0",
     "@vercel/blob": "^1.1.1",
-    "axios": "^1.9.0",
+    "axios": "1.11.0",
     "basic-ftp": "^5.0.5",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.4.1",
@@ -35,8 +32,7 @@
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
     "dotenv": "^16.3.1",
-    "drizzle-kit": "^0.31.0",
-    "drizzle-orm": "^0.43.1",
+
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "helmet": "^7.1.0",
@@ -45,9 +41,9 @@
     "jsonrepair": "^3.12.0",
     "jsonwebtoken": "^9.0.2",
     "marked": "^16.1.1",
-    "mongoose": "^8.0.3",
+    "mongoose": "^8.17.2",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
+    "multer": "2.0.2",
     "node-cron": "^3.0.3",
     "openai": "^5.8.2",
     "prettier": "^3.5.3",

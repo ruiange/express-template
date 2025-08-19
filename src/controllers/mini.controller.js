@@ -86,16 +86,15 @@ export const miniLogin = async (req, res) => {
       });
     }
 
-    const timestamp = info.create_time;
+    const timestamp = info.createTime;
     const now = dayjs();
-    let days = dateDiff(info.create_time, dayjs());
+    let days = dateDiff(info.createTime, dayjs());
 
     // 生成包含用户openid的JWT token
     const token = generateToken({ id: info._id, openid, role: info.role });
-    const userInfo = {
-      ...info,
-      days,
-    };
+
+    info.days = days
+    const userInfo = info
     res.send({
       code: 2000,
       data: {

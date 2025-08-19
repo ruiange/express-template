@@ -1,6 +1,5 @@
-import { db } from '../config/db.js';
-import { wealthTable } from '../db/schemas/wealth.schema.js';
-import { desc, eq, sql } from 'drizzle-orm';
+import Wealth from '../models/wealth.model.js';
+import User from '../models/user.model.js';
 
 /**
  * 更新或插入用户的木鱼财富记录
@@ -8,23 +7,34 @@ import { desc, eq, sql } from 'drizzle-orm';
  * @param {number} newMuyu
  */
 export const addMuyuWealth = async (openid, newMuyu) => {
-  const [row] = await db
-    .insert(wealthTable)
-    .values({
-      openid,
-      count: newMuyu,
-      muyu: newMuyu,
-    })
-    .onConflictDoUpdate({
-      target: wealthTable.openid,
-      set: {
-        count: sql.raw(`wealth.count - wealth.muyu + excluded.muyu`),
-        muyu: sql.raw(`excluded.muyu`),
-      },
-    })
-    .returning();
+  try {
+    const existingWealth = await Wealth.findOne({ openid });
 
-  return row;
+    if (existingWealth) {
+      // 更新现有记录
+      const oldMuyu = parseFloat(existingWealth.muyu) || 0;
+      const oldCount = parseFloat(existingWealth.count) || 0;
+
+      existingWealth.count = oldCount - oldMuyu + newMuyu;
+      existingWealth.muyu = newMuyu;
+
+      await existingWealth.save();
+      return existingWealth;
+    } else {
+      // 创建新记录
+      const newWealth = new Wealth({
+        openid,
+        count: newMuyu,
+        muyu: newMuyu,
+      });
+
+      await newWealth.save();
+      return newWealth;
+    }
+  } catch (error) {
+    console.error('Error in addMuyuWealth:', error);
+    throw error;
+  }
 };
 
 /**
@@ -33,45 +43,71 @@ export const addMuyuWealth = async (openid, newMuyu) => {
  * @returns 排名（从 1 开始），如果用户不存在返回 null
  */
 export const getWealthRank = async (openid) => {
-  // 第一步：取用户自己的 count 值
-  const [user] = await db
-    .select({ count: wealthTable.count })
-    .from(wealthTable)
-    .where(eq(wealthTable.openid, openid))
-    .limit(1);
+  try {
+    // 第一步：取用户自己的 count 值
+    const user = await Wealth.findOne({ openid });
 
-  if (!user) return null; // 用户不存在
+    if (!user) return null; // 用户不存在
 
-  const userCount = user.count;
+    const userCount = parseFloat(user.count) || 0;
 
-  // 第二步：统计比他大的总数（即排名 = 大于的人数 + 1）
-  const [row] = await db
-    .select({ total: sql`count(*)` })
-    .from(wealthTable)
-    .where(sql`${wealthTable.count} > ${userCount}`);
+    // 第二步：统计比他大的总数（即排名 = 大于的人数 + 1）
+    const greaterCount = await Wealth.countDocuments({
+      count: { $gt: userCount },
+    });
 
-  return Number(row.total) + 1;
+    return greaterCount + 1;
+  } catch (error) {
+    console.error('Error in getWealthRank:', error);
+    return null;
+  }
 };
 
 /**
  * 获取摸鱼排行榜（前20名），附带用户昵称和头像
  */
 export const getMoyuRank = async () => {
-  const result = await db.execute(sql`
-      SELECT
-          w.openid,
-          w.count,
-          w.muyu,
-          u.nickname,
-          u.avatar
-      FROM wealth AS w
-               LEFT JOIN users AS u ON w.openid = u.openid
-      ORDER BY w.muyu DESC
-          LIMIT 20
-  `);
+  try {
+    const pipeline = [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'openid',
+          foreignField: 'openid',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $sort: { muyu: -1 },
+      },
+      {
+        $limit: 20,
+      },
+      {
+        $project: {
+          openid: 1,
+          count: 1,
+          muyu: 1,
+          nickname: '$user.nickname',
+          avatar: '$user.avatar',
+        },
+      },
+    ];
 
-  return result.rows.map((item, index) => ({
-    rank: index + 1,
-    ...item,
-  }));
+    const results = await Wealth.aggregate(pipeline);
+
+    return results.map((item, index) => ({
+      rank: index + 1,
+      ...item,
+    }));
+  } catch (error) {
+    console.error('Error in getMoyuRank:', error);
+    return [];
+  }
 };
