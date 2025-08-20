@@ -60,7 +60,7 @@ export const getUserList = async (req, res) => {
 
     // 构建响应数据，隐藏敏感信息
     const userList = result.users.map((user) => {
-      let userObj = { ...user };
+      let userObj = user
       delete userObj.password;
       return userObj;
     });
