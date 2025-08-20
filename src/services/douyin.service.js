@@ -39,9 +39,9 @@ export const saveVideoData = async (jsonData) => {
 
 export const getVideoData = async (id) => {
   try {
-    const result = await Douyin.findById(id);
-    return result;
+    return await Douyin.findById(id, { __v: 0 });
   } catch (e) {
+    console.error('获取视频数据失败:', e);
     return null;
   }
 };
