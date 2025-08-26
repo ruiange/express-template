@@ -15,6 +15,63 @@
     ]
   },
   {
+    "type": "get",
+    "url": "/api/health",
+    "title": "健康检查",
+    "name": "GetHealth",
+    "group": "Health",
+    "description": "<p>获取服务健康状态</p>",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>服务状态</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "timestamp",
+            "description": "<p>当前时间戳</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "uptime",
+            "description": "<p>服务运行时间（秒）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "environment",
+            "description": "<p>运行环境</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"status\": \"ok\",\n  \"timestamp\": \"2024-01-01T00:00:00.000Z\",\n  \"uptime\": 123.456,\n  \"environment\": \"development\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/health.route.js",
+    "groupTitle": "Health",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/api/health"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/upload",
     "title": "上传文件",
@@ -124,6 +181,624 @@
     "sampleRequest": [
       {
         "url": "http://127.0.0.1:3000/api/upload"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/question/special/:id/questions",
+    "title": "添加题目到专题",
+    "description": "<p>将题目添加到指定专题的题库中</p>",
+    "name": "AddQuestionToSpecial",
+    "group": "专题",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "questionId",
+        "description": "<p>题目ID</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": true,
+        "field": "sort",
+        "defaultValue": "0",
+        "description": "<p>排序值</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "special",
+            "description": "<p>更新后的专题</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id/questions"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/question/special/create",
+    "title": "创建专题",
+    "description": "<p>创建新的专题</p>",
+    "name": "CreateSpecial",
+    "group": "专题",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "description": "<p>专题名称</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "icon",
+        "description": "<p>专题图标URL</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "description",
+        "description": "<p>专题描述</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": true,
+        "field": "isActive",
+        "defaultValue": "true",
+        "description": "<p>是否激活</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "special",
+            "description": "<p>创建的专题</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/create"
+      }
+    ]
+  },
+  {
+    "type": "delete",
+    "url": "/question/special/:id",
+    "title": "删除专题",
+    "description": "<p>删除指定ID的专题</p>",
+    "name": "DeleteSpecial",
+    "group": "专题",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>删除成功</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/question/special/:id",
+    "title": "获取专题详情",
+    "description": "<p>根据ID获取专题的详细信息，包含题库信息</p>",
+    "name": "GetSpecialDetail",
+    "group": "专题",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "special",
+            "description": "<p>专题详情</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "special.name",
+            "description": "<p>专题名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "special.icon",
+            "description": "<p>专题图标</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "special.description",
+            "description": "<p>专题描述</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "special.questionBank",
+            "description": "<p>题库信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "special.isActive",
+            "description": "<p>是否激活</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "special.totalQuestions",
+            "description": "<p>题目总数</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/question/special/list",
+    "title": "获取专题列表",
+    "description": "<p>获取专题列表，支持分页和筛选</p>",
+    "name": "GetSpecialList",
+    "group": "专题",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "current",
+            "defaultValue": "1",
+            "description": "<p>页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "10",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "keyword",
+            "description": "<p>关键词搜索</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "isActive",
+            "description": "<p>是否激活状态筛选</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "sortBy",
+            "defaultValue": "createdAt",
+            "description": "<p>排序字段</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "sortOrder",
+            "defaultValue": "desc",
+            "description": "<p>排序方式，asc或desc</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "list",
+            "description": "<p>专题列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "pagination",
+            "description": "<p>分页信息</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/list"
+      }
+    ]
+  },
+  {
+    "type": "delete",
+    "url": "/question/special/:id/questions/:questionId",
+    "title": "从专题中移除题目",
+    "description": "<p>从指定专题的题库中移除题目</p>",
+    "name": "RemoveQuestionFromSpecial",
+    "group": "专题",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "questionId",
+            "description": "<p>题目ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "special",
+            "description": "<p>更新后的专题</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id/questions/:questionId"
+      }
+    ]
+  },
+  {
+    "type": "patch",
+    "url": "/question/special/:id/questions/:questionId/sort",
+    "title": "更新题目排序",
+    "description": "<p>更新专题中题目的排序</p>",
+    "name": "UpdateQuestionSort",
+    "group": "专题",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "questionId",
+            "description": "<p>题目ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "sort",
+        "description": "<p>新的排序值</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "special",
+            "description": "<p>更新后的专题</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id/questions/:questionId/sort"
+      }
+    ]
+  },
+  {
+    "type": "patch",
+    "url": "/question/special/:id",
+    "title": "更新专题",
+    "description": "<p>更新现有专题的信息</p>",
+    "name": "UpdateSpecial",
+    "group": "专题",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "name",
+        "description": "<p>专题名称</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "icon",
+        "description": "<p>专题图标URL</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "description",
+        "description": "<p>专题描述</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": true,
+        "field": "isActive",
+        "description": "<p>是否激活</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "special",
+            "description": "<p>更新后的专题</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id"
       }
     ]
   },
@@ -1593,6 +2268,115 @@
     ]
   },
   {
+    "type": "get",
+    "url": "/user/role",
+    "title": "查询用户角色",
+    "name": "GetUserRole",
+    "group": "用户",
+    "description": "<p>查询当前登录用户的角色信息</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>返回数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.role",
+            "description": "<p>用户角色</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.userId",
+            "description": "<p>用户ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>成功信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 2000,\n  \"data\": {\n    \"role\": \"admin\",\n    \"userId\": \"64f1a2b3c4d5e6f7g8h9i0j1\"\n  },\n  \"message\": \"获取用户角色成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误状态码</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\": 404,\n  \"message\": \"用户不存在\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 401 Unauthorized\n{\n  \"code\": 401,\n  \"message\": \"未授权访问\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/user.route.js",
+    "groupTitle": "用户",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/user/role"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/user/register",
     "title": "用户注册",
@@ -1735,7 +2519,7 @@
   },
   {
     "type": "post",
-    "url": "/admin/login-qrcode/confirm",
+    "url": "/admin/users/login-qrcode/confirm",
     "title": "确认二维码登录",
     "name": "ConfirmQrcodeLogin",
     "group": "用户管理",
@@ -1839,13 +2623,13 @@
     "groupTitle": "用户管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/admin/login-qrcode/confirm"
+        "url": "http://127.0.0.1:3000/api/admin/users/login-qrcode/confirm"
       }
     ]
   },
   {
     "type": "delete",
-    "url": "/admin/delete",
+    "url": "/admin/users/delete",
     "title": "批量删除用户",
     "name": "DeleteUsers",
     "group": "用户管理",
@@ -1949,7 +2733,7 @@
     "groupTitle": "用户管理",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/admin/delete"
+        "url": "http://127.0.0.1:3000/api/admin/users/delete"
       }
     ]
   },
@@ -2430,7 +3214,7 @@
     "title": "获取待清理文件列表",
     "name": "GetCleanupList",
     "group": "资源管理",
-    "description": "<p>获取待清理的文件列表</p>",
+    "description": "<p>分页获取待清理的文件列表</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2438,9 +3222,17 @@
             "group": "Parameter",
             "type": "Number",
             "optional": true,
-            "field": "limit",
-            "defaultValue": "50",
-            "description": "<p>限制返回数量</p>"
+            "field": "current",
+            "defaultValue": "1",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "20",
+            "description": "<p>每页数量</p>"
           }
         ]
       }
@@ -2450,10 +3242,17 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Boolean",
+            "type": "Number",
             "optional": false,
-            "field": "success",
-            "description": "<p>请求是否成功</p>"
+            "field": "code",
+            "description": "<p>响应状态码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>响应消息</p>"
           },
           {
             "group": "Success 200",
@@ -2466,22 +3265,43 @@
             "group": "Success 200",
             "type": "Object[]",
             "optional": false,
-            "field": "data.files",
+            "field": "data.list",
             "description": "<p>文件列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data.pagination",
+            "description": "<p>分页信息</p>"
           },
           {
             "group": "Success 200",
             "type": "Number",
             "optional": false,
-            "field": "data.count",
-            "description": "<p>文件数量</p>"
+            "field": "data.pagination.current",
+            "description": "<p>当前页码</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Number",
             "optional": false,
-            "field": "message",
-            "description": "<p>响应消息</p>"
+            "field": "data.pagination.pageSize",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pagination.total",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.pagination.totalPages",
+            "description": "<p>总页数</p>"
           }
         ]
       }

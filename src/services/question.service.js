@@ -1,6 +1,7 @@
 // question.service.js
 
 import Question from '../models/question.model.js';
+import Special from '../models/special.model.js';
 
 /**
  * 获取题库列表
@@ -82,7 +83,7 @@ export const getQuestionList = async (options = {}) => {
  * @returns {Promise<Object>} - 题目详情
  */
 export const getQuestionById = async (id) => {
-  const question = await Question.findById(id, { __v: 0,  updatedAt: 0 });
+  const question = await Question.findById(id, { __v: 0, updatedAt: 0 });
 
   if (!question) {
     throw new Error('题目不存在');
@@ -178,6 +179,237 @@ export const batchDeleteQuestions = async (ids) => {
   }
 };
 
+// ==================== Special 专题相关服务方法 ====================
+
+/**
+ * 获取专题列表
+ * @param {Object} options - 查询选项
+ * @param {number} options.current - 页码，默认为1
+ * @param {number} options.pageSize - 每页数量，默认为10
+ * @param {string} options.keyword - 关键词搜索
+ * @param {boolean} options.isActive - 是否激活状态筛选
+ * @param {string} options.sortBy - 排序字段
+ * @param {string} options.sortOrder - 排序方式，asc或desc
+ * @returns {Promise<Object>} - 包含专题列表和总数的对象
+ */
+export const getSpecialList = async (options = {}) => {
+  const {
+    current = 1,
+    pageSize = 10,
+    keyword,
+    isActive,
+    sortBy = 'createdAt',
+    sortOrder = 'desc',
+  } = options;
+
+  // 构建查询条件
+  const query = {};
+
+  if (isActive !== undefined) {
+    query.isActive = isActive;
+  }
+
+  if (keyword) {
+    query.$or = [
+      { name: { $regex: keyword, $options: 'i' } },
+      { description: { $regex: keyword, $options: 'i' } },
+    ];
+  }
+
+  // 构建排序条件
+  const sort = {};
+  sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+
+  // 计算分页
+  const skip = (current - 1) * pageSize;
+
+  // 执行查询
+  const [specials, total] = await Promise.all([
+    Special.find(query, { __v: 0 }).sort(sort).limit(pageSize).skip(skip),
+    Special.countDocuments(query),
+  ]);
+
+  return {
+    list: specials,
+    pagination: {
+      total,
+      current,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    },
+  };
+};
+
+/**
+ * 获取专题详情
+ * @param {string} id - 专题ID
+ * @returns {Promise<Object>} - 专题详情，包含题目信息
+ */
+export const getSpecialById = async (id) => {
+  const special = await Special.findById(id, { __v: 0 }).populate(
+    'questionBank.questionId',
+    'title desc difficulty category tags createdAt'
+  );
+
+  if (!special) {
+    throw new Error('专题不存在');
+  }
+
+  return special;
+};
+
+/**
+ * 创建新专题
+ * @param {Object} specialData - 专题数据
+ * @returns {Promise<Object>} - 创建的专题对象
+ */
+export const createSpecial = async (specialData) => {
+  try {
+    // 检查名称是否已存在
+    const existingSpecial = await Special.findOne({ name: specialData.name, isActive: true });
+    if (existingSpecial) {
+      throw new Error('专题名称已存在');
+    }
+
+    const newSpecial = new Special(specialData);
+    await newSpecial.save();
+    return newSpecial;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * 更新专题
+ * @param {string} id - 专题ID
+ * @param {Object} specialData - 更新的专题数据
+ * @returns {Promise<Object>} - 更新后的专题对象
+ */
+export const updateSpecial = async (id, specialData) => {
+  // 检查专题是否存在
+  const existingSpecial = await Special.findById(id);
+  if (!existingSpecial) {
+    throw new Error('专题不存在');
+  }
+
+  // 如果更新名称，检查名称是否已被其他专题使用
+  if (specialData.name && specialData.name !== existingSpecial.name) {
+    const duplicateSpecial = await Special.findOne({
+      name: specialData.name,
+      isActive: true,
+      _id: { $ne: id },
+    });
+    if (duplicateSpecial) {
+      throw new Error('专题名称已存在');
+    }
+  }
+
+  // 更新专题
+  const updatedSpecial = await Special.findByIdAndUpdate(id, specialData, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedSpecial;
+};
+
+/**
+ * 删除专题
+ * @param {string} id - 专题ID
+ * @returns {Promise<boolean>} - 删除成功返回true
+ */
+export const deleteSpecial = async (id) => {
+  // 检查专题是否存在
+  const existingSpecial = await Special.findById(id);
+  if (!existingSpecial) {
+    throw new Error('专题不存在');
+  }
+
+  // 删除专题
+  await Special.findByIdAndDelete(id);
+  return true;
+};
+
+/**
+ * 添加题目到专题
+ * @param {string} specialId - 专题ID
+ * @param {string} questionId - 题目ID
+ * @param {number} sort - 排序值
+ * @returns {Promise<Object>} - 更新后的专题对象
+ */
+export const addQuestionToSpecial = async (specialId, questionId, sort = 0) => {
+  // 检查专题是否存在
+  const special = await Special.findById(specialId);
+  if (!special) {
+    throw new Error('专题不存在');
+  }
+
+  // 检查题目是否存在
+  const question = await Question.findById(questionId);
+  if (!question) {
+    throw new Error('题目不存在');
+  }
+
+  try {
+    await special.addQuestion(questionId, sort);
+    return await Special.findById(specialId).populate(
+      'questionBank.questionId',
+      'title desc difficulty category tags'
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * 从专题中移除题目
+ * @param {string} specialId - 专题ID
+ * @param {string} questionId - 题目ID
+ * @returns {Promise<Object>} - 更新后的专题对象
+ */
+export const removeQuestionFromSpecial = async (specialId, questionId) => {
+  // 检查专题是否存在
+  const special = await Special.findById(specialId);
+  if (!special) {
+    throw new Error('专题不存在');
+  }
+
+  try {
+    await special.removeQuestion(questionId);
+    return await Special.findById(specialId).populate(
+      'questionBank.questionId',
+      'title desc difficulty category tags'
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * 更新题目排序
+ * @param {string} specialId - 专题ID
+ * @param {string} questionId - 题目ID
+ * @param {number} sort - 新的排序值
+ * @returns {Promise<Object>} - 更新后的专题对象
+ */
+export const updateQuestionSort = async (specialId, questionId, sort) => {
+  // 检查专题是否存在
+  const special = await Special.findById(specialId);
+  if (!special) {
+    throw new Error('专题不存在');
+  }
+
+  try {
+    await special.updateQuestionSort(questionId, sort);
+    return await Special.findById(specialId).populate(
+      'questionBank.questionId',
+      'title desc difficulty category tags'
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getQuestionList,
   getQuestionById,
@@ -185,4 +417,13 @@ export default {
   updateQuestion,
   deleteQuestion,
   batchDeleteQuestions,
+  // Special 专题相关方法
+  getSpecialList,
+  getSpecialById,
+  createSpecial,
+  updateSpecial,
+  deleteSpecial,
+  addQuestionToSpecial,
+  removeQuestionFromSpecial,
+  updateQuestionSort,
 };
