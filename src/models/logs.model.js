@@ -38,3 +38,4 @@ const logsSchema = new mongoose.Schema(
 
 const Logs = mongoose.model('Logs', logsSchema);
 export default Logs;
+

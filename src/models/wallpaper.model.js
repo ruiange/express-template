@@ -87,3 +87,4 @@ const Wallpaper = mongoose.model('Wallpaper', wallpaperSchema);
 
 export { Category, Wallpaper };
 export default Wallpaper;
+

@@ -10,9 +10,12 @@ const getUnlimitedQRCode = async (page, scene) => {
     env_version = 'develop';
   }
 
+  console.log(process.env)
+
   try {
     // 生成唯一的scene值作为登录会话标识 6位数的UUID
 
+    console.log(env_version)
     const access_token = await getStableAccessToken();
     // 调用微信接口生成小程序码
     const response = await axios({

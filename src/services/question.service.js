@@ -24,7 +24,7 @@ export const getQuestionList = async (options = {}) => {
     difficulty,
     keyword,
     sortBy = 'createdAt',
-    sortOrder = 'desc'
+    sortOrder = 'desc',
   } = options;
 
   // 构建查询条件
@@ -45,7 +45,7 @@ export const getQuestionList = async (options = {}) => {
   if (keyword) {
     query.$or = [
       { title: { $regex: keyword, $options: 'i' } },
-      { desc: { $regex: keyword, $options: 'i' } }
+      { desc: { $regex: keyword, $options: 'i' } },
     ];
   }
 
@@ -58,11 +58,11 @@ export const getQuestionList = async (options = {}) => {
 
   // 执行查询
   const [questions, total] = await Promise.all([
-    Question.find(query)
+    Question.find(query, { __v: 0, createdAt: 0, updatedAt: 0, analysis: 0, answer: 0 })
       .sort(sort)
       .limit(pageSize)
       .skip(skip),
-    Question.countDocuments(query)
+    Question.countDocuments(query),
   ]);
 
   return {
@@ -71,8 +71,8 @@ export const getQuestionList = async (options = {}) => {
       total,
       current,
       pageSize,
-      totalPages: Math.ceil(total / pageSize)
-    }
+      totalPages: Math.ceil(total / pageSize),
+    },
   };
 };
 
@@ -82,7 +82,7 @@ export const getQuestionList = async (options = {}) => {
  * @returns {Promise<Object>} - 题目详情
  */
 export const getQuestionById = async (id) => {
-  const question = await Question.findById(id);
+  const question = await Question.findById(id, { __v: 0,  updatedAt: 0 });
 
   if (!question) {
     throw new Error('题目不存在');
@@ -121,11 +121,10 @@ export const updateQuestion = async (id, questionData) => {
   }
 
   // 更新题目
-  const updatedQuestion = await Question.findByIdAndUpdate(
-    id,
-    questionData,
-    { new: true, runValidators: true }
-  );
+  const updatedQuestion = await Question.findByIdAndUpdate(id, questionData, {
+    new: true,
+    runValidators: true,
+  });
 
   return updatedQuestion;
 };
@@ -158,9 +157,9 @@ export const batchDeleteQuestions = async (ids) => {
   try {
     // 检查哪些题目存在
     const existingQuestions = await Question.find({ _id: { $in: ids } }).select('_id');
-    
-    const existingIds = existingQuestions.map(q => q._id.toString());
-    const failedIds = ids.filter(id => !existingIds.includes(id));
+
+    const existingIds = existingQuestions.map((q) => q._id.toString());
+    const failedIds = ids.filter((id) => !existingIds.includes(id));
 
     let deletedCount = 0;
     if (existingIds.length > 0) {
@@ -172,7 +171,7 @@ export const batchDeleteQuestions = async (ids) => {
     return {
       success: true,
       deletedCount,
-      failedIds
+      failedIds,
     };
   } catch (error) {
     throw new Error(`批量删除失败: ${error.message}`);
@@ -185,5 +184,5 @@ export default {
   createQuestion,
   updateQuestion,
   deleteQuestion,
-  batchDeleteQuestions
+  batchDeleteQuestions,
 };

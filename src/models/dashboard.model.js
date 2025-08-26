@@ -16,3 +16,4 @@ const dashboardSchema = new mongoose.Schema(
 
 const Dashboard = mongoose.model('Dashboard', dashboardSchema);
 export default Dashboard;
+

@@ -21,3 +21,4 @@ const imagesSchema = new mongoose.Schema(
 
 const Images = mongoose.model('Images', imagesSchema);
 export default Images;
+

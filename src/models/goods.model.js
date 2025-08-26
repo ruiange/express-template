@@ -16,3 +16,4 @@ const goodsSchema = new mongoose.Schema(
 
 const Goods = mongoose.model('Goods', goodsSchema);
 export default Goods;
+

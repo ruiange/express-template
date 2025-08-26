@@ -60,3 +60,4 @@ const fileResourcesSchema = new mongoose.Schema(
 
 const FileResources = mongoose.model('FileResources', fileResourcesSchema);
 export default FileResources;
+

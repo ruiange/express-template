@@ -36,3 +36,4 @@ configSchema.pre('findOneAndUpdate', function(next) {
 
 const Config = mongoose.model('Config', configSchema);
 export default Config;
+

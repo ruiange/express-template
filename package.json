@@ -8,7 +8,6 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "生成文档": "apidoc -i src/routes/ -o src/public/apidoc/",
-
     "upload": "node build/upload.js",
     "创建模块": "node scripts/createMmodule.script.js"
   },
@@ -21,7 +20,6 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.844.0",
-
     "@redis/client": "^5.6.0",
     "@vercel/blob": "^1.1.1",
     "axios": "1.11.0",
@@ -32,14 +30,15 @@
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
     "dotenv": "^16.3.1",
-
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "helmet": "^7.1.0",
+    "highlight.js": "^11.11.1",
     "jsdom": "^26.1.0",
     "json5": "^2.2.3",
     "jsonrepair": "^3.12.0",
     "jsonwebtoken": "^9.0.2",
+    "markdown-it": "^14.1.0",
     "marked": "^16.1.1",
     "mongoose": "^8.17.2",
     "morgan": "^1.10.0",
@@ -50,6 +49,7 @@
     "qiniu": "^7.10.1",
     "redis": "^5.6.0",
     "redis-om": "^0.4.7",
+    "shiki": "^3.11.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

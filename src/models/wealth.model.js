@@ -29,3 +29,4 @@ const wealthSchema = new mongoose.Schema(
 
 const Wealth = mongoose.model('Wealth', wealthSchema);
 export default Wealth;
+

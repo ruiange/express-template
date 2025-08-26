@@ -9,6 +9,7 @@ import { requestLogMiddleware } from './middlewares/requestLog.middleware.js';
 import loggerMiddleware from './middlewares/logger.middleware.js';
 import { initFileCleanup, shutdownFileCleanup } from './init/fileCleanupInit.js';
 import connectDatabase from './config/db.js';
+import chalk from 'chalk';
 
 /** @type {Express} */
 const app = express();
@@ -50,7 +51,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`服务运行在:http://${getEnvIp()}:${port}`);
   console.log(`服务运行在:http://${getEnvIp()}:${port}/apidoc`);
-  
+  console.log(chalk.red(process.env.NODE_ENV))
   // 初始化文件清理系统
   initFileCleanup();
 });

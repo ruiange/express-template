@@ -1,6 +1,7 @@
 // question.controller.js
 import questionService from '../services/question.service.js';
 import { marked } from 'marked';
+import md2HtmlUtil from '../utils/md2Html.util.js';
 
 class QuestionController {
   /**
@@ -48,24 +49,24 @@ class QuestionController {
    */
   static async getQuestionDetail(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
+      const { id } = req.params;
+      const {mini=false} = req.query;
+      if (!id) {
         return res.error('无效的题目ID');
       }
 
+      console.log('mini',mini)
       const question = await questionService.getQuestionById(id);
-      const { createdAt, updatedAt, ...questionDetail } = question;
-      console.log(questionDetail.answer);
-      const html = marked.parse(questionDetail.answer);
-      console.error(html);
-      questionDetail.answer = html;
-      res.success(questionDetail);
-    } catch (error) {
-      if (error.message === '题目不存在') {
-        res.error(error.message, 404);
-      } else {
-        res.error(error.message);
+
+      if (mini) {
+        question.desc = await md2HtmlUtil(question.desc);
+        question.answer = await md2HtmlUtil(question.answer);
+        question.analysis = await md2HtmlUtil(question.analysis);
       }
+
+      res.success(question);
+    } catch (error) {
+      res.error(error.message);
     }
   }
 
@@ -173,14 +174,14 @@ class QuestionController {
   static async batchDeleteQuestions(req, res) {
     try {
       const { ids } = req.body;
-      
+
       // 验证参数
       if (!ids || !Array.isArray(ids) || ids.length === 0) {
         return res.error('请提供有效的题目ID数组');
       }
 
       // 验证所有ID都是数字
-      const validIds = ids.filter(id => Number.isInteger(id) && id > 0);
+      const validIds = ids.filter((id) => Number.isInteger(id) && id > 0);
       if (validIds.length === 0) {
         return res.error('请提供有效的题目ID');
       }
