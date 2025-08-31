@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import { fileURLToPath } from 'url';
 import apiRouter from './api.router.js';
 import responseMiddleware from '../middlewares/response.middleware.js';
+import ipMiddleware from '../middlewares/ip.middleware.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const mainRouter = express.Router();
 
 mainRouter.use(responseMiddleware);
-
+mainRouter.use(ipMiddleware);
 
 mainRouter.use('/api', apiRouter);
 mainRouter.use('/apidoc', express.static(path.join(__dirname, '../public/apidoc')));

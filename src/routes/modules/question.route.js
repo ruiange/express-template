@@ -303,4 +303,45 @@ questionRoute.delete('/special/:id/questions/:questionId', authMiddleware, admin
  */
 questionRoute.patch('/special/:id/questions/:questionId/sort', authMiddleware, adminMiddleware, QuestionController.updateQuestionSort);
 
+/**
+ * @api {get} /question/special/:id/questions 获取专题下的题目列表
+ * @apiDescription 根据专题ID获取该专题下的题目列表，支持分页、筛选和排序
+ * @apiName GetSpecialQuestions
+ * @apiGroup 专题
+ * @apiVersion 1.0.0
+ * 
+ * @apiParam {String} id 专题ID
+ * @apiParam {Number} [current=1] 页码
+ * @apiParam {Number} [pageSize=10] 每页数量
+ * @apiParam {String} [category] 分类筛选
+ * @apiParam {String} [tags] 标签筛选
+ * @apiParam {Number} [difficulty] 难度筛选
+ * @apiParam {String} [keyword] 关键词搜索
+ * @apiParam {String} [sortBy=sort] 排序字段，可选值：sort(专题排序)、title、difficulty、createdAt等
+ * @apiParam {String} [sortOrder=asc] 排序方式，asc或desc
+ * 
+ * @apiSuccess {Object[]} list 题目列表
+ * @apiSuccess {Number} list.id 题目ID
+ * @apiSuccess {String} list.title 题目标题
+ * @apiSuccess {String} list.desc 题目描述
+ * @apiSuccess {Number} list.difficulty 难度级别
+ * @apiSuccess {String} list.category 题目分类
+ * @apiSuccess {String} list.tags 题目标签
+ * @apiSuccess {Number} list.specialSort 专题中的排序值
+ * @apiSuccess {Object} pagination 分页信息
+ * @apiSuccess {Number} pagination.total 总数
+ * @apiSuccess {Number} pagination.current 当前页码
+ * @apiSuccess {Number} pagination.pageSize 每页数量
+ * @apiSuccess {Number} pagination.totalPages 总页数
+ * @apiSuccess {Object} specialInfo 专题信息
+ * @apiSuccess {String} specialInfo.id 专题ID
+ * @apiSuccess {String} specialInfo.name 专题名称
+ * @apiSuccess {String} specialInfo.description 专题描述
+ * @apiSuccess {Number} specialInfo.totalQuestions 专题题目总数
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.get('/special/:id/questions', QuestionController.getSpecialQuestions);
+
 export default questionRoute;

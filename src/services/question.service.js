@@ -410,6 +410,139 @@ export const updateQuestionSort = async (specialId, questionId, sort) => {
   }
 };
 
+/**
+ * 获取专题下的题目列表
+ * @param {string} specialId - 专题ID
+ * @param {Object} options - 查询选项
+ * @param {number} options.current - 页码，默认为1
+ * @param {number} options.pageSize - 每页数量，默认为10
+ * @param {string} options.category - 分类筛选
+ * @param {string} options.tags - 标签筛选
+ * @param {number} options.difficulty - 难度筛选
+ * @param {string} options.keyword - 关键词搜索
+ * @param {string} options.sortBy - 排序字段，默认为sort
+ * @param {string} options.sortOrder - 排序方式，默认为asc
+ * @returns {Promise<Object>} - 包含题目列表和总数的对象
+ */
+export const getSpecialQuestions = async (specialId, options = {}) => {
+  const {
+    current = 1,
+    pageSize = 10,
+    category,
+    tags,
+    difficulty,
+    keyword,
+    sortBy = 'sort',
+    sortOrder = 'asc',
+  } = options;
+
+  // 检查专题是否存在
+  const special = await Special.findById(specialId);
+  if (!special) {
+    throw new Error('专题不存在');
+  }
+
+  // 构建题目查询条件
+  const questionQuery = {};
+  
+  if (category) {
+    questionQuery.category = category;
+  }
+
+  if (tags) {
+    questionQuery.tags = { $regex: tags, $options: 'i' };
+  }
+
+  if (difficulty) {
+    questionQuery.difficulty = difficulty;
+  }
+
+  if (keyword) {
+    questionQuery.$or = [
+      { title: { $regex: keyword, $options: 'i' } },
+      { desc: { $regex: keyword, $options: 'i' } },
+    ];
+  }
+
+  // 获取专题的题目ID列表
+  const questionIds = special.questionBank.map(item => item.questionId);
+  
+  if (questionIds.length === 0) {
+    return {
+      list: [],
+      pagination: {
+        total: 0,
+        current,
+        pageSize,
+        totalPages: 0,
+      },
+      specialInfo: {
+        id: special._id,
+        name: special.name,
+        description: special.description,
+        totalQuestions: 0,
+      },
+    };
+  }
+
+  // 添加专题题目ID筛选条件
+  questionQuery._id = { $in: questionIds };
+
+  // 执行题目查询
+  const [questions, total] = await Promise.all([
+    Question.find(questionQuery, { __v: 0, createdAt: 0, updatedAt: 0, analysis: 0, answer: 0 }),
+    Question.countDocuments(questionQuery),
+  ]);
+
+  // 根据专题中的排序重新排列题目
+  const questionMap = new Map();
+  questions.forEach(q => questionMap.set(q._id.toString(), q));
+
+  const sortedQuestions = special.questionBank
+    .filter(item => questionMap.has(item.questionId.toString()))
+    .map(item => ({
+      ...questionMap.get(item.questionId.toString()).toObject(),
+      specialSort: item.sort, // 添加专题中的排序字段
+    }));
+
+  // 根据排序选项排序
+  if (sortBy === 'sort' || sortBy === 'specialSort') {
+    sortedQuestions.sort((a, b) => {
+      return sortOrder === 'asc' ? a.specialSort - b.specialSort : b.specialSort - a.specialSort;
+    });
+  } else {
+    sortedQuestions.sort((a, b) => {
+      const aVal = a[sortBy];
+      const bVal = b[sortBy];
+      if (sortOrder === 'asc') {
+        return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+      } else {
+        return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+      }
+    });
+  }
+
+  // 分页处理
+  const skip = (current - 1) * pageSize;
+  const paginatedQuestions = sortedQuestions.slice(skip, skip + pageSize);
+
+  return {
+    list: paginatedQuestions,
+    pagination: {
+      total,
+      current,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    },
+    specialInfo: {
+      id: special._id,
+      name: special.name,
+      description: special.description,
+      totalQuestions: sortedQuestions.length,
+    },
+  };
+};
+
 export default {
   getQuestionList,
   getQuestionById,
@@ -426,4 +559,5 @@ export default {
   addQuestionToSpecial,
   removeQuestionFromSpecial,
   updateQuestionSort,
+  getSpecialQuestions,
 };

@@ -571,6 +571,247 @@
     ]
   },
   {
+    "type": "get",
+    "url": "/question/special/:id/questions",
+    "title": "获取专题下的题目列表",
+    "description": "<p>根据专题ID获取该专题下的题目列表，支持分页、筛选和排序</p>",
+    "name": "GetSpecialQuestions",
+    "group": "专题",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>专题ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "current",
+            "defaultValue": "1",
+            "description": "<p>页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "10",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "category",
+            "description": "<p>分类筛选</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "tags",
+            "description": "<p>标签筛选</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "difficulty",
+            "description": "<p>难度筛选</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "keyword",
+            "description": "<p>关键词搜索</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "sortBy",
+            "defaultValue": "sort",
+            "description": "<p>排序字段，可选值：sort(专题排序)、title、difficulty、createdAt等</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "sortOrder",
+            "defaultValue": "asc",
+            "description": "<p>排序方式，asc或desc</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "list",
+            "description": "<p>题目列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.title",
+            "description": "<p>题目标题</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.desc",
+            "description": "<p>题目描述</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.difficulty",
+            "description": "<p>难度级别</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.category",
+            "description": "<p>题目分类</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.tags",
+            "description": "<p>题目标签</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.specialSort",
+            "description": "<p>专题中的排序值</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "pagination",
+            "description": "<p>分页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.total",
+            "description": "<p>总数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.current",
+            "description": "<p>当前页码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.pageSize",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "pagination.totalPages",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "specialInfo",
+            "description": "<p>专题信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "specialInfo.id",
+            "description": "<p>专题ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "specialInfo.name",
+            "description": "<p>专题名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "specialInfo.description",
+            "description": "<p>专题描述</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "specialInfo.totalQuestions",
+            "description": "<p>专题题目总数</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "专题",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/special/:id/questions"
+      }
+    ]
+  },
+  {
     "type": "delete",
     "url": "/question/special/:id/questions/:questionId",
     "title": "从专题中移除题目",
