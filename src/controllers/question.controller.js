@@ -3,6 +3,7 @@ import questionService from '../services/question.service.js';
 import commentService from '../services/comment.service.js';
 import { marked } from 'marked';
 import md2HtmlUtil from '../utils/md2Html.util.js';
+import msgSecCheck from '../utils/wechat/msgSecCheck.util.js';
 
 class QuestionController {
   /**
@@ -51,12 +52,14 @@ class QuestionController {
   static async getQuestionDetail(req, res) {
     try {
       const { id } = req.params;
-      const {mini=false} = req.query;
+      const { mini = false } = req.query;
+      console.log('getQuestionDetail method called with id:', id); // 调试信息
+
       if (!id) {
         return res.error('无效的题目ID');
       }
 
-      console.log('mini',mini)
+      console.log('mini', mini);
       const question = await questionService.getQuestionById(id);
 
       if (mini) {
@@ -116,10 +119,11 @@ class QuestionController {
    */
   static async updateQuestion(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
+      const {id} = req.params
+      if (!id) {
         return res.error('无效的题目ID');
       }
+
 
       const { title, content, answer, difficulty, category, tags } = req.body;
 
@@ -194,8 +198,64 @@ class QuestionController {
     }
   }
 
-  static async getTodayQuestion(req,res){
+  // ==================== 今日题目相关方法 ====================
 
+  /**
+   * 获取今日题目
+   * @param {Object} req - 请求对象
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回今日题目数据，如果没有设置则返回null
+   */
+  static async getTodayTopic(req, res) {
+    try {
+      console.log('getTodayTopic method called'); // 调试信息
+      const todayTopic = await questionService.getTodayTopic();
+      res.success(todayTopic);
+    } catch (error) {
+      res.error(error.message);
+    }
+  }
+
+  /**
+   * 设置今日题目
+   * @param {Object} req - 请求对象
+   * @param {Object} req.body - 请求体
+   * @param {string} req.body.questionId - 题目ID（必填）
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回设置为今日题目的题目数据
+   */
+  static async setTodayTopic(req, res) {
+    try {
+      const { questionId } = req.body;
+
+      if (!questionId) {
+        return res.error('题目ID为必填项');
+      }
+
+      const todayTopic = await questionService.setTodayTopic(questionId);
+      res.success(todayTopic, '今日题目设置成功');
+    } catch (error) {
+      if (error.message.includes('题目不存在')) {
+        res.error(error.message, 404);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 取消今日题目
+   * @param {Object} req - 请求对象
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回取消操作结果
+   */
+  static async cancelTodayTopic(req, res) {
+    try {
+      await questionService.cancelTodayTopic();
+      res.success(true, '今日题目取消成功');
+    } catch (error) {
+      res.error(error.message);
+    }
   }
 
   // ==================== Special 专题相关方法 ====================
@@ -525,6 +585,7 @@ class QuestionController {
       const { id } = req.params;
       const { content, parentId } = req.body;
       const userId = req.user.id;
+      const openId = req.user.openid;
 
       // 验证必填字段
       if (!content || content.trim().length === 0) {
@@ -533,6 +594,12 @@ class QuestionController {
 
       if (content.length > 1000) {
         return res.error('评论内容不能超过1000字符');
+      }
+      console.log(openId,'openid')
+      const status = await msgSecCheck(content,openId)
+      console.log(status,'status')
+      if(!status){
+        return res.success(null,'内容含有违法违规内容',4005)
       }
 
       const commentData = {

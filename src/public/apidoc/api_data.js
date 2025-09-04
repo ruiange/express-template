@@ -4671,6 +4671,68 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/question/today-topic/cancel",
+    "title": "取消今日题目",
+    "description": "<p>取消当前的今日题目设置</p>",
+    "name": "CancelTodayTopic",
+    "group": "题库",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>取消成功</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/today-topic/cancel"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/question/create",
     "title": "创建题目",
     "description": "<p>创建新的题目</p>",
@@ -5178,10 +5240,10 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/question/today",
+    "url": "/question/today-topic",
     "title": "获取今日题目",
-    "description": "<p>获取今日题目，返回一个随机的题目</p>",
-    "name": "GetTodayQuestion",
+    "description": "<p>获取当前设置的今日题目</p>",
+    "name": "GetTodayTopic",
     "group": "题库",
     "version": "1.0.0",
     "success": {
@@ -5192,13 +5254,13 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "question",
-            "description": "<p>今日题目</p>"
+            "description": "<p>今日题目（如果没有设置则返回null）</p>"
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "question.id",
+            "field": "question._id",
             "description": "<p>题目ID</p>"
           },
           {
@@ -5212,8 +5274,8 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "question.content",
-            "description": "<p>题目内容</p>"
+            "field": "question.desc",
+            "description": "<p>题目描述</p>"
           },
           {
             "group": "Success 200",
@@ -5221,6 +5283,13 @@ define({ "api": [
             "optional": false,
             "field": "question.answer",
             "description": "<p>题目答案</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.analysis",
+            "description": "<p>题目解析</p>"
           },
           {
             "group": "Success 200",
@@ -5238,10 +5307,17 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Array",
             "optional": false,
             "field": "question.tags",
             "description": "<p>题目标签</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "question.isTodayTopic",
+            "description": "<p>是否为今日题目</p>"
           },
           {
             "group": "Success 200",
@@ -5284,23 +5360,106 @@ define({ "api": [
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/question/today"
+        "url": "http://127.0.0.1:3000/api/question/today-topic"
       }
     ]
   },
   {
-    "type": "get",
-    "url": "/question/setToday",
+    "type": "post",
+    "url": "/question/today-topic/set",
     "title": "设置今日题目",
-    "description": "<p>设置今日题目，返回一个随笔题</p>",
-    "name": "SetTodayQuestion",
+    "description": "<p>设置指定题目为今日题目，只能存在一个今日题目</p>",
+    "name": "SetTodayTopic",
     "group": "题库",
     "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "questionId",
+        "description": "<p>题目ID</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "question",
+            "description": "<p>设置为今日题目的题目数据</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question._id",
+            "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.title",
+            "description": "<p>题目标题</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "question.isTodayTopic",
+            "description": "<p>是否为今日题目（true）</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
     "filename": "src/routes/modules/question.route.js",
     "groupTitle": "题库",
     "sampleRequest": [
       {
-        "url": "http://127.0.0.1:3000/api/question/setToday"
+        "url": "http://127.0.0.1:3000/api/question/today-topic/set"
       }
     ]
   },

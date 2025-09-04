@@ -32,6 +32,71 @@ const questionRoute = express.Router();
  */
 questionRoute.get('/list', QuestionController.getQuestionList);
 
+// ==================== 今日题目相关路由 ====================
+
+/**
+ * @api {get} /question/today-topic 获取今日题目
+ * @apiDescription 获取当前设置的今日题目
+ * @apiName GetTodayTopic
+ * @apiGroup 题库
+ * @apiVersion 1.0.0
+ *
+ * @apiSuccess {Object} question 今日题目（如果没有设置则返回null）
+ * @apiSuccess {String} question._id 题目ID
+ * @apiSuccess {String} question.title 题目标题
+ * @apiSuccess {String} question.desc 题目描述
+ * @apiSuccess {String} question.answer 题目答案
+ * @apiSuccess {String} question.analysis 题目解析
+ * @apiSuccess {Number} question.difficulty 难度级别
+ * @apiSuccess {String} question.category 题目分类
+ * @apiSuccess {Array} question.tags 题目标签
+ * @apiSuccess {Boolean} question.isTodayTopic 是否为今日题目
+ * @apiSuccess {Date} question.createdAt 创建时间
+ * @apiSuccess {Date} question.updatedAt 更新时间
+ *
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.get('/today-topic', QuestionController.getTodayTopic);
+
+/**
+ * @api {post} /question/today-topic/set 设置今日题目
+ * @apiDescription 设置指定题目为今日题目，只能存在一个今日题目
+ * @apiName SetTodayTopic
+ * @apiGroup 题库
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
+ * @apiHeader {String} Content-Type application/json
+ * 
+ * @apiBody {String} questionId 题目ID
+ * 
+ * @apiSuccess {Object} question 设置为今日题目的题目数据
+ * @apiSuccess {String} question._id 题目ID
+ * @apiSuccess {String} question.title 题目标题
+ * @apiSuccess {Boolean} question.isTodayTopic 是否为今日题目（true）
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.post('/today-topic/set', authMiddleware, adminMiddleware, QuestionController.setTodayTopic);
+
+/**
+ * @api {post} /question/today-topic/cancel 取消今日题目
+ * @apiDescription 取消当前的今日题目设置
+ * @apiName CancelTodayTopic
+ * @apiGroup 题库
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
+ * 
+ * @apiSuccess {Boolean} success 取消成功
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.post('/today-topic/cancel', authMiddleware, adminMiddleware, QuestionController.cancelTodayTopic);
+
 /**
  * @api {get} /question/:id 获取题目详情
  * @apiDescription 根据ID获取题目的详细信息
@@ -158,40 +223,6 @@ questionRoute.post('/batch-delete',authMiddleware,adminMiddleware, QuestionContr
  * @apiError {Number} code 错误代码
  */
 questionRoute.delete('/:id',authMiddleware,adminMiddleware, QuestionController.deleteQuestion);
-
-
-/**
- * @api {get} /question/today 获取今日题目
- * @apiDescription 获取今日题目，返回一个随机的题目
- * @apiName GetTodayQuestion
- * @apiGroup 题库
- * @apiVersion 1.0.0
- *
- * @apiSuccess {Object} question 今日题目
- * @apiSuccess {Number} question.id 题目ID
- * @apiSuccess {String} question.title 题目标题
- * @apiSuccess {String} question.content 题目内容
- * @apiSuccess {String} question.answer 题目答案
- * @apiSuccess {Number} question.difficulty 难度级别
- * @apiSuccess {String} question.category 题目分类
- * @apiSuccess {String} question.tags 题目标签
- * @apiSuccess {Date} question.createdAt 创建时间
- * @apiSuccess {Date} question.updatedAt 更新时间
- *
- * @apiError {String} message 错误信息
- * @apiError {Number} code 错误代码
- */
-questionRoute.get('/today',QuestionController.getTodayQuestion)
-
-/**
- * @api {get} /question/setToday 设置今日题目
- * @apiDescription 设置今日题目，返回一个随笔题
- * @apiName SetTodayQuestion
- * @apiGroup 题库
- * @apiVersion 1.0.0
- */
-questionRoute.get('/setToday',QuestionController.getTodayQuestion)
-
 
 // ==================== Special 专题相关路由 ====================
 

@@ -83,6 +83,11 @@ export const getQuestionList = async (options = {}) => {
  * @returns {Promise<Object>} - 题目详情
  */
 export const getQuestionById = async (id) => {
+  // 验证是否为有效的 ObjectId
+  if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
+    throw new Error('无效的题目ID格式');
+  }
+
   const question = await Question.findById(id, { __v: 0, updatedAt: 0 });
 
   if (!question) {
@@ -543,6 +548,55 @@ export const getSpecialQuestions = async (specialId, options = {}) => {
   };
 };
 
+// ==================== 今日题目相关服务方法 ====================
+
+/**
+ * 获取今日题目
+ * @returns {Promise<Object|null>} - 今日题目对象，如果没有则返回null
+ */
+export const getTodayTopic = async () => {
+  return Question.findOne({ isTodayTopic: true });
+};
+
+/**
+ * 设置今日题目
+ * @param {string} questionId - 题目ID
+ * @returns {Promise<Object>} - 设置为今日题目的题目对象
+ */
+export const setTodayTopic = async (questionId) => {
+  // 检查题目是否存在
+  const question = await Question.findById(questionId);
+  if (!question) {
+    throw new Error('题目不存在');
+  }
+
+  // 先将所有题目的isTodayTopic设为false
+  await Question.updateMany({}, { $set: { isTodayTopic: false } });
+  
+  // 然后将指定题目设为今日题目
+  const todayTopic = await Question.findByIdAndUpdate(
+    questionId,
+    { $set: { isTodayTopic: true } },
+    { new: true }
+  );
+  
+  if (!todayTopic) {
+    throw new Error('设置今日题目失败');
+  }
+
+  return todayTopic;
+};
+
+/**
+ * 取消今日题目
+ * @returns {Promise<boolean>} - 取消成功返回true
+ */
+export const cancelTodayTopic = async () => {
+  // 将所有题目的isTodayTopic设为false
+  await Question.updateMany({}, { $set: { isTodayTopic: false } });
+  return true;
+};
+
 export default {
   getQuestionList,
   getQuestionById,
@@ -550,6 +604,10 @@ export default {
   updateQuestion,
   deleteQuestion,
   batchDeleteQuestions,
+  // 今日题目相关方法
+  getTodayTopic,
+  setTodayTopic,
+  cancelTodayTopic,
   // Special 专题相关方法
   getSpecialList,
   getSpecialById,

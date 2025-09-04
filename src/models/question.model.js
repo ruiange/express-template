@@ -30,12 +30,32 @@ const questionSchema = new mongoose.Schema(
       type: Array,
       maxLength: 255, // 题目标签，最大长度255字符
     },
+    isTodayTopic: {
+      type: Boolean,
+      default: false, // 是否为今日题目，默认为false
+    },
   },
   {
     timestamps: true, // 自动添加 createdAt 和 updatedAt 字段
     collection: 'questions', // 指定集合名称为'questions'
   }
 );
+
+// 添加索引
+questionSchema.index({ isTodayTopic: 1 }); // 为今日题目字段添加索引
+
+// 添加中间件：确保只有一个题目可以设置为今日题目
+questionSchema.pre('save', async function(next) {
+  if (this.isTodayTopic && this.isModified('isTodayTopic')) {
+    // 如果当前题目要设置为今日题目，先将其他所有题目的isTodayTopic设为false
+    await this.constructor.updateMany(
+      { _id: { $ne: this._id }, isTodayTopic: true },
+      { $set: { isTodayTopic: false } }
+    );
+  }
+  next();
+});
+
 
 // 创建并导出Question模型
 const Question = mongoose.model('Question', questionSchema);
