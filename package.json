@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "生成文档": "apidoc -i src/routes/ -o src/public/apidoc/",
+    "doc": "apidoc -i src/routes/ -o src/public/apidoc/",
     "upload": "node build/upload.js",
     "创建模块": "node scripts/createMmodule.script.js"
   },
