@@ -7,6 +7,8 @@ publicRoute.get('/weather', async (req, res) => {
   const clientIP = req.clientIP || 'Unknown';
   let ip = clientIP.replace(/[^0-9.]/g, '');
 
+  console.log(clientIP, 'clientIP')
+
   console.log(ip, 'ip');
   if (ip === '1' || !ip) ip = '127.0.0.1';
 
