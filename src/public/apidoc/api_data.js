@@ -3307,6 +3307,752 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/question/:id/comments",
+    "title": "创建评论",
+    "description": "<p>为指定题目创建评论</p>",
+    "name": "CreateComment",
+    "group": "评论",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要用户登录</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>题目ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "content",
+        "description": "<p>评论内容</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "parentId",
+        "description": "<p>父评论ID（回复时使用）</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>创建的评论</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "comment._id",
+            "description": "<p>评论ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "comment.content",
+            "description": "<p>评论内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "comment.user",
+            "description": "<p>用户信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "comment.createdAt",
+            "description": "<p>创建时间</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/:id/comments"
+      }
+    ]
+  },
+  {
+    "type": "delete",
+    "url": "/question/comments/:commentId",
+    "title": "删除评论",
+    "description": "<p>删除评论（评论作者或管理员可操作）</p>",
+    "name": "DeleteComment",
+    "group": "评论",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要用户登录</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "commentId",
+            "description": "<p>评论ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>删除成功</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/comments/:commentId"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/question/comments/:commentId/dislike",
+    "title": "踩/取消踩评论",
+    "description": "<p>对评论进行踩或取消踩操作</p>",
+    "name": "DislikeComment",
+    "group": "评论",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要用户登录</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "commentId",
+            "description": "<p>评论ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "disliked",
+            "description": "<p>是否踩（true=踩，false=取消踩）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "dislikes",
+            "description": "<p>当前踩数</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/comments/:commentId/dislike"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/question/:id/comments",
+    "title": "获取题目评论列表",
+    "description": "<p>获取指定题目的评论列表，支持分页和排序</p>",
+    "name": "GetQuestionComments",
+    "group": "评论",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "current",
+            "defaultValue": "1",
+            "description": "<p>页码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "defaultValue": "10",
+            "description": "<p>每页数量</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "sortBy",
+            "defaultValue": "createdAt",
+            "description": "<p>排序字段</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "sortOrder",
+            "defaultValue": "desc",
+            "description": "<p>排序方式，asc或desc</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "list",
+            "description": "<p>评论列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list._id",
+            "description": "<p>评论ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.content",
+            "description": "<p>评论内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.user",
+            "description": "<p>评论用户信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.user._id",
+            "description": "<p>用户ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.user.nickname",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.user.avatar",
+            "description": "<p>用户头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.likes",
+            "description": "<p>点赞数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "list.dislikes",
+            "description": "<p>踩数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "list.isTop",
+            "description": "<p>是否置顶</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "list.replies",
+            "description": "<p>回复列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "list.createdAt",
+            "description": "<p>创建时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "pagination",
+            "description": "<p>分页信息</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/:id/comments"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/question/comments/:commentId/like",
+    "title": "点赞/取消点赞评论",
+    "description": "<p>对评论进行点赞或取消点赞操作</p>",
+    "name": "LikeComment",
+    "group": "评论",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要用户登录</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "commentId",
+            "description": "<p>评论ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "liked",
+            "description": "<p>是否点赞（true=点赞，false=取消点赞）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "likes",
+            "description": "<p>当前点赞数</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/comments/:commentId/like"
+      }
+    ]
+  },
+  {
+    "type": "patch",
+    "url": "/question/comments/:commentId/top",
+    "title": "置顶/取消置顶评论",
+    "description": "<p>设置或取消评论置顶（管理员操作）</p>",
+    "name": "TopComment",
+    "group": "评论",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要管理员权限</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "commentId",
+            "description": "<p>评论ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": false,
+        "field": "isTop",
+        "description": "<p>是否置顶</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>更新后的评论</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "comment.isTop",
+            "description": "<p>是否置顶</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/comments/:commentId/top"
+      }
+    ]
+  },
+  {
+    "type": "patch",
+    "url": "/question/comments/:commentId",
+    "title": "更新评论",
+    "description": "<p>更新评论内容（仅评论作者可操作）</p>",
+    "name": "UpdateComment",
+    "group": "评论",
+    "version": "1.0.0",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token，需要用户登录</p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Content-Type",
+            "description": "<p>application/json</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "commentId",
+            "description": "<p>评论ID</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "content",
+        "description": "<p>新的评论内容</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "comment",
+            "description": "<p>更新后的评论</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "comment._id",
+            "description": "<p>评论ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "comment.content",
+            "description": "<p>评论内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "comment.updatedAt",
+            "description": "<p>更新时间</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "评论",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/comments/:commentId"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/wealth/muyu",
     "title": "敲木鱼增加财富",
     "name": "WealthMuyu",
@@ -4427,6 +5173,134 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://127.0.0.1:3000/api/question/list"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/question/today",
+    "title": "获取今日题目",
+    "description": "<p>获取今日题目，返回一个随机的题目</p>",
+    "name": "GetTodayQuestion",
+    "group": "题库",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "question",
+            "description": "<p>今日题目</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "question.id",
+            "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.title",
+            "description": "<p>题目标题</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.content",
+            "description": "<p>题目内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.answer",
+            "description": "<p>题目答案</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "question.difficulty",
+            "description": "<p>难度级别</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.category",
+            "description": "<p>题目分类</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "question.tags",
+            "description": "<p>题目标签</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "question.createdAt",
+            "description": "<p>创建时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Date",
+            "optional": false,
+            "field": "question.updatedAt",
+            "description": "<p>更新时间</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>错误信息</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>错误代码</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/today"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/question/setToday",
+    "title": "设置今日题目",
+    "description": "<p>设置今日题目，返回一个随笔题</p>",
+    "name": "SetTodayQuestion",
+    "group": "题库",
+    "version": "1.0.0",
+    "filename": "src/routes/modules/question.route.js",
+    "groupTitle": "题库",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/question/setToday"
       }
     ]
   },

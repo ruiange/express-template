@@ -378,4 +378,159 @@ questionRoute.patch('/special/:id/questions/:questionId/sort', authMiddleware, a
  */
 questionRoute.get('/special/:id/questions', QuestionController.getSpecialQuestions);
 
+
+// ==================== Comment 评论相关路由 ====================
+
+/**
+ * @api {get} /question/:id/comments 获取题目评论列表
+ * @apiDescription 获取指定题目的评论列表，支持分页和排序
+ * @apiName GetQuestionComments
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiParam {String} id 题目ID
+ * @apiParam {Number} [current=1] 页码
+ * @apiParam {Number} [pageSize=10] 每页数量
+ * @apiParam {String} [sortBy=createdAt] 排序字段
+ * @apiParam {String} [sortOrder=desc] 排序方式，asc或desc
+ * 
+ * @apiSuccess {Object[]} list 评论列表
+ * @apiSuccess {String} list._id 评论ID
+ * @apiSuccess {String} list.content 评论内容
+ * @apiSuccess {Object} list.user 评论用户信息
+ * @apiSuccess {String} list.user._id 用户ID
+ * @apiSuccess {String} list.user.nickname 用户昵称
+ * @apiSuccess {String} list.user.avatar 用户头像
+ * @apiSuccess {Number} list.likes 点赞数
+ * @apiSuccess {Number} list.dislikes 踩数
+ * @apiSuccess {Boolean} list.isTop 是否置顶
+ * @apiSuccess {Object[]} list.replies 回复列表
+ * @apiSuccess {Date} list.createdAt 创建时间
+ * @apiSuccess {Object} pagination 分页信息
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.get('/:id/comments', QuestionController.getQuestionComments);
+
+/**
+ * @api {post} /question/:id/comments 创建评论
+ * @apiDescription 为指定题目创建评论
+ * @apiName CreateComment
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要用户登录
+ * @apiHeader {String} Content-Type application/json
+ * 
+ * @apiParam {String} id 题目ID
+ * @apiBody {String} content 评论内容
+ * @apiBody {String} [parentId] 父评论ID（回复时使用）
+ * 
+ * @apiSuccess {Object} comment 创建的评论
+ * @apiSuccess {String} comment._id 评论ID
+ * @apiSuccess {String} comment.content 评论内容
+ * @apiSuccess {Object} comment.user 用户信息
+ * @apiSuccess {Date} comment.createdAt 创建时间
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.post('/:id/comments', authMiddleware, QuestionController.createComment);
+
+/**
+ * @api {patch} /question/comments/:commentId 更新评论
+ * @apiDescription 更新评论内容（仅评论作者可操作）
+ * @apiName UpdateComment
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要用户登录
+ * @apiHeader {String} Content-Type application/json
+ * 
+ * @apiParam {String} commentId 评论ID
+ * @apiBody {String} content 新的评论内容
+ * 
+ * @apiSuccess {Object} comment 更新后的评论
+ * @apiSuccess {String} comment._id 评论ID
+ * @apiSuccess {String} comment.content 评论内容
+ * @apiSuccess {Date} comment.updatedAt 更新时间
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.patch('/comments/:commentId', authMiddleware, QuestionController.updateComment);
+
+/**
+ * @api {delete} /question/comments/:commentId 删除评论
+ * @apiDescription 删除评论（评论作者或管理员可操作）
+ * @apiName DeleteComment
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要用户登录
+ * @apiParam {String} commentId 评论ID
+ * 
+ * @apiSuccess {Boolean} success 删除成功
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.delete('/comments/:commentId', authMiddleware, QuestionController.deleteComment);
+
+/**
+ * @api {post} /question/comments/:commentId/like 点赞/取消点赞评论
+ * @apiDescription 对评论进行点赞或取消点赞操作
+ * @apiName LikeComment
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要用户登录
+ * @apiParam {String} commentId 评论ID
+ * 
+ * @apiSuccess {Boolean} liked 是否点赞（true=点赞，false=取消点赞）
+ * @apiSuccess {Number} likes 当前点赞数
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.post('/comments/:commentId/like', authMiddleware, QuestionController.likeComment);
+
+/**
+ * @api {post} /question/comments/:commentId/dislike 踩/取消踩评论
+ * @apiDescription 对评论进行踩或取消踩操作
+ * @apiName DislikeComment
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要用户登录
+ * @apiParam {String} commentId 评论ID
+ * 
+ * @apiSuccess {Boolean} disliked 是否踩（true=踩，false=取消踩）
+ * @apiSuccess {Number} dislikes 当前踩数
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.post('/comments/:commentId/dislike', authMiddleware, QuestionController.dislikeComment);
+
+/**
+ * @api {patch} /question/comments/:commentId/top 置顶/取消置顶评论
+ * @apiDescription 设置或取消评论置顶（管理员操作）
+ * @apiName TopComment
+ * @apiGroup 评论
+ * @apiVersion 1.0.0
+ * 
+ * @apiHeader {String} Authorization Bearer token，需要管理员权限
+ * @apiParam {String} commentId 评论ID
+ * @apiBody {Boolean} isTop 是否置顶
+ * 
+ * @apiSuccess {Object} comment 更新后的评论
+ * @apiSuccess {Boolean} comment.isTop 是否置顶
+ * 
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.patch('/comments/:commentId/top', authMiddleware, adminMiddleware, QuestionController.topComment);
+
 export default questionRoute;

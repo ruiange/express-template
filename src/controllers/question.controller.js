@@ -1,5 +1,6 @@
 // question.controller.js
 import questionService from '../services/question.service.js';
+import commentService from '../services/comment.service.js';
 import { marked } from 'marked';
 import md2HtmlUtil from '../utils/md2Html.util.js';
 
@@ -459,6 +460,265 @@ class QuestionController {
       res.success(result);
     } catch (error) {
       if (error.message === '专题不存在') {
+        res.error(error.message, 404);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  // ==================== Comment 评论相关方法 ====================
+
+  /**
+   * 获取题目评论列表
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.id - 题目ID
+   * @param {Object} req.query - 查询参数
+   * @param {number} req.query.current - 当前页码，默认为1
+   * @param {number} req.query.pageSize - 每页数量，默认为10
+   * @param {string} req.query.sortBy - 排序字段，默认为createdAt
+   * @param {string} req.query.sortOrder - 排序方式，默认为desc
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回评论列表数据
+   */
+  static async getQuestionComments(req, res) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return res.error('无效的题目ID');
+      }
+
+      const options = {
+        current: parseInt(req.query.current) || 1,
+        pageSize: parseInt(req.query.pageSize) || 10,
+        sortBy: req.query.sortBy || 'createdAt',
+        sortOrder: req.query.sortOrder || 'desc',
+      };
+
+      const result = await commentService.getQuestionComments(id, options);
+      res.success(result);
+    } catch (error) {
+      if (error.message === '题目不存在') {
+        res.error(error.message, 404);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 创建评论
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.id - 题目ID
+   * @param {Object} req.body - 请求体
+   * @param {string} req.body.content - 评论内容
+   * @param {string} [req.body.parentId] - 父评论ID（回复时使用）
+   * @param {Object} req.user - 用户信息（来自认证中间件）
+   * @param {string} req.user.id - 用户ID
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回创建的评论数据
+   */
+  static async createComment(req, res) {
+    try {
+      const { id } = req.params;
+      const { content, parentId } = req.body;
+      const userId = req.user.id;
+
+      // 验证必填字段
+      if (!content || content.trim().length === 0) {
+        return res.error('评论内容不能为空');
+      }
+
+      if (content.length > 1000) {
+        return res.error('评论内容不能超过1000字符');
+      }
+
+      const commentData = {
+        content: content.trim(),
+        parentId,
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent'),
+      };
+
+      const newComment = await commentService.createComment(id, userId, commentData);
+      res.created(newComment, '评论创建成功');
+    } catch (error) {
+      if (error.message === '题目不存在' || error.message === '父评论不存在') {
+        res.error(error.message, 404);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 更新评论
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.commentId - 评论ID
+   * @param {Object} req.body - 请求体
+   * @param {string} req.body.content - 新的评论内容
+   * @param {Object} req.user - 用户信息（来自认证中间件）
+   * @param {string} req.user.id - 用户ID
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回更新后的评论数据
+   */
+  static async updateComment(req, res) {
+    try {
+      const { commentId } = req.params;
+      const { content } = req.body;
+      const userId = req.user.id;
+
+      if (!commentId) {
+        return res.error('无效的评论ID');
+      }
+
+      // 验证必填字段
+      if (!content || content.trim().length === 0) {
+        return res.error('评论内容不能为空');
+      }
+
+      if (content.length > 1000) {
+        return res.error('评论内容不能超过1000字符');
+      }
+
+      const updateData = { content: content.trim() };
+      const updatedComment = await commentService.updateComment(commentId, userId, updateData);
+      res.success(updatedComment, '评论更新成功');
+    } catch (error) {
+      if (error.message === '评论不存在') {
+        res.error(error.message, 404);
+      } else if (error.message === '只能修改自己的评论' || error.message === '该评论无法修改') {
+        res.error(error.message, 403);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 删除评论
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.commentId - 评论ID
+   * @param {Object} req.user - 用户信息（来自认证中间件）
+   * @param {string} req.user.id - 用户ID
+   * @param {string} req.user.role - 用户角色
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回删除操作结果
+   */
+  static async deleteComment(req, res) {
+    try {
+      const { commentId } = req.params;
+      const userId = req.user.id;
+      const isAdmin = req.user.role === 'admin';
+
+      if (!commentId) {
+        return res.error('无效的评论ID');
+      }
+
+      await commentService.deleteComment(commentId, userId, isAdmin);
+      res.success(true, '评论删除成功');
+    } catch (error) {
+      if (error.message === '评论不存在') {
+        res.error(error.message, 404);
+      } else if (error.message === '没有权限删除该评论') {
+        res.error(error.message, 403);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 点赞评论
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.commentId - 评论ID
+   * @param {Object} req.user - 用户信息（来自认证中间件）
+   * @param {string} req.user.id - 用户ID
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回点赞操作结果
+   */
+  static async likeComment(req, res) {
+    try {
+      const { commentId } = req.params;
+      const userId = req.user.id;
+
+      if (!commentId) {
+        return res.error('无效的评论ID');
+      }
+
+      const result = await commentService.likeComment(commentId, userId);
+      res.success(result, '点赞成功');
+    } catch (error) {
+      if (error.message === '评论不存在') {
+        res.error(error.message, 404);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 踩评论
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.commentId - 评论ID
+   * @param {Object} req.user - 用户信息（来自认证中间件）
+   * @param {string} req.user.id - 用户ID
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回踩操作结果
+   */
+  static async dislikeComment(req, res) {
+    try {
+      const { commentId } = req.params;
+      const userId = req.user.id;
+
+      if (!commentId) {
+        return res.error('无效的评论ID');
+      }
+
+      const result = await commentService.dislikeComment(commentId, userId);
+      res.success(result, '操作成功');
+    } catch (error) {
+      if (error.message === '评论不存在') {
+        res.error(error.message, 404);
+      } else {
+        res.error(error.message);
+      }
+    }
+  }
+
+  /**
+   * 置顶/取消置顶评论
+   * @param {Object} req - 请求对象
+   * @param {Object} req.params - 路径参数
+   * @param {string} req.params.commentId - 评论ID
+   * @param {Object} req.body - 请求体
+   * @param {boolean} req.body.isTop - 是否置顶
+   * @param {Object} res - 响应对象
+   * @returns {Object} 返回更新后的评论数据
+   */
+  static async topComment(req, res) {
+    try {
+      const { commentId } = req.params;
+      const { isTop } = req.body;
+
+      if (!commentId) {
+        return res.error('无效的评论ID');
+      }
+
+      if (typeof isTop !== 'boolean') {
+        return res.error('isTop参数必须为布尔值');
+      }
+
+      const updatedComment = await commentService.topComment(commentId, isTop);
+      res.success(updatedComment, isTop ? '评论置顶成功' : '取消置顶成功');
+    } catch (error) {
+      if (error.message === '评论不存在') {
         res.error(error.message, 404);
       } else {
         res.error(error.message);
