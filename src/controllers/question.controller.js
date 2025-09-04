@@ -193,6 +193,10 @@ class QuestionController {
     }
   }
 
+  static async getTodayQuestion(req,res){
+
+  }
+
   // ==================== Special 专题相关方法 ====================
 
   /**

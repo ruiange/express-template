@@ -159,6 +159,40 @@ questionRoute.post('/batch-delete',authMiddleware,adminMiddleware, QuestionContr
  */
 questionRoute.delete('/:id',authMiddleware,adminMiddleware, QuestionController.deleteQuestion);
 
+
+/**
+ * @api {get} /question/today 获取今日题目
+ * @apiDescription 获取今日题目，返回一个随机的题目
+ * @apiName GetTodayQuestion
+ * @apiGroup 题库
+ * @apiVersion 1.0.0
+ *
+ * @apiSuccess {Object} question 今日题目
+ * @apiSuccess {Number} question.id 题目ID
+ * @apiSuccess {String} question.title 题目标题
+ * @apiSuccess {String} question.content 题目内容
+ * @apiSuccess {String} question.answer 题目答案
+ * @apiSuccess {Number} question.difficulty 难度级别
+ * @apiSuccess {String} question.category 题目分类
+ * @apiSuccess {String} question.tags 题目标签
+ * @apiSuccess {Date} question.createdAt 创建时间
+ * @apiSuccess {Date} question.updatedAt 更新时间
+ *
+ * @apiError {String} message 错误信息
+ * @apiError {Number} code 错误代码
+ */
+questionRoute.get('/today',QuestionController.getTodayQuestion)
+
+/**
+ * @api {get} /question/setToday 设置今日题目
+ * @apiDescription 设置今日题目，返回一个随笔题
+ * @apiName SetTodayQuestion
+ * @apiGroup 题库
+ * @apiVersion 1.0.0
+ */
+questionRoute.get('/setToday',QuestionController.getTodayQuestion)
+
+
 // ==================== Special 专题相关路由 ====================
 
 /**
