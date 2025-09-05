@@ -2407,6 +2407,339 @@
   },
   {
     "type": "get",
+    "url": "/vote/mine/:questionId",
+    "title": "查询我在某题目的投票",
+    "name": "GetMyVote",
+    "group": "投票",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "questionId",
+            "description": "<p>题目ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>业务码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>投票记录（未投票时为空对象）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": true,
+            "field": "data._id",
+            "description": "<p>记录ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": true,
+            "field": "data.user",
+            "description": "<p>用户ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": true,
+            "field": "data.question",
+            "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "size": "0..1",
+            "optional": true,
+            "field": "data.value",
+            "description": "<p>投票值</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>提示信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n  \"data\": { \"_id\": \"...\", \"user\": \"...\", \"question\": \"...\", \"value\": 0 },\n  \"message\": \"success\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/vote.route.js",
+    "groupTitle": "投票",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/vote/mine/:questionId"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/vote/stats/:questionId",
+    "title": "查询题目投票统计（需登录）",
+    "name": "GetVoteStats",
+    "group": "投票",
+    "description": "<p>必须登录，返回统计并附带当前用户是否投票及其投票值</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "questionId",
+            "description": "<p>题目ID</p>"
+          }
+        ]
+      }
+    },
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>业务码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>统计信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.yes",
+            "description": "<p>“会”数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.no",
+            "description": "<p>“不会”数量</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.total",
+            "description": "<p>总投票数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "data.myVoted",
+            "description": "<p>是否已投票</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "size": "0..1",
+            "optional": true,
+            "field": "data.myValue",
+            "description": "<p>我的投票值（未投票时为空）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>提示信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n  \"data\": { \"yes\": 10, \"no\": 3, \"total\": 13, \"myVoted\": true, \"myValue\": 1 },\n  \"message\": \"success\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/vote.route.js",
+    "groupTitle": "投票",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/vote/stats/:questionId"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/vote",
+    "title": "提交/更新投票",
+    "name": "PostVote",
+    "group": "投票",
+    "description": "<p>用户对题目投 “会/不会”，重复提交将更新投票值</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Bearer token</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "questionId",
+        "description": "<p>题目ID</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "size": "0..1",
+        "optional": false,
+        "field": "value",
+        "description": "<p>投票值，1=会，0=不会</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "code",
+            "description": "<p>业务码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>投票记录</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data._id",
+            "description": "<p>记录ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.user",
+            "description": "<p>用户ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.question",
+            "description": "<p>题目ID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "data.value",
+            "description": "<p>投票值</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>提示信息</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 0,\n  \"data\": { \"_id\": \"...\", \"user\": \"...\", \"question\": \"...\", \"value\": 1 },\n  \"message\": \"success\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 400 Bad Request\n{ \"code\": 4000, \"message\": \"投票失败\" }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/modules/vote.route.js",
+    "groupTitle": "投票",
+    "sampleRequest": [
+      {
+        "url": "http://127.0.0.1:3000/api/vote"
+      }
+    ]
+  },
+  {
+    "type": "get",
     "url": "/douyin/save",
     "title": "保存视频数据接口",
     "name": "保存视频数据接口",

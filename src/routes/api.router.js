@@ -13,6 +13,7 @@ import fileResourcesRoute from './modules/fileResources.route.js';
 import dashboardRoute from './modules/dashboard.route.js';
 import healthRouter from './modules/health.route.js';
 import publicRoute from './modules/public.route.js';
+import voteRoute from './modules/vote.route.js';
 
 // 创建主路由实例
 const apiRouter = express.Router();
@@ -45,4 +46,6 @@ apiRouter.use('/dashboard', dashboardRoute)
 apiRouter.use('/health', healthRouter);
 
 apiRouter.use('/public',publicRoute)
+// 投票相关路由 - 题目会/不会投票
+apiRouter.use('/vote', voteRoute);
 export default apiRouter;
