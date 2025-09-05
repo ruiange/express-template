@@ -26,6 +26,11 @@ export const vercelBlobUpload = async (file, path) => {
     }
   );
 
+  if (path.includes('/avatar/')) {
+    // 头像文件不需要记录
+    return url;
+  }
+
   // 记录文件资源
   try {
     await recordFileResource({
