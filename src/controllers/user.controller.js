@@ -5,6 +5,7 @@ import { getUserInfo, registerUser, updateUser } from '../services/user.service.
 import AuthService from '../services/auth.service.js';
 import { generateToken } from '../utils/jwt.util.js';
 import { deleteBlobService } from '../services/upload.service.js';
+import msgSecCheck from '../utils/wechat/msgSecCheck.util.js';
 
 // 用户注册
 export const register = async (req, res) => {
@@ -59,7 +60,7 @@ export const updateProfile = async (req, res) => {
   try {
     const { nickname, avatar, bio, signature } = req.body;
     const info = await getUserInfo(req.user);
-
+    const { openid } = req.user;
     if (!info) {
       return res.status(500).send({
         code: 500,
@@ -73,6 +74,20 @@ export const updateProfile = async (req, res) => {
       bio,
       signature,
     };
+    const nickNameCheck = await msgSecCheck(nickname, openid);
+    const bioCheck = await msgSecCheck(bio, openid);
+    const signatureCheck = await msgSecCheck(signature, openid);
+
+    if(!nickNameCheck){
+      params.nickname = '刺客无名'
+    }
+    if(!bioCheck){
+      params.bio = '这个人很懒，什么都没有留下'
+    }
+    if(!signatureCheck){
+      params.signature = '这个人很懒，什么都没有留下'
+    }
+
     if (info.avatar && info.avatar !== avatar) {
       console.log(chalk.red('删除旧头像'));
       await deleteBlobService(info.avatar);
