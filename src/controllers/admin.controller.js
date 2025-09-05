@@ -116,22 +116,16 @@ export const deleteUsers = async (req, res) => {
 export const updateUserController = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = parseInt(id);
+    const userId = id;
 
-    if (isNaN(userId)) {
-      return res.status(400).json({
-        code: 4000,
-        message: '无效的用户ID',
-      });
+    if (!userId) {
+      return res.error('无效的用户ID')
     }
 
     // 检查用户是否存在
     const existingUser = await getUserById(userId);
     if (!existingUser) {
-      return res.status(404).json({
-        code: 4004,
-        message: '用户不存在',
-      });
+      return res.error('用户不存在')
     }
 
     // 获取要更新的数据
