@@ -13,7 +13,7 @@ export const muyuAddWealth = async (req, res) => {
     muyu: req.body.totalCount,
   };
 
-  const data = await addMuyuWealth(params.openid, params.muyu);
+  await addMuyuWealth(params.openid, params.muyu);
   const rank = await getWealthRank(params.openid);
   const result = {
     rank,
