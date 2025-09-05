@@ -37,7 +37,7 @@ const responseMiddleware = (req, res, next) => {
   // 未授权响应 - 状态码 401
   res.unauthorized = (message = '未授权访问') => {
     return res.status(401).json({
-      code: 401,
+      code: 4001,
       message,
     });
   };

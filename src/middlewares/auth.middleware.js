@@ -22,7 +22,7 @@ export const authMiddleware = async (req, res, next) => {
       req.user = verifyToken(token);
       next();
     } catch (error) {
-      return res.status(401).json({ code: 4001, message: 'token已过期或无效' });
+      return  res.unauthorized('token已过期或无效');
     }
   } catch (error) {
     return res.status(500).json({ code: 5000, message: `服务器内部错误${error.message}` });
