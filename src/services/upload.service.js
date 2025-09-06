@@ -26,8 +26,12 @@ export const vercelBlobUpload = async (file, path) => {
     }
   );
 
-  if (path.includes('/avatar/')) {
+  console.log('==上传blob=')
+  console.error(filepath)
+
+  if (filepath.includes('/avatar/')) {
     // 头像文件不需要记录
+    console.log(chalk.green('头像文件上传成功~ 头像文件不需要存储到资源数据库重'))
     return url;
   }
 
@@ -42,6 +46,7 @@ export const vercelBlobUpload = async (file, path) => {
       storageProvider: 'vercel',
       storagePath: filepath,
     });
+    console.log(chalk.green('文件资源记录成功~'))
   } catch (error) {
     console.warn('[Vercel文件资源记录失败]', error.message);
   }
