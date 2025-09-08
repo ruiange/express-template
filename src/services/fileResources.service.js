@@ -1,6 +1,7 @@
 import FileResources from '../models/fileResources.model.js';
 import { deleteBlobService } from './upload.service.js';
 import chalk from 'chalk';
+import mongoose from 'mongoose';
 
 /**
  * 记录文件资源
@@ -91,9 +92,9 @@ export const getFilesToCleanup = async (limit = 100) => {
         { status: 'unused' },
         {
           status: 'pending',
-          createdAt: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } // 24小时前的pending文件
-        }
-      ]
+          createdAt: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, // 24小时前的pending文件
+        },
+      ],
     }).limit(limit);
 
     return files;
@@ -123,18 +124,15 @@ export const getFilesToCleanupWithPagination = async (options = {}) => {
         { status: 'unused' },
         {
           status: 'pending',
-          createdAt: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } // 24小时前的pending文件
-        }
-      ]
+          createdAt: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) }, // 24小时前的pending文件
+        },
+      ],
     };
 
     // 获取总数和分页数据
     const [totalCount, files] = await Promise.all([
       FileResources.countDocuments(query),
-      FileResources.find(query)
-        .sort({ createdAt: 1 })
-        .limit(pageSize)
-        .skip(skip)
+      FileResources.find(query).sort({ createdAt: 1 }).limit(pageSize).skip(skip),
     ]);
 
     return {
@@ -169,25 +167,8 @@ export const cleanupSingleFile = async (fileResource) => {
   try {
     // 从存储服务删除文件
     const deleteSuccess = await deleteBlobService(fileResource.fileUrl);
-
-    if (deleteSuccess) {
-      // 更新数据库状态
-      await FileResources.findByIdAndUpdate(
-        fileResource._id,
-        {
-          status: 'deleted',
-          updatedAt: new Date(),
-        }
-      );
-
-      console.log(chalk.red(`[文件已清理] ${fileResource.fileName} - ${fileResource.fileUrl}`));
-      return true;
-    } else {
-      console.warn(
-        chalk.yellow(`[文件删除失败] ${fileResource.fileName} - ${fileResource.fileUrl}`)
-      );
-      return false;
-    }
+    await FileResources.findByIdAndDelete(fileResource._id);
+    return true
   } catch (error) {
     console.error('[清理文件失败]', error);
     return false;
@@ -253,9 +234,9 @@ export const getFileResourceStats = async () => {
       {
         $group: {
           _id: '$status',
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     const result = {
@@ -305,10 +286,7 @@ export const getAllFileResources = async (options = {}) => {
     // 获取总数和分页数据
     const [totalCount, files] = await Promise.all([
       FileResources.countDocuments(query),
-      FileResources.find(query)
-        .sort({ createdAt: 1 })
-        .limit(pageSize)
-        .skip(skip)
+      FileResources.find(query).sort({ createdAt: 1 }).limit(pageSize).skip(skip),
     ]);
 
     const totalPages = Math.ceil(totalCount / pageSize);
@@ -326,4 +304,20 @@ export const getAllFileResources = async (options = {}) => {
     console.error('[分页获取文件资源失败]', error);
     throw error;
   }
+};
+
+/**
+ * 通过文件id清理文件
+ */
+export const batchByIdFile = async (ids) => {
+  const list = await FileResources.find({ _id: { $in: ids } });
+  let cleanList = []
+  for (let i = 0; i < list.length; i++) {
+    console.error(list[i].fileUrl);
+    const status = await cleanupSingleFile(list[i]);
+    if(status){
+      cleanList.push(list[i])
+    }
+  }
+  return cleanList.length
 };

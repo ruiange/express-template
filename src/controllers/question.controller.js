@@ -155,8 +155,8 @@ class QuestionController {
    */
   static async deleteQuestion(req, res) {
     try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
+      const id = req.params.id
+      if (!id) {
         return res.error('无效的题目ID');
       }
 

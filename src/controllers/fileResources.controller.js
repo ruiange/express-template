@@ -4,7 +4,7 @@ import {
   getFilesToCleanup,
   getFilesToCleanupWithPagination,
   markFileStatus,
-  getAllFileResources,
+  getAllFileResources, batchByIdFile,
 } from '../services/fileResources.service.js';
 import chalk from 'chalk';
 
@@ -217,6 +217,18 @@ class FileResourcesController {
       console.error('[定时文件清理失败]', error);
       return { total: 0, success: 0, failed: 0 };
     }
+  }
+
+  async cleanFiles(req,res){
+    const {ids} = req.body
+    if(!ids||ids.length===0){
+      return res.error('参数错误')
+    }
+    console.log('=========')
+    console.error(ids)
+   const length =  await batchByIdFile(ids)
+
+    res.success({success:length,error:ids.length-length},'操作成功                                                                                                                                                                                            ')
   }
 }
 

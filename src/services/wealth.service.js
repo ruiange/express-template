@@ -104,7 +104,11 @@ export const getMoyuRank = async () => {
 
     return results.map((item, index) => ({
       rank: index + 1,
-      ...item,
+      openid: item.openid,
+      count: parseFloat(item.count) || 0,
+      muyu: parseFloat(item.muyu) || 0,
+      nickname: item.nickname,
+      avatar: item.avatar,
     }));
   } catch (error) {
     console.error('Error in getMoyuRank:', error);

@@ -123,4 +123,5 @@ fileResourcesRoute.post('/mark-unused', (req, res) => fileResourcesController.ma
  */
 fileResourcesRoute.get('/all', (req, res) => fileResourcesController.getAllFiles(req, res));
 
+fileResourcesRoute.post('/clean',(req,res)=>fileResourcesController.cleanFiles(req,res))
 export default fileResourcesRoute;
