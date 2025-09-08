@@ -74,18 +74,19 @@ export const updateProfile = async (req, res) => {
       bio,
       signature,
     };
+
     const nickNameCheck = await msgSecCheck(nickname, openid);
     const bioCheck = await msgSecCheck(bio, openid);
     const signatureCheck = await msgSecCheck(signature, openid);
 
-    if(!nickNameCheck){
-      params.nickname = '刺客无名'
+    if (!nickNameCheck && nickname) {
+      params.nickname = '刺客无名';
     }
-    if(!bioCheck){
-      params.bio = '这个人很懒，什么都没有留下'
+    if (!bioCheck && bio) {
+      params.bio = '这个人很懒，什么都没有留下';
     }
-    if(!signatureCheck){
-      params.signature = '这个人很懒，什么都没有留下'
+    if (!signatureCheck && signature) {
+      params.signature = '这个人很懒，什么都没有留下';
     }
 
     if (info.avatar && info.avatar !== avatar) {
