@@ -447,3 +447,5 @@ curl http://localhost:3000/api/health
 ## 许可证
 
 [ISC](LICENSE)
+
+[![星象历史图](https://api.star-history.com/svg?repos=ruiange/express-template&type=Date)](https://www.star-history.com/#ruiange/express-template&Date)
