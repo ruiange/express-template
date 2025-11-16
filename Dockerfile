@@ -17,7 +17,7 @@ RUN pnpm install
 COPY . .
 
 # 生成 API 文档
-RUN npm run apidoc
+RUN npm run doc
 
 # 清理开发依赖，只保留生产依赖
 RUN pnpm install --prod && \
