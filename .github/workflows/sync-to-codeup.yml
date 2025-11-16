@@ -1,0 +1,29 @@
+name: Sync master to Codeup
+
+on:
+  push:
+    branches:
+      - master        # 仅监听 master 分支的推送
+
+jobs:
+  sync:
+    name: Push master branch to Codeup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整历史（如只需最新提交，可设为 1 或删除）
+
+      - name: Configure Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Push to Codeup
+        env:
+          CODEUP_TOKEN: ${{ secrets.CODEUP_TOKEN }}
+        run: |
+          # 安全地构造远程 URL（避免在日志中泄露 token）
+          git remote add codeup "https://$CODEUP_TOKEN@codeup.aliyun.com/63fadb4a094cae3f533f2202/express_template.git"
+          git push --force codeup master
