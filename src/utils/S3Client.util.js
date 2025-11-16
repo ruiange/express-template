@@ -1,6 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import dotenv from 'dotenv';
-dotenv.config();
+import loadEnvConfig from './loadDotenv.util.js';
+
+loadEnvConfig()
 
 export const endpoint = process.env.R2_ENDPOINT;
 const accessKeyId = process.env.R2_ACCESS_KEY_ID;

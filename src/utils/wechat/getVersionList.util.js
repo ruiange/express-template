@@ -1,5 +1,6 @@
 import axios from 'axios';
 import getStableAccessToken from './getStableAccessToken.util.js';
+
 /**
  * 获取客户端版本
  * @url https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/operation/getVersionList.html

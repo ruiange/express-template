@@ -6,7 +6,8 @@ import dotenv from 'dotenv';
 import s3CompatibleClient from '../utils/S3Client.util.js';
 import { recordFileResource } from './fileResources.service.js';
 import chalk from 'chalk';
-dotenv.config();
+import loadEnvConfig from '../utils/loadDotenv.util.js';
+loadEnvConfig()
 
 /**
  * Vercel Blob 上传
