@@ -1,35 +1,35 @@
-name: Sync master to Codeup  # 工作流名称：同步到Codeup
+name: Sync master to Codeup
 
-# 定义触发工作流的事件
 on:
   push:
     branches:
-      - master        # 仅监听 master 分支的推送
+      - master
 
-# 定义工作流中的任务
 jobs:
   sync:
-    name: Push master branch to Codeup  # 任务名称
-    runs-on: ubuntu-latest  # 指定运行环境为最新Ubuntu系统
+    name: Push master branch to Codeup
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code  # 步骤1：检出代码
-        uses: actions/checkout@v4  # 使用官方检出动作
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取完整历史（如只需最新提交，可设为 1 或删除）
+          fetch-depth: 0  # 获取完整历史（可选，如只需最新提交可设为 1）
 
-      - name: Configure Git user  # 步骤2：配置Git用户信息
+      - name: Configure Git user
         run: |
-          # 设置全局Git用户名称
           git config --global user.name "github-actions[bot]"
-          # 设置全局Git用户邮箱
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Push to Codeup  # 步骤3：推送到Codeup
+      - name: Push to Codeup
         env:
-          # 从GitHub Secrets中获取Codeup访问令牌
-          CODEUP_TOKEN: ${{ secrets.CODEUP_TOKEN }}
+          CODEUP_TOKEN: ${{ secrets.CODEUP_TOKEN }}  # 必须在 GitHub Secrets 中设置
         run: |
-          # 安全地构造远程URL（避免在日志中泄露token）
-          git remote add codeup "https://$CODEUP_TOKEN@codeup.aliyun.com/63fadb4a094cae3f533f2202/express_template.git"
-          # 强制推送master分支到Codeup远程仓库
-          git push --force codeup master
+          # 构造带认证的 HTTPS URL（阿里云 Codeup 推荐使用 oauth2 作为用户名）
+          REMOTE_URL="https://oauth2:$CODEUP_TOKEN@codeup.aliyun.com/63fadb4a094cae3f533f2202/express_template.git"
+          
+          # 安全地设置远程仓库：先移除（如果存在），再添加
+          git remote remove codeup 2>/dev/null || true
+          git remote add codeup "$REMOTE_URL"
+          
+          # 使用 --force-with-lease 更安全地强制推送
+          git push --force-with-lease codeup master
