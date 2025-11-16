@@ -7,7 +7,7 @@ import express from 'express';
 const healthRoute = express.Router();
 
 /**
- * @api {get} /api/health 健康检查
+ * @api {get} /health 健康检查
  * @apiName GetHealth
  * @apiGroup Health
  * @apiDescription 获取服务健康状态
