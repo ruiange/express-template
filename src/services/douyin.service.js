@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Douyin from '../models/douyin.model.js';
 
-export const douyinService = async (str, minimal = false) => {
-  const urlRegex = /https?:\/\/[^\s]+/g;
+export const douyinService = async (str) => {
+  const urlRegex = /https?:\/\/\S+/g;
   const urls = str.match(urlRegex);
 
   // 输出提取的网址
@@ -17,12 +17,12 @@ export const douyinService = async (str, minimal = false) => {
   }
 
   const url = encodeURIComponent(urls[0]);
-  const douyinUrl = `${process.env.DY_URL}/api/hybrid/video_data?url=${url}&minimal=${minimal}`;
+  const douyinUrl = `${process.env.DY_URL}/Analysis?dy_url=${url}`;
   const { data } = await axios({
     method: 'get',
     url: douyinUrl,
   });
-  return data.data || {};
+  return data.dy_data || {};
 };
 
 export const saveVideoData = async (jsonData) => {
@@ -33,6 +33,7 @@ export const saveVideoData = async (jsonData) => {
     const result = await douyin.save();
     return result._id;
   } catch (e) {
+    console.error('保存视频数据失败:', e);
     return null;
   }
 };
@@ -47,8 +48,13 @@ export const getVideoData = async (id) => {
 };
 
 export const getDouyinDataListService = async (page) => {
-  return Douyin.find()
-    .limit(10)
-    .skip(page * 10)
-    .sort({ createdAt: -1 });
+  try {
+    const limit = 10;
+    const skip = page * limit;
+    // 按创建时间倒序排列
+    return await Douyin.find().limit(limit).skip(skip).sort({ createdAt: -1 });
+  } catch (e) {
+    console.error('获取抖音数据列表失败:', e);
+    return [];
+  }
 };
