@@ -1,5 +1,7 @@
 # Express API 模板项目
 
+## PS：master分支只能合并，无法直接提交；master分支提交后 会自动部署镜像到docker
+
 这是一个基于 Express.js 框架的 API 服务模板项目，集成了多个实用功能和最佳实践。
 
 ## 项目特性
